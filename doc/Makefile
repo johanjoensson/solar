@@ -6,7 +6,9 @@ TARGET = projectplan.pdf
 all:  	$(TARGET)
 
 %.pdf:	%.tex
-	$(CC) $^
+	for nr in 1 2 3 ; do\
+		$(CC) $^ ; \
+	done
 
 clean:
 	rm -f *.aux *.log
