@@ -1,6 +1,8 @@
 Solar System
 ============
 
+- - -
+
 Description
 -----------
 We will write a solar system where the bodies follows a subset of the laws of 
@@ -15,7 +17,7 @@ Will Do
   * Collision handling
   * Movable camera
   * Light source(s)
-  * Spacebox (skybox but in SPACE!)
+  * Spacebox (skybox but in **SPACE!**)
 
 
 Might Do
@@ -23,7 +25,7 @@ Might Do
   * Random initial state
   * Relativistic physics (special)
   * Drawing optimized for frustum
-  * No sound (because SPACE!)
+  * No sound (because **SPACE!**)
   * Landing on selected bodies (sound?)
   * Asteroid belt
   * Build our solar system
