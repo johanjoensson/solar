@@ -1,5 +1,5 @@
-Solar
-=====
+Solar System
+============
 
 Description
 -----------
