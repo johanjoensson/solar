@@ -18,7 +18,8 @@ Will Do
   * Movable camera
   * Light source(s)
   * Spacebox (skybox but in **SPACE!**)
-
+  * Asteroid belt
+  * Controllable spaceship 
 
 Might Do
 --------
@@ -27,7 +28,6 @@ Might Do
   * Drawing optimized for frustum
   * No sound (because **SPACE!**)
   * Landing on selected bodies (sound?)
-  * Asteroid belt
   * Build our solar system
   * Trans-Neptunian objects (Pluto?, Deathstar?)
   * Aliens
