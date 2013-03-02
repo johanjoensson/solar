@@ -3,7 +3,7 @@ Classes
 
   * System
   * Object (drawable)
-    * Celestial_body
+    * Body
       * Sun
       * Planet
       * Asteroid
