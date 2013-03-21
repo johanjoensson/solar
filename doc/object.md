@@ -9,7 +9,7 @@ Methods:
   * Update
   * Draw
   * Constructor
-  * Deconstructor
+  * Destructor
 
 Attributes:
 -----------
