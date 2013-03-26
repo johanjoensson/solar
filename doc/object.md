@@ -16,3 +16,4 @@ Attributes:
   * Texture/Color
   * Vertices
   * Reflectivity
+  * Matrix
