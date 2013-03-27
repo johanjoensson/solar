@@ -15,3 +15,5 @@ Attributes:
 -----------
   * Acceleration
   * Spin
+  * Mass
+  * Radius
