@@ -5,7 +5,6 @@ Celestial body
 Methods:
 --------
   * Update
-    - Acceleration
     - Position
     - Rotation
   * Constructor 
@@ -13,7 +12,6 @@ Methods:
 
 Attributes:
 -----------
-  * Acceleration
   * Spin
   * Mass
   * Radius
