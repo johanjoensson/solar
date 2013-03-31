@@ -9,15 +9,7 @@
 2.	F = ma
 3.	Varje kraft har en lika och mortiktad reaktionskraft
 
-Newton 2 och Kepler 2 kommer bli användbara.
-# Lösningasgång (konceptuell)
-Använd sfäriska koordinater:
-x = r*cos(u)
-y = r*sin(u)
+# Rörelseekvationerna
+Använd Newton 2 och kom ihåg att a = v' samt att v = r'. Skriv om Newton 2 till första ordningens diff.ekvation, v' = F/m. Teckna ett uttryck för totala kraften F verkandes på kroppen (i vårt fall enbart gravitationskrafter från övriga kroppar)..
 
-Derivera sedan fram hastegheterna vx och vy. Använd Kepler 2 för att få bort tidsderivatan av u och få in konstanten A.
-Derivera fram accelerationerna ax och ay. Använd än en gång Kepler 2 och ersätt tidsderivatan av u med A/r.
-
-Nästa steg blir att beräkna den totala graviationskraften på kroppen. Använd Newton 2 för att få fram ekvationer för ax och ay. Lös dessa på lämpligt sätt.
-
-Voila!
+Denna diff.ekvation kan lösas numeriskt på olika sätt, jag föreslår RK4 (Runge Kutta, 4 termer).
