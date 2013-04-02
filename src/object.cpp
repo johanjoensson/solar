@@ -4,6 +4,7 @@ using namespace std;
 
 Object::Object(){
     reflectivity = 1;
+    matrix = IdentityMatrix();
 }
 
 Object::~Object(){
@@ -15,15 +16,18 @@ void Object::rotate(char direction, float angle)
     switch (direction) {
         case 'x':
             // Rotate around x
-            matrix =  Rx(angle) * matrix;
+            matrix = Mult(Rx(angle), matrix); // Temporärt för VU3 funkar ej
+            //matrix = Ry(angle) * matrix;
             break;
         case 'y':
             // Rotate around y
-            matrix =  Ry(angle) * matrix;
+            matrix = Mult(Ry(angle), matrix); // Temporärt för VU3 funkar ej
+            //matrix = Ry(angle) * matrix;
             break;
         case 'z':
             // Rotate around z
-            matrix =  Rz(angle) * matrix;
+            matrix = Mult(Rz(angle), matrix); // Temporärt för VU3 funkar ej
+            //matrix = Rz(angle) * matrix;
             break;
         default:
             cout << "x,y or z" << endl;
@@ -32,5 +36,14 @@ void Object::rotate(char direction, float angle)
 
 void Object::translate(float dx, float dy, float dz)
 {
-    matrix = T(dx, dy, dz) * matrix; 
+    matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
+}
+
+void Object::print_matrix()
+{
+    cout << matrix.m[0] << " " << matrix.m[1] << " " << matrix.m[2] << " " << matrix.m[3] << endl;
+    cout << matrix.m[4] << " " << matrix.m[5] << " " << matrix.m[6] << " " << matrix.m[7] << endl;
+    cout << matrix.m[8] << " " << matrix.m[9] << " " << matrix.m[10] << " " << matrix.m[11] << endl;
+    cout << matrix.m[12] << " " << matrix.m[13] << " " << matrix.m[14] << " " << matrix.m[15] << endl;
+    cout << endl;
 }

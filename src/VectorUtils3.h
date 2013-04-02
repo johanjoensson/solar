@@ -12,7 +12,7 @@
 #include <math.h>
 
 #ifndef M_PI
-#define M_PI           3.14159265358979323846
+#define M_PI 3.14159265358979323846
 #endif
 
 #define Vector3f Point3D
@@ -136,6 +136,7 @@ extern "C" {
 
 // --- vec3 operations ---
 
+/*
 vec3 operator+(const vec3 &a, const vec3 &b) // vec3+vec3
 {
     return vec3(a.x+b.x, a.y+b.y, a.z+b.z);
@@ -231,6 +232,8 @@ vec3 operator*(const mat3 &a, const vec3 &b)
 {
     return MultMat3Vec3(a, b); // result = a * b
 }
+*/
+
 
 #endif
 
