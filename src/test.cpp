@@ -1,13 +1,12 @@
-#include"object.h"
-#include<iostream>
-
-using namespace std;
+#include"body.h"
 
 int main()
 {
-    Object o;
-    o.print_matrix();
-    o.translate(0.32, 0, 4);
-    o.print_matrix();
+    Body b;
+    b.spin_x = 1.5;
+    b.print_matrix();
+    b.update(0.2);
+    b.print_matrix();
+
     return 0;
 }

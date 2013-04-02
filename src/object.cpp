@@ -7,9 +7,9 @@ Object::Object(){
     matrix = IdentityMatrix();
 }
 
-Object::~Object(){
+/*Object::~Object(){
     delete vertices;
-}
+}*/
 
 void Object::rotate(char direction, float angle)
 {
