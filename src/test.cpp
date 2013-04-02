@@ -1,13 +1,13 @@
-#include "object.h"
-#include <iostream>
-#include <GL/gl.h>
+#include"object.h"
+#include<iostream>
 
 using namespace std;
 
-int main(){
-    GLfloat x = 0.56;
-    //Object test_object;
-    //test_object.rotate('g', x);
-    cout << x << endl;
+int main()
+{
+    Object o;
+    o.print_matrix();
+    o.translate(0.32, 0, 4);
+    o.print_matrix();
     return 0;
 }
