@@ -12,6 +12,10 @@ Methods:
 
 Attributes:
 -----------
-  * Spin
+  * Spin_x
+  * Spin_y
+  * Spin_z
+  * Velocity
+  * Position
   * Mass
   * Radius
