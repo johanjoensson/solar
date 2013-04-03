@@ -26,7 +26,7 @@ typedef struct
   GLuint vb, ib, nb, tb; // VBOs
 } Model;
 
-Model* LoadModel(char* name);
+Model* LoadModel(const char* name);
 
 // NEW:
 

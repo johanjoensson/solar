@@ -83,6 +83,8 @@ Uint32 OnTimer(Uint32 interval, void* param)
 {
 	a += 0.1;
 
+    // För att få bort varningar
+    param = NULL;
 	SDL_Event event;
 	
 	event.type = SDL_USEREVENT;
