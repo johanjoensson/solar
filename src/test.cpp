@@ -1,3 +1,5 @@
+#define MAINFILE
+
 #include <math.h>
 #include "GL_utilities.h"
 #include "SDL_util.h"

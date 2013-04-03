@@ -142,7 +142,7 @@ extern "C" {
 
 // --- vec3 operations ---
 
-
+#if 0
 EXTERN vec3 operator+(const vec3 &a, const vec3 &b) // vec3+vec3
 {
     return vec3(a.x+b.x, a.y+b.y, a.z+b.z);
@@ -238,7 +238,7 @@ EXTERN vec3 operator*(const mat3 &a, const vec3 &b)
 {
     return MultMat3Vec3(a, b); // result = a * b
 }
-
+#endif
 
 
 #endif
