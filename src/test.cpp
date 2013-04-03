@@ -3,21 +3,31 @@
 #include <math.h>
 #include "GL_utilities.h"
 #include "SDL_util.h"
-#include "object.h"
+#include "body.h"
 #include "loadobj.h"
+#include "VectorUtils3.h"
+
+#define near 1
+#define far 30
+#define right 1
+#define left -1
+#define bottom -1
+#define top 1
 
 // Globals
 GLfloat a = 0.0;
 
 // Reference to shader program
 GLuint program;
+Body b;
 
-Object b;
+mat4 projection_matrix;
 
 void init(void)
 {
 	dumpInfo();
-    b = Object("bunnyplus.obj");
+    b = Body("../res/planet.obj");
+    b.translate(0,0,-20);
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -25,6 +35,13 @@ void init(void)
 
 	// Load and compile shader
 	program = loadShaders("test.vert", "test.frag");
+
+    // Create and upload projection matrix
+    projection_matrix = frustum(left, right, bottom, top, near, far);
+    glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_TRUE, projection_matrix.m);
+	printError("error loading projection");
+
+	printError("error loading shaders");
 }
 
 
@@ -32,9 +49,9 @@ void display(void)
 {
 	printError("pre display");
 
+    b.rotate('y', 0.01);
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     b.draw(program);
 
 	SDL_GL_SwapBuffers();
@@ -46,6 +63,8 @@ Uint32 OnTimer(Uint32 interval, void* param)
 
     // För att få bort varningar
     param = NULL;
+    param = param;
+
 	SDL_Event event;
 	
 	event.type = SDL_USEREVENT;

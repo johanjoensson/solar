@@ -16,6 +16,7 @@ Object::Object(const char *model)
 }
 
 void Object::draw(int program){
+    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
     DrawModel(m, program, (char*)"in_Position", NULL, NULL);
 }
 
