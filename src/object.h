@@ -17,7 +17,7 @@ class Object {
         void draw();
         void print_matrix();
         Object();
-        ~Object();
+        //~Object();
 };
 
 #endif

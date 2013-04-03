@@ -1,0 +1,20 @@
+#ifndef BODY_H
+#define BODY_H
+
+#include "object.h"
+#include "VectorUtils3.h"
+
+class Body: public Object {
+    public:
+        float spin_x;
+        float spin_y;
+        float spin_z;
+        float mass;
+        float radius;
+        vec3 position;
+        vec3 velocity;
+
+        void update(float);
+        Body();
+};
+#endif
