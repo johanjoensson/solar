@@ -73,3 +73,5 @@ int main()
 
 	inf_loop();
 }
+
+#undef MAINFILE
