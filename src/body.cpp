@@ -22,9 +22,9 @@ Body::Body()
 
 void Body::update(float dt)
 {
-    rotate('x', dt*spin_x);
-    rotate('y', dt*spin_y);
-    rotate('z', dt*spin_z);
+    this->rotate('x', dt*spin_x);
+    this->rotate('y', dt*spin_y);
+    this->rotate('z', dt*spin_z);
 
     //TODO RK4 för resten här
     // Position och hastighet, och så att matrix uppdateras

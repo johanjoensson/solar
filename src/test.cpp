@@ -28,6 +28,8 @@ void init(void)
 	dumpInfo();
     b = Body("../res/planet.obj");
     b.translate(0,0,-2);
+    b.spin_y = 2*3.14;
+    //b.spin_x = 3.14;
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -51,9 +53,6 @@ void display(void)
 
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    b.rotate('x', 0.01);
-    b.rotate('y', 0.02);
-    b.rotate('z', 0.026);
     b.draw(program);
 	printError("draw error");
 
@@ -67,6 +66,8 @@ Uint32 OnTimer(Uint32 interval, void* param)
     // För att få bort varningar
     param = NULL;
     param = param;
+
+    b.update(interval/1000.0);
 
 	SDL_Event event;
 	
