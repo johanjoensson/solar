@@ -19,4 +19,5 @@ void init_SDL();
 
 void inf_loop();
 
+#undef EXTERN
 #endif //SDL_UTIL_H
