@@ -14,7 +14,7 @@ class Object {
         void rotate(char direction, float angle);
         void translate(float dx, float dy, float dz);
         void update();
-        void draw();
+        void draw(int);
         void print_matrix();
         Object();
         Object(const char*);

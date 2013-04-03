@@ -1,4 +1,5 @@
 #include "object.h"
+#include "GL_utilities.h"
 #include <iostream>
 using namespace std;
 
@@ -7,16 +8,16 @@ Object::Object(){
     matrix = IdentityMatrix();
 }
 
-Object::Object(const char* model)
+Object::Object(const char *model)
 {
-    m = LoadModel(model);
+    m = LoadModelPlus((char*)model);
     reflectivity = 1;
     matrix = IdentityMatrix();
 }
 
-/*void Object::draw(){
-    DrawModel(m, program, "in_Position", NULL, NULL);
-}*/
+void Object::draw(int program){
+    DrawModel(m, program, (char*)"in_Position", NULL, NULL);
+}
 
 /*Object::~Object(){
     delete vertices;
