@@ -1,18 +1,27 @@
-CC = g++
+CC = gcc
+CXX = g++
 
-WARN = -Wall -Wextra -W -pedantic
+WARN = -Wall -Wextra -W -pedantic 
+ETC = -DGL_GLEXT_PROTOTYPES -g 
+LIB = -lGL  -lm `sdl-config --cflags --libs` 
 
-ETC = -DGL_GLEXT_PROTOTYPES -g
-LIB = -lGL -lGLU -lm `sdl-config --cflags --libs`
+CFLAGS = $(WARN) $(ETC) $(LIB) -std=c99
 
-CFLAGS = $(WARN) $(ETC) $(LIB)
+CXFLAGS = $(WARN) $(ETC) $(LIB)
 
 EXE = test
 
 all : $(EXE)
 
-test: test.cpp SDL_util.c VectorUtils3.c object.cpp body.cpp GL_utilities.c loadobj.o
-	$(CC) $(CFLAGS) -o test $^
+%.o : %.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+%.o : %.cpp
+	$(CXX) $(CXFLAGS) -c $^ -o $@
+
+test: test.o SDL_util.c VectorUtils3.o object.o body.o GL_utilities.c loadobj.o
+	$(CXX) $(CXFLAGS) $^ -o test
 
 clean:
+	rm *.o
 	rm $(EXE)
