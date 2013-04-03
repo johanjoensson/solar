@@ -3,7 +3,7 @@
 #include <math.h>
 #include "GL_utilities.h"
 #include "SDL_util.h"
-#include "body.h"
+#include "object.h"
 #include "loadobj.h"
 
 // Globals
@@ -12,15 +12,12 @@ GLfloat a = 0.0;
 // Reference to shader program
 GLuint program;
 
-// Model
-Model *m;
+Object b;
 
 void init(void)
 {
 	dumpInfo();
-
-    //Object o = Object("../res/planet.obj");
-    m = LoadModelPlus("bunnyplus.obj");
+    b = Object("bunnyplus.obj");
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -38,8 +35,8 @@ void display(void)
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    DrawModel(m, program, "in_Position",NULL,NULL);
-	
+    b.draw(program);
+
 	SDL_GL_SwapBuffers();
 }
 
