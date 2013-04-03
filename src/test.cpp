@@ -27,7 +27,7 @@ void init(void)
 {
 	dumpInfo();
     b = Body("../res/planet.obj");
-    b.translate(0,0,-20);
+    b.translate(0,0,-2);
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -35,13 +35,13 @@ void init(void)
 
 	// Load and compile shader
 	program = loadShaders("test.vert", "test.frag");
+	printError("error loading shaders");
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
     glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_TRUE, projection_matrix.m);
 	printError("error loading projection");
 
-	printError("error loading shaders");
 }
 
 
@@ -49,10 +49,13 @@ void display(void)
 {
 	printError("pre display");
 
-    b.rotate('y', 0.01);
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    b.rotate('x', 0.01);
+    b.rotate('y', 0.02);
+    b.rotate('z', 0.026);
     b.draw(program);
+	printError("draw error");
 
 	SDL_GL_SwapBuffers();
 }

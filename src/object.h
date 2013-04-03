@@ -6,6 +6,9 @@
 #include "loadobj.h"
 
 class Object {
+    protected:
+        mat4 rot_mat;
+        mat4 trans_mat;
     public:
         Model *m;
 
