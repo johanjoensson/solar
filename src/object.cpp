@@ -7,6 +7,17 @@ Object::Object(){
     matrix = IdentityMatrix();
 }
 
+Object::Object(const char* model)
+{
+    m = LoadModel(model);
+    reflectivity = 1;
+    matrix = IdentityMatrix();
+}
+
+/*void Object::draw(){
+    DrawModel(m, program, "in_Position", NULL, NULL);
+}*/
+
 /*Object::~Object(){
     delete vertices;
 }*/
