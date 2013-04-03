@@ -799,7 +799,7 @@ static Model* generateModel(Mesh* mesh)
 }
 
 
-Model* LoadModel(char* name)
+Model* LoadModel(const char* name)
 {
         Model* model = 0;
         Mesh* mesh = LoadOBJ(name);

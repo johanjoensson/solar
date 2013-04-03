@@ -1,10 +1,22 @@
 #include "object.h"
+#include "GL_utilities.h"
 #include <iostream>
 using namespace std;
 
 Object::Object(){
     reflectivity = 1;
     matrix = IdentityMatrix();
+}
+
+Object::Object(const char *model)
+{
+    m = LoadModelPlus((char*)model);
+    reflectivity = 1;
+    matrix = IdentityMatrix();
+}
+
+void Object::draw(int program){
+    DrawModel(m, program, (char*)"in_Position", NULL, NULL);
 }
 
 /*Object::~Object(){
