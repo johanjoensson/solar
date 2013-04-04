@@ -11,4 +11,5 @@ Classes
       * Deathstar
     * Spaceship
     * Ground
+    * Spacebox
   * Kamera
