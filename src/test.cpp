@@ -28,8 +28,8 @@ mat4 projection_matrix;
 void init(void)
 {
 	dumpInfo();
-    b = Body("bunnyplus.obj");
-    p = Body("../res/planet.obj");
+    b = Body("src/bunnyplus.obj");
+    p = Body("res/planet.obj");
     p.translate(2,0,-3);
     b.translate(0,0,-2);
     p.spin_z = 1;
@@ -42,7 +42,7 @@ void init(void)
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("test.vert", "test.frag");
+	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
     // Init camera
