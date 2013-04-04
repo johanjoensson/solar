@@ -4,4 +4,4 @@ Sun object
 
 Attributes:
 -----------
-  * Color
+  * emit_color
