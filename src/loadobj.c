@@ -848,7 +848,7 @@ void CenterModel(Model *m)
 
 // NEW for lab 2 2012
 
-void DrawModel(Model *m, GLuint program, char* vertexVariableName, char* normalVariableName, char* texCoordVariableName)
+void DrawModel(Model *m, GLuint program, const char* vertexVariableName, const char* normalVariableName, const char* texCoordVariableName)
 {
         if (m != NULL)
         {

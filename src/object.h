@@ -6,16 +6,24 @@
 #include "loadobj.h"
 
 class Object {
+    protected:
+        mat4 rot_mat;
+        mat4 trans_mat;
     public:
         Model *m;
+
         mat4 matrix;
+        vec3 position;
+
         float reflectivity;
         int texture;
+
         void rotate(char direction, float angle);
         void translate(float dx, float dy, float dz);
         void update();
         void draw(int);
         void print_matrix();
+
         Object();
         Object(const char*);
         //~Object();

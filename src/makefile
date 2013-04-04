@@ -7,7 +7,7 @@ LIB = -lGL  -lm `sdl-config --cflags --libs`
 
 CFLAGS = $(WARN) $(ETC) $(LIB) -std=c99
 
-CXFLAGS = $(WARN) $(ETC) $(LIB) -lstdc++ -std=c++0x
+CXFLAGS = $(WARN) $(ETC) $(LIB) -std=c++11
 
 EXE = test
 

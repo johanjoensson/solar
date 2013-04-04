@@ -30,7 +30,7 @@ Model* LoadModel(const char* name);
 
 // NEW:
 
-void DrawModel(Model *m, GLuint program, char* vertexVariableName, char* normalVariableName, char* texCoordVariableName);
+void DrawModel(Model *m, GLuint program, const char* vertexVariableName, const char* normalVariableName, const char* texCoordVariableName);
 void DrawWireframeModel(Model *m, GLuint program, char* vertexVariableName, char* normalVariableName, char* texCoordVariableName);
 
 Model* LoadModelPlus(char* name/*,
