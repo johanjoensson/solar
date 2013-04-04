@@ -11,3 +11,11 @@
 *.lai
 *.la
 *.a
+
+# Swap files and temporary files (e.g. from Emacs)
+*.*~
+*.swp
+
+
+# Compiled object files, must be recompiled for different architectures anyway
+*.o
