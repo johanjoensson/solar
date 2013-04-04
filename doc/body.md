@@ -16,6 +16,5 @@ Attributes:
   * Spin_y
   * Spin_z
   * Velocity
-  * Position
   * Mass
   * Radius

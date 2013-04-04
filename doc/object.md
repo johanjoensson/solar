@@ -17,3 +17,4 @@ Attributes:
   * Vertices
   * Reflectivity
   * Matrix
+  * Position
