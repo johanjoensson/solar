@@ -13,6 +13,10 @@ Object::Object(){
 Object::Object(const char *model)/* : Object()*/
 {
     m = LoadModelPlus((char*)model);
+    reflectivity = 1;
+    matrix = IdentityMatrix();
+    rot_mat = IdentityMatrix();
+    trans_mat = IdentityMatrix();
 }
 
 void Object::draw(int program){
