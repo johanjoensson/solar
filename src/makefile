@@ -7,9 +7,22 @@ LIB = -lGL  -lm `sdl-config --cflags --libs`
 
 CFLAGS = $(WARN) $(ETC) $(LIB) -std=c99
 
-CXFLAGS = $(WARN) $(ETC) $(LIB)
+CXFLAGS = $(WARN) $(ETC) $(LIB) -std=c++0x
 
 EXE = test
+
+CXSRC = test.cpp \
+	object.cpp \
+	camera.cpp
+
+CSRC =	SDL_util.c \
+	VectorUtils3.c \
+	GL_utilities.c
+
+SRC = $(CXSRC) $(CSRC)
+
+OBJ = $(patsubst %.c, %.o, $(CSRC)) $(patsubst %.cpp, %.o, $(CXSRC))
+
 
 all : $(EXE)
 
@@ -19,7 +32,7 @@ all : $(EXE)
 %.o : %.cpp
 	$(CXX) $(CXFLAGS) -c $^ -o $@
 
-test: test.o SDL_util.c VectorUtils3.o object.o body.o GL_utilities.c loadobj.o
+test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o camera.o
 	$(CXX) $(CXFLAGS) $^ -o test
 
 clean:

@@ -19,8 +19,13 @@
 // Models?
 
 // Additions
+#ifdef __cplusplus
+extern "C" {
+#endif
 void printError(const char *functionName);
 GLuint loadShaders(const char *vertFileName, const char *fragFileName);
 void dumpInfo(void);
-
+#ifdef __cplusplus
+}
+#endif
 #endif

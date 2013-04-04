@@ -11,10 +11,10 @@ class Body: public Object {
         float spin_z;
         float mass;
         float radius;
-        vec3 position;
         vec3 velocity;
 
         void update(float);
+        Body(const char*);
         Body();
 };
 #endif

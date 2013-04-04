@@ -6,17 +6,22 @@ using namespace std;
 Object::Object(){
     reflectivity = 1;
     matrix = IdentityMatrix();
+    rot_mat = IdentityMatrix();
+    trans_mat = IdentityMatrix();
 }
 
-Object::Object(const char *model)
+Object::Object(const char *model)/* : Object()*/
 {
     m = LoadModelPlus((char*)model);
     reflectivity = 1;
     matrix = IdentityMatrix();
+    rot_mat = IdentityMatrix();
+    trans_mat = IdentityMatrix();
 }
 
 void Object::draw(int program){
-    DrawModel(m, program, (char*)"in_Position", NULL, NULL);
+    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
+    DrawModel(m, program, "in_position", "in_normal", NULL);
 }
 
 /*Object::~Object(){
@@ -28,18 +33,18 @@ void Object::rotate(char direction, float angle)
     switch (direction) {
         case 'x':
             // Rotate around x
-            matrix = Mult(Rx(angle), matrix); // Temporärt för VU3 funkar ej
-            //matrix = Ry(angle) * matrix;
+            rot_mat = Rx(angle) * rot_mat;
+            matrix = trans_mat * rot_mat; 
             break;
         case 'y':
             // Rotate around y
-            matrix = Mult(Ry(angle), matrix); // Temporärt för VU3 funkar ej
-            //matrix = Ry(angle) * matrix;
+            rot_mat = Ry(angle) * rot_mat;
+            matrix = trans_mat * rot_mat; 
             break;
         case 'z':
             // Rotate around z
-            matrix = Mult(Rz(angle), matrix); // Temporärt för VU3 funkar ej
-            //matrix = Rz(angle) * matrix;
+            rot_mat = Rz(angle) * rot_mat;
+            matrix = trans_mat * rot_mat; 
             break;
         default:
             cout << "x,y or z" << endl;
@@ -48,7 +53,9 @@ void Object::rotate(char direction, float angle)
 
 void Object::translate(float dx, float dy, float dz)
 {
-    matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
+    trans_mat = T(dx, dy, dz) * trans_mat;
+    matrix = trans_mat * rot_mat;
+    //matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
 }
 
 void Object::print_matrix()
