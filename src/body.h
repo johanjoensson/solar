@@ -5,6 +5,11 @@
 #include "VectorUtils3.h"
 
 class Body: public Object {
+    private:
+        vec3 set_acceleration(float);
+        void set_velocity(float);
+        void set_position(float);
+        void gravity(float);
     public:
         float spin_x;
         float spin_y;

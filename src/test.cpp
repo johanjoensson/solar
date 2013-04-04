@@ -66,6 +66,8 @@ void display(void)
     p.draw(program);
 	printError("draw error");
 
+    cout << "Position = " << p.position.x << "Hastighet = " << p.velocity.x << endl;
+
 
 	SDL_GL_SwapBuffers();
 }
