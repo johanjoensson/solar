@@ -10,7 +10,7 @@ Object::Object(){
     trans_mat = IdentityMatrix();
 }
 
-Object::Object(const char *model) : Object()
+Object::Object(const char *model)/* : Object()*/
 {
     m = LoadModelPlus((char*)model);
 }
