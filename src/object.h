@@ -1,8 +1,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include<GL/gl.h>
-#include"VectorUtils3.h"
+#include <GL/gl.h>
+#include "VectorUtils3.h"
 #include "loadobj.h"
 
 class Object {
@@ -16,7 +16,7 @@ class Object {
         vec3 position;
 
         float reflectivity;
-        int texture;
+        GLuint texture;
 
         void rotate(char direction, float angle);
         void translate(float dx, float dy, float dz);
@@ -26,7 +26,7 @@ class Object {
 
         Object();
         Object(const char*);
-        //~Object();
+        Object(const char*, const char*);
 };
 
 #endif
