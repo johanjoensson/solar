@@ -33,18 +33,18 @@ void Object::rotate(char direction, float angle)
     switch (direction) {
         case 'x':
             // Rotate around x
-            rot_mat = Mult(Rx(angle), rot_mat);
-            matrix = Mult(trans_mat, rot_mat);
+            rot_mat = Rx(angle) * rot_mat;
+            matrix = trans_mat * rot_mat; 
             break;
         case 'y':
             // Rotate around y
-            rot_mat = Mult(Ry(angle), rot_mat);
-            matrix = Mult(trans_mat, rot_mat);
+            rot_mat = Ry(angle) * rot_mat;
+            matrix = trans_mat * rot_mat; 
             break;
         case 'z':
             // Rotate around z
-            rot_mat = Mult(Rz(angle), rot_mat);
-            matrix = Mult(trans_mat, rot_mat);
+            rot_mat = Rz(angle) * rot_mat;
+            matrix = trans_mat * rot_mat; 
             break;
         default:
             cout << "x,y or z" << endl;
@@ -53,8 +53,8 @@ void Object::rotate(char direction, float angle)
 
 void Object::translate(float dx, float dy, float dz)
 {
-    trans_mat = Mult(T(dx, dy, dz), trans_mat);
-    matrix = Mult(trans_mat, rot_mat);
+    trans_mat = T(dx, dy, dz) * trans_mat;
+    matrix = trans_mat * rot_mat;
     //matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
 }
 

@@ -1,5 +1,4 @@
 #include <math.h>
-#include <iostream>
 #include "GL_utilities.h"
 #include "SDL_util.h"
 #include "body.h"
@@ -28,7 +27,7 @@ void init(void)
     b = Body("../res/planet.obj");
     b.translate(0,0,-2);
     b.spin_y = 2*3.14;
-    //b.spin_x = 3.14;
+    b.spin_x = 3.14;
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -44,7 +43,6 @@ void init(void)
 	printError("error loading projection");
 
 }
-
 
 void display(void)
 {
