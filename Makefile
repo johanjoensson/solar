@@ -5,6 +5,9 @@
 CC = gcc
 CXX = g++
 
+SRC = src
+BIN = bin
+
 # Jag vill se ALLT som KAN vara fel!
 # om saker kompileras med varningar är det för att man gjort FEL!
 # Inga varningar när man kompilerar kod, capish?!
@@ -22,11 +25,11 @@ LIB = GL m
 
 # Länka de bibliotek vi behöver
 # sdl-config för att enkelt länka rätt bibliotek
-LDFLAGS = $(addprefix -l,$(LIB)) `sdl-config --libs`
+LDXFLAGS = $(addprefix -l,$(LIB)) `sdl-config --libs`
 
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
-CXSOURCES = $(wildcard *.cpp)
+CXSOURCES = $(wildcard $(SRC)/*.cpp)
 
 # Vi vill ha objekt av alla våra .c-filer
 CXOBJ = $(patsubst %.cpp, %.o, $(CXSOURCES))
@@ -54,7 +57,8 @@ test: $(EXE)
 # TODO: Att byta ut mot lämpligt namn på programmet!
 # Kompilera vår exekverbara fil med lämpliga flaggor samt bibliotek
 test: $(OBJ)
-	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
+	@echo "$(CXSOURCES)"
+#	$(CXX) $(CXXFLAGS) $^ $(LDXFLAGS) -o $@
 
 # Rensa bort alla temporära filer som skapats
 clean:
