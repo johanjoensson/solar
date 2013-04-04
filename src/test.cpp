@@ -3,7 +3,10 @@
 #include "SDL_util.h"
 #include "body.h"
 #include "loadobj.h"
+#include "camera.h"
 #include "VectorUtils3.h"
+#include<iostream>
+using namespace std;
 
 #define near 1
 #define far 30
@@ -17,17 +20,22 @@ GLfloat a = 0.0;
 
 // Reference to shader program
 GLuint program;
-Body b;
+Body b, p;
+Camera c;
 
 mat4 projection_matrix;
 
 void init(void)
 {
 	dumpInfo();
-    b = Body("../res/planet.obj");
+    b = Body("bunnyplus.obj");
+    p = Body("../res/planet.obj");
+    p.translate(2,0,-3);
     b.translate(0,0,-2);
+    p.spin_z = 1;
     b.spin_y = 2*3.14;
     b.spin_x = 3.14;
+    b.spin_z = 9;
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -36,6 +44,9 @@ void init(void)
 	// Load and compile shader
 	program = loadShaders("test.vert", "test.frag");
 	printError("error loading shaders");
+
+    // Init camera
+    c = Camera(program);
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
@@ -48,10 +59,13 @@ void display(void)
 {
 	printError("pre display");
 
+
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     b.draw(program);
+    p.draw(program);
 	printError("draw error");
+
 
 	SDL_GL_SwapBuffers();
 }
@@ -65,6 +79,7 @@ Uint32 OnTimer(Uint32 interval, void* param)
     param = param;
 
     b.update(interval/1000.0);
+    p.update(interval/1000.0);
 
 	SDL_Event event;
 	
@@ -83,7 +98,7 @@ int main()
 	set_sdl_display_func(&display);
 	init();
 	SDL_TimerID timer_id;
-	timer_id = SDL_AddTimer(17, &OnTimer, NULL);
+	timer_id = SDL_AddTimer(20, &OnTimer, NULL);
 	if(timer_id == NULL){
 		fprintf(stderr, "Error setting timer function: %s", SDL_GetError());
 	}

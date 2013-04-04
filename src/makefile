@@ -12,7 +12,8 @@ CXFLAGS = $(WARN) $(ETC) $(LIB) -std=c++0x
 EXE = test
 
 CXSRC = test.cpp \
-	object.cpp
+	object.cpp \
+	camera.cpp
 
 CSRC =	SDL_util.c \
 	VectorUtils3.c \
@@ -31,7 +32,7 @@ all : $(EXE)
 %.o : %.cpp
 	$(CXX) $(CXFLAGS) -c $^ -o $@
 
-test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o
+test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o camera.o
 	$(CXX) $(CXFLAGS) $^ -o test
 
 clean:
