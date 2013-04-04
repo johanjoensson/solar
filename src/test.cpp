@@ -1,6 +1,5 @@
-#define MAINFILE
-
 #include <math.h>
+#include <iostream>
 #include "GL_utilities.h"
 #include "SDL_util.h"
 #include "object.h"
@@ -70,5 +69,3 @@ int main()
 
 	inf_loop();
 }
-
-#undef MAINFILE

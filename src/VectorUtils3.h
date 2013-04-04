@@ -4,14 +4,6 @@
 #ifndef VECTORUTILS3
 #define VECTORUTILS3
 
-#define NO_FUNC // tills vi fixat operatorsöverladdningen
-
-#ifdef MAINFILE
-    #define EXTERN
-#else
-    #define EXTERN extern
-#endif
-
 #ifdef __APPLE__
 	#include <OpenGL/gl3.h>
 #else
@@ -37,7 +29,7 @@
 	{
 		GLfloat x, y, z;
 		#ifdef __cplusplus
-			vec3(GLfloat x2, GLfloat y2, GLfloat z2) : x(x2), y(y2), z(z2) {}
+			 vec3(GLfloat x2, GLfloat y2, GLfloat z2) : x(x2), y(y2), z(z2) {}
             vec3() {}
 
 //			vec3(vec4 v) : x(v.x), y(v.y), z(v.z) {}
@@ -146,66 +138,66 @@ extern "C" {
 
 // --- vec3 operations ---
 #ifndef NO_FUNC
-EXTERN vec3 operator+(const vec3 &a, const vec3 &b) // vec3+vec3
+inline vec3 operator+(const vec3 &a, const vec3 &b) // vec3+vec3
 {
 	return vec3(a.x+b.x, a.y+b.y, a.z+b.z);
 }
 
-EXTERN vec3 operator-(const vec3 &a, const vec3 &b) // vec3-vec3
+inline vec3 operator-(const vec3 &a, const vec3 &b) // vec3-vec3
 {
 	return vec3(a.x-b.x, a.y-b.y, a.z-b.z);
 }
 
 	// Questionable, not like GLSL
-EXTERN float operator*(const vec3 &a, const vec3 &b) // vec3 dot vec3
+inline float operator*(const vec3 &a, const vec3 &b) // vec3 dot vec3
 {
 	return (a.x*b.x+ a.y*b.y+ a.z*b.z);
 }
 
-EXTERN vec3 operator*(const vec3 &b, double a) // vec3 * scalar
+inline vec3 operator*(const vec3 &b, double a) // vec3 * scalar
 {
 	return vec3(a*b.x, a*b.y, a*b.z);
 }
 
-EXTERN vec3 operator*(double a, const vec3 &b) // scalar * vec3
+inline vec3 operator*(double a, const vec3 &b) // scalar * vec3
 {
 	return vec3(a*b.x, a*b.y, a*b.z);
 }
 
-EXTERN vec3 operator/(const vec3 &b, double a) // vec3 / scalar
+inline vec3 operator/(const vec3 &b, double a) // vec3 / scalar
 {
 	return vec3(b.x/a, b.y/a, b.z/a);
 }
 
 // --- EXTERN vec4 operations ---
 
-EXTERN vec4 operator+(const vec4 &a, const vec4 &b) // vec4+vec4
+inline vec4 operator+(const vec4 &a, const vec4 &b) // vec4+vec4
 {
 	return vec4(a.x+b.x, a.y+b.y, a.z+b.z, a.w+b.w);
 }
 
-EXTERN vec4 operator-(const vec4 &a, const vec4 &b) // vec4-vec4
+inline vec4 operator-(const vec4 &a, const vec4 &b) // vec4-vec4
 {
 	return vec4(a.x-b.x, a.y-b.y, a.z-b.z, a.w-b.w);
 }
 
 	// Questionable, not like GLSL
-EXTERN float operator*(const vec4 &a, const vec4 &b) // vec4 dot vec4
+inline float operator*(const vec4 &a, const vec4 &b) // vec4 dot vec4
 {
 	return (a.x*b.x+ a.y*b.y+ a.z*b.z+ a.w*b.w);
 }
 
-EXTERN vec4 operator*(const vec4 &b, double a) // vec4 * scalar
+inline vec4 operator*(const vec4 &b, double a) // vec4 * scalar
 {
 	return vec4(a*b.x, a*b.y, a*b.z, a*b.w);
 }
 
-EXTERN vec4 operator*(double a, const vec4 &b) // scalar * vec4
+inline vec4 operator*(double a, const vec4 &b) // scalar * vec4
 {
 	return vec4(a*b.x, a*b.y, a*b.z, a*b.w);
 }
 
-EXTERN vec4 operator/(const vec4 &b, double a) // vec4 / scalar
+inline vec4 operator/(const vec4 &b, double a) // vec4 / scalar
 {
 	return vec4(b.x/a, b.y/a, b.z/a, b.w/a);
 }
@@ -213,31 +205,31 @@ EXTERN vec4 operator/(const vec4 &b, double a) // vec4 / scalar
 // --- Matrix multiplication ---
 
 // mat4 * mat4
-EXTERN mat4 operator*(const mat4 &a, const mat4 &b)
+inline mat4 operator*(const mat4 &a, const mat4 &b)
 {
 	return (Mult(a, b));
 }
 
 // EXTERN mat3 * mat3
-EXTERN mat3 operator*(const mat3 &a, const mat3 &b)
+inline mat3 operator*(const mat3 &a, const mat3 &b)
 {
 	return (MultMat3(a, b));
 }
 
 // mat4 * vec3
-EXTERN vec3 operator*(const mat4 &a, const vec3 &b)
+inline vec3 operator*(const mat4 &a, const vec3 &b)
 {
 	return MultVec3(a, b); // result = a * b
 }
 
 // mat4 * EXTERN vec4
-EXTERN vec4 operator*(const mat4 &a, const vec4 &b)
+inline vec4 operator*(const mat4 &a, const vec4 &b)
 {
 	return MultVec4(a, b); // result = a * b
 }
 
 // mat3 * EXTERN vec3
-EXTERN vec3 operator*(const mat3 &a, const vec3 &b)
+inline vec3 operator*(const mat3 &a, const vec3 &b)
 {
 	return MultMat3Vec3(a, b); // result = a * b
 }
