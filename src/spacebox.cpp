@@ -4,7 +4,6 @@
 
 Spacebox::Spacebox(const char* model, const char* tex) : Object(model, tex)
 {
-   translate(0,-1,0);
 }
 
 Spacebox::Spacebox()

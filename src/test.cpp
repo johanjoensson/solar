@@ -29,11 +29,11 @@ mat4 projection_matrix;
 void init(void)
 {
 	dumpInfo();
-    //b = Body("bunnyplus.obj", "../res/grass.tga");
-    s = Spacebox("../res/skybox.obj", "../res/grass.tga");
-    //b.translate(0,0,-2);
+    b = Body("../res/bunnyplus.obj", "../res/grass.tga");
+    s = Spacebox("../res/spacedome.obj", "../res/spacedome.tga");
+    b.translate(0,0,-2);
 
-    //b.spin_y = 2*3.14;
+    b.spin_y = 3.14;
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -53,6 +53,8 @@ void init(void)
     projection_matrix = frustum(left, right, bottom, top, near, far);
     glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_TRUE, projection_matrix.m);
 	printError("error loading projection");
+
+    //glUniform1i(glGetUniformLocation(program, "spacebox"), 0);
 }
 
 void display(void)
@@ -60,9 +62,9 @@ void display(void)
 	printError("pre display");
 
 	// clear the screen
-    //b.draw(program);
-    c.rotate('y', 0.01);
     s.draw(program);
+    b.draw(program);
+    //c.rotate('y', 0.01);
 	printError("draw error");
 	SDL_GL_SwapBuffers();
 }
