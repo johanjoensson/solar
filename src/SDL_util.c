@@ -146,9 +146,9 @@ void init_SDL()
 		exit_prog(1);
 	}
 	
-	glViewport(0, 0, height >> 1, height >> 1);
+	glViewport(0, 0, width >> 1, height >> 1);
 	glMatrixMode(GL_PROJECTION);
-	glOrtho(0, height >> 1, 0, height >> 1, -1, 1);
+	glOrtho(0, width >> 1, 0, height >> 1, -1, 1);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
