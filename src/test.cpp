@@ -9,6 +9,8 @@
 #include "system.h"
 #include<iostream>
 using namespace std;
+#include "LoadTGA.h"
+#include "spacebox.h"
 
 #define near 1
 #define far 30
@@ -22,7 +24,8 @@ GLfloat a = 0.0;
 
 // Reference to shader program
 GLuint program;
-Body b, p;
+Body b;
+Spacebox s;
 Camera c;
 System sys;
 
@@ -31,47 +34,43 @@ mat4 projection_matrix;
 void init(void)
 {
 	dumpInfo();
-    b = Body("src/bunnyplus.obj");
-    p = Body("res/planet.obj");
-    p.translate(2,0,-3);
+    b = Body("../res/bunnyplus.obj", "../res/grass.tga");
+    s = Spacebox("../res/spacedome.obj", "../res/spacedome.tga");
     b.translate(0,0,-2);
-    p.spin_z = 1;
-    b.spin_y = 2*3.14;
-    b.spin_x = 3.14;
-    b.spin_z = 9;
     set_event_handler(sys.event_handler);
-    sys.bodies.add_planet(&p);
-    sys.bodies.update();
-    sys.bodies.remove_planet(&p);
-    sys.bodies.update();
+
+    b.spin_y = 3.14;
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("src/test.vert", "src/test.frag");
+	program = loadShaders("test.vert", "test.frag");
 	printError("error loading shaders");
 
     // Init camera
     c = Camera(program);
+
+    // Set Texture units
+    glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
     glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_TRUE, projection_matrix.m);
 	printError("error loading projection");
 
+    //glUniform1i(glGetUniformLocation(program, "spacebox"), 0);
 }
 
 void display(void)
 {
 	printError("pre display");
 
-
 	// clear the screen
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    s.draw(program);
     b.draw(program);
-    p.draw(program);
+    //c.rotate('y', 0.01);
 	printError("draw error");
 
 	SDL_GL_SwapBuffers();
@@ -86,7 +85,6 @@ Uint32 OnTimer(Uint32 interval, void* param)
     param = param;
 
     b.update(interval/1000.0);
-    p.update(interval/1000.0);
 
 	SDL_Event event;
 	

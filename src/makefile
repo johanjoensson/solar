@@ -13,11 +13,13 @@ EXE = test
 
 CXSRC = test.cpp \
 	object.cpp \
-	camera.cpp
+	camera.cpp \
+	spacebox.cpp
 
-CSRC =	SDL_util.c \
-	VectorUtils3.c \
-	GL_utilities.c
+CSRC = SDL_util.c \
+       VectorUtils3.c \
+       GL_utilities.c \
+       LoadTGA.c
 
 SRC = $(CXSRC) $(CSRC)
 
@@ -32,7 +34,7 @@ all : $(EXE)
 %.o : %.cpp
 	$(CXX) $(CXFLAGS) -c $^ -o $@
 
-test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o camera.o system.o
+test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o LoadTGA.o camera.o spacebox.o system.o
 	$(CXX) $(CXFLAGS) $^ -o test
 
 clean:
