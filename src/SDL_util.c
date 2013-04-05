@@ -6,6 +6,8 @@ SDL_Surface* screen;
 int bpp;
 
 void (*ptdisplay)(void);
+void (*handle_event)(SDL_Event event);
+
 
 void set_sdl_display_func(void (*display_func)(void))
 {
@@ -13,6 +15,15 @@ void set_sdl_display_func(void (*display_func)(void))
 	if(ptdisplay == NULL){
 		fprintf(stderr, "Error setting display function\n");
 	}
+}
+
+void set_event_handler(void (*event_func)(SDL_Event event))
+{
+    handle_event = event_func;
+	if(ptdisplay == NULL){
+		fprintf(stderr, "Error setting event handler\n");
+	}
+
 }
 
 void exit_prog(int value)
@@ -64,9 +75,9 @@ void handle_keypress(SDL_Event event)
 void handle_userevent(SDL_Event event)
 {
 	switch(event.user.code){
-		case (int)CUSTOM_TIMER:
+//		case (int)CUSTOM_TIMER:
 				//(*ptdisplay)();
-				break;
+//				break;
 		default:
 			break;
 	}	
@@ -97,7 +108,7 @@ void inf_loop()
 	SDL_Event event;
 	while(1){
 		while(SDL_PollEvent(&event)){
-			event_handler(event);	
+			(*handle_event)(event);	
 		}
 		(*ptdisplay)();
 	}
