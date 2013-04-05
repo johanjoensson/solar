@@ -35,7 +35,7 @@ void init(void)
 {
 	dumpInfo();
     b = Body("../res/bunnyplus.obj", "../res/grass.tga");
-//    s = Spacebox("../res/spacedome.obj", "../res/spacedome.tga");
+    s = Spacebox("../res/spacedome.obj", "../res/spacedome.tga");
     b.translate(0,0,-2);
     set_event_handler(sys.event_handler);
 
