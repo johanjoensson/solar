@@ -4,6 +4,7 @@
 #include "SDL_util.h"
 #include "body.h"
 #include "camera.h"
+#include "spacebox.h"
 
 
 
@@ -25,10 +26,18 @@ class System {
         }bodies;
 
         Camera cam;
-
         
         static void event_handler(SDL_Event event);
 
+        void update(Uint32);
+        void draw(int);
+
+        Body b;
+        Spacebox s;
+        Camera c;
+
         System();
+        System(int);
+
 };
 #endif //SYSTEM_H

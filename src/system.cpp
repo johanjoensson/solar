@@ -1,5 +1,8 @@
 #include <iostream>
 #include "system.h"
+#include "body.h"
+#include "camera.h"
+#include "spacebox.h"
 
 System::System(){
     bodies.next = NULL;
@@ -62,7 +65,29 @@ void System::event_handler(SDL_Event event){
 		case SDL_USEREVENT:
 			handle_userevent(event);
 			break;
+        case SDL_MOUSEMOTION:
+            //handle_mouse(event);
+            break;
 		default:
 			break;
 	}
+}
+
+void System::update(Uint32 dt)
+{
+    b.update(dt/1000.0);
+}
+
+System::System(int program){
+    b = Body("../res/bunnyplus.obj", "../res/grass.tga");
+    s = Spacebox("../res/spacebox.obj", "../res/Leo.tga");
+    b.translate(0,0,-2);
+    b.spin_y = 1;
+    c = Camera(program);
+}
+
+void System::draw(int program)
+{
+    s.draw(program);
+    b.draw(program);
 }

@@ -54,3 +54,19 @@ void Camera::print_matrix()
     cout << matrix.m[12] << " " << matrix.m[13] << " " << matrix.m[14] << " " << matrix.m[15] << endl;
     cout << endl;
 }
+
+void Camera::forward(float d)
+{
+    vec3 forward_vec = look_at_pos - position;
+    forward_vec = d * forward_vec;
+    translate(forward_vec.x, forward_vec.y, forward_vec.z);
+}
+
+void Camera::strafe(float d)
+{
+    vec3 strafe_vec = look_at_pos - position;
+    strafe_vec = CrossProduct(up, strafe_vec);
+    strafe_vec = Normalize(strafe_vec);
+    strafe_vec = d * strafe_vec;
+    translate(strafe_vec.x, strafe_vec.y, strafe_vec.z);
+}
