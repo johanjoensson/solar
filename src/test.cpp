@@ -34,8 +34,8 @@ mat4 projection_matrix;
 void init(void)
 {
 	dumpInfo();
-    b = Body("../res/bunnyplus.obj", "../res/grass.tga");
-    s = Spacebox("../res/skybox.obj", "../res/skybox512.tga");
+    b = Body("res/bunnyplus.obj", "res/grass.tga");
+    s = Spacebox("res/skybox.obj", "res/SkyBox512.tga");
     b.translate(0,0,-2);
     set_event_handler(sys.event_handler);
 
@@ -46,7 +46,7 @@ void init(void)
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("test.vert", "test.frag");
+	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
     // Init camera
