@@ -39,13 +39,13 @@ CXOBJ = $(patsubst $(SRC)/%.cpp,$(BIN)/%.o, $(CXSOURCES))
 OBJ = $(CXOBJ) $(COBJ)
 
 # om någon är korkad ska detta inte förstöra min fina Makefile
-.PHONY: all clean
+.PHONY: all clean src bin
 
 # Samtliga exekverbara filer vi vill skapa, bör bara finnas en!
 EXE = test\
 
 # Om inget annat nämns så bygger vi alla exekverbara filer
-all: $(EXE)
+all: bin src $(EXE)
 
 # Samtliga .o-filer bör ha en passande .c/.cpp-fil att kompilera
 # Om inte så är det inga problem (såvida vi inte kör en make clean)
@@ -60,10 +60,16 @@ $(BIN)/%.o: $(SRC)/%.cpp
 test: $(OBJ)
 	$(CXX) $(LDXFLAGS) $^ -o $@
 
+src : 
+	mkdir -p src
+
+bin :
+	mkdir -p bin
+
 # Rensa bort alla temporära filer som skapats
 clean:
-	rm -f $(OBJ)
+	rm  $(OBJ)
 
 # Ta bort allt som kompilerats!
 cleanall:
-	rm -f $(EXE) $(OBJ)
+	rm  $(EXE) $(OBJ)

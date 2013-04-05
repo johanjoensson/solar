@@ -5,6 +5,7 @@
 #include "loadobj.h"
 #include "camera.h"
 #include "VectorUtils3.h"
+#include "system.h"
 #include<iostream>
 using namespace std;
 
@@ -22,6 +23,7 @@ GLfloat a = 0.0;
 GLuint program;
 Body b, p;
 Camera c;
+System sys;
 
 mat4 projection_matrix;
 
@@ -36,6 +38,10 @@ void init(void)
     b.spin_y = 2*3.14;
     b.spin_x = 3.14;
     b.spin_z = 9;
+    sys.bodies.add_planet(&p);
+    sys.bodies.update();
+    sys.bodies.remove_planet(&p);
+    sys.bodies.update();
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -65,9 +71,6 @@ void display(void)
     b.draw(program);
     p.draw(program);
 	printError("draw error");
-
-    cout << "Position = " << p.position.x << "Hastighet = " << p.velocity.x << endl;
-
 
 	SDL_GL_SwapBuffers();
 }

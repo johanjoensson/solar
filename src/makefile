@@ -32,7 +32,7 @@ all : $(EXE)
 %.o : %.cpp
 	$(CXX) $(CXFLAGS) -c $^ -o $@
 
-test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o camera.o
+test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o camera.o system.o
 	$(CXX) $(CXFLAGS) $^ -o test
 
 clean:
