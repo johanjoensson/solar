@@ -1,4 +1,5 @@
 #include <math.h>
+#include <SDL.h>
 #include "GL_utilities.h"
 #include "SDL_util.h"
 #include "body.h"
@@ -38,6 +39,7 @@ void init(void)
     b.spin_y = 2*3.14;
     b.spin_x = 3.14;
     b.spin_z = 9;
+    set_event_handler(sys.event_handler);
     sys.bodies.add_planet(&p);
     sys.bodies.update();
     sys.bodies.remove_planet(&p);
@@ -89,7 +91,7 @@ Uint32 OnTimer(Uint32 interval, void* param)
 	SDL_Event event;
 	
 	event.type = SDL_USEREVENT;
-	event.user.code = (int)CUSTOM_TIMER;
+	event.user.code = (int)System::CUSTOM_TIMER;
 	event.user.data1 = 0;
 	event.user.data2 = 0;
 

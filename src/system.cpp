@@ -47,3 +47,22 @@ void System::Cel_bodies::update()
     }
     return;
 }
+
+void System::event_handler(SDL_Event event){
+	switch(event.type){
+		case SDL_VIDEORESIZE: 
+			resize_window(event);
+			break;
+		case SDL_KEYDOWN:
+			handle_keypress(event);
+			break;
+		case SDL_QUIT:
+			exit_prog(0);
+			break;
+		case SDL_USEREVENT:
+			handle_userevent(event);
+			break;
+		default:
+			break;
+	}
+}
