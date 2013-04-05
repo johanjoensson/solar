@@ -29,29 +29,18 @@ mat4 projection_matrix;
 void init(void)
 {
 	dumpInfo();
-<<<<<<< HEAD
     //b = Body("bunnyplus.obj", "../res/grass.tga");
     s = Spacebox("../res/skybox.obj", "../res/grass.tga");
     //b.translate(0,0,-2);
 
     //b.spin_y = 2*3.14;
-=======
-    b = Body("src/bunnyplus.obj");
-    p = Body("res/planet.obj");
-    p.translate(2,0,-3);
-    b.translate(0,0,-2);
-    p.spin_z = 1;
-    b.spin_y = 2*3.14;
-    b.spin_x = 3.14;
-    b.spin_z = 9;
->>>>>>> master
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("src/test.vert", "src/test.frag");
+	program = loadShaders("test.vert", "test.frag");
 	printError("error loading shaders");
 
     // Init camera
