@@ -16,8 +16,8 @@ WARNINGS = -Wall -Wextra -W -pedantic
 # Kompilera med lite olika flaggor, utöver varningarna.
 # -g för debugmode, bör tas bort inför slutreleasen (inget måste dock).
 # sdl-config för att sätta flaggor för SDL korrekt.
-CXXFLAGS = -g $(WARNINGS) `sdl-config --cflags` -std=c++0x
-CFLAGS = -g $(WARNINGS) `sdl-config --cflags` -std=c99
+CXXFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c++0x
+CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c99
 
 # De ytterligagre bibliotek vi behöver
 # GL är OpnGL och m är matematik
@@ -30,9 +30,11 @@ LDXFLAGS = $(addprefix -l,$(LIB)) `sdl-config --libs`
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
 CXSOURCES = $(wildcard $(SRC)/*.cpp)
+CSOURCES = $(wildcard $(SRC)/*.c)
 
-# Vi vill ha objekt av alla våra .c-filer
-CXOBJ = $(patsubst %.cpp, %.o, $(CXSOURCES))
+# Vi vill ha objekt av alla våra .c/.cpp-filer
+COBJ = $(patsubst $(SRC)/%.c,$(BIN)/%.o, $(CSOURCES))
+CXOBJ = $(patsubst $(SRC)/%.cpp,$(BIN)/%.o, $(CXSOURCES))
 
 OBJ = $(CXOBJ) $(COBJ)
 
@@ -47,18 +49,16 @@ all: bin src $(EXE)
 
 # Samtliga .o-filer bör ha en passande .c/.cpp-fil att kompilera
 # Om inte så är det inga problem (såvida vi inte kör en make clean)
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $? -o $@
-
-%.o: %.c
+$(BIN)/%.o: $(SRC)/%.c
 	$(CC) $(CFLAGS) -c $? -o $@
 	
+$(BIN)/%.o: $(SRC)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $? -o $@
 
 # TODO: Att byta ut mot lämpligt namn på programmet!
 # Kompilera vår exekverbara fil med lämpliga flaggor samt bibliotek
 test: $(OBJ)
-	@echo "$(CXSOURCES)"
-#	$(CXX) $(CXXFLAGS) $^ $(LDXFLAGS) -o $@
+	$(CXX) $(LDXFLAGS) $^ -o $@
 
 src : 
 	mkdir -p src

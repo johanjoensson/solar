@@ -1,5 +1,5 @@
-#include "system.h"
 #include <iostream>
+#include "system.h"
 
 System::System(){
     bodies.next = NULL;
