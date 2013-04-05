@@ -48,10 +48,10 @@ all: bin src $(EXE)
 # Samtliga .o-filer bör ha en passande .c/.cpp-fil att kompilera
 # Om inte så är det inga problem (såvida vi inte kör en make clean)
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) $? -o $@
+	$(CXX) $(CXXFLAGS) -c $? -o $@
 
 %.o: %.c
-	$(CC) $(CFLAGS) $? -o $@
+	$(CC) $(CFLAGS) -c $? -o $@
 	
 
 # TODO: Att byta ut mot lämpligt namn på programmet!
