@@ -24,7 +24,7 @@ GLfloat a = 0.0;
 
 // Reference to shader program
 GLuint program;
-Body b;
+Body b,p,d;
 Spacebox s;
 Camera c;
 System sys;
@@ -35,12 +35,21 @@ void init(void)
 {
 	dumpInfo();
     b = Body("res/bunnyplus.obj", "res/grass.tga");
+    p = Body("res/bunnyplus.obj", "res/grass.tga");
+    d = Body("res/bunnyplus.obj", "res/grass.tga");
     s = Spacebox("res/skybox.obj", "res/SkyBox512.tga");
     b.translate(0,0,-2);
     set_event_handler(sys.event_handler);
 
     b.spin_y = 3.14;
+    
+    sys.bodies.add_planet(&b);
+    sys.bodies.add_planet(&d);
+    sys.bodies.add_planet(&p);
 
+    sys.bodies.update();
+    sys.bodies.clear_list();
+    sys.bodies.update();
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
@@ -68,8 +77,8 @@ void display(void)
 	printError("pre display");
 
 	// clear the screen
-    s.draw(program);
-    b.draw(program);
+//    s.draw(program);
+//    b.draw(program);
     //c.rotate('y', 0.01);
 	printError("draw error");
 

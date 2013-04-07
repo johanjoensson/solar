@@ -16,11 +16,12 @@ class System {
         } custom_codes;
 
         struct Cel_bodies{
-            Body planet;
+            Body *planet;
             Cel_bodies *next;
 
             void add_planet(Body*);
             void remove_planet(Body*);
+	    void clear_list();
             void update();
         }bodies;
 
