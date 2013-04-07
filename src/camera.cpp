@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "VectorUtils3.h"
+#include<math.h>
 #include<iostream>
 using namespace std;
 
@@ -10,6 +11,7 @@ Camera::Camera(int program)
     up = vec3(0,1,0);
     position = vec3(0,0,0);
     look_at_pos = vec3(0,0,-1);
+    x = 0;
     upload();
 }
 
@@ -19,6 +21,11 @@ void Camera::upload()
 {
     // Upload camera matrix here
     glUniformMatrix4fv(glGetUniformLocation(program, "cam_matrix"), 1, GL_TRUE, matrix.m);
+}
+void Camera::update()
+{
+    matrix = lookAtv(position, look_at_pos, up);
+    upload();
 }
 
 void Camera::rotate(char direction, float angle)
@@ -46,12 +53,6 @@ void Camera::translate(float dx, float dy, float dz)
     upload();
 }
 
-void Camera::update()
-{
-    matrix = lookAtv(position, look_at_pos, up);
-    upload();
-}
-
 void Camera::print_matrix()
 {
     cout << matrix.m[0] << " " << matrix.m[1] << " " << matrix.m[2] << " " << matrix.m[3] << endl;
@@ -75,4 +76,17 @@ void Camera::strafe(float d)
     strafe_vec = Normalize(strafe_vec);
     strafe_vec = d * strafe_vec;
     translate(strafe_vec.x, strafe_vec.y, strafe_vec.z);
+}
+
+void Camera::change_look_at_pos(int xrel, int y, int width, int height)
+{
+    x += xrel;
+    float fi = ((float)x)/width*2*M_PI;
+    float theta = ((float)y)/height*M_PI;
+
+    look_at_pos.x = -sin(theta)*sin(fi) + position.x;
+    look_at_pos.y = cos(theta) + position.y;
+    look_at_pos.z = sin(theta)*cos(fi) + position.z;
+    matrix = lookAtv(position, look_at_pos, up);
+    upload();
 }

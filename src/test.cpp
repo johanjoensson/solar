@@ -10,7 +10,6 @@
 #include "LoadTGA.h"
 #include "spacebox.h"
 #include<stdio.h>
-//#include<iostream>
 
 #define near 1
 #define far 30
@@ -26,10 +25,6 @@ const SDL_VideoInfo* info;
 // Reference to shader program
 GLuint program;
 System sys;
-
-// Test, coordinates
-int x;
-int y;
 
 mat4 projection_matrix;
 
@@ -51,10 +46,6 @@ void init(void)
 
     sys = System(program);
     set_event_handler(event_handler);
-
-    info = SDL_GetVideoInfo();
-    x = info->current_w/2;
-    y = info->current_h/2;
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
@@ -149,16 +140,7 @@ void handle_mouse(SDL_Event event)
     int width = info->current_w; 
     int height = info->current_h; 
 
-    x += event.motion.xrel;
-    y = event.motion.y;
-
-    float fi = ((float)x)/width*2*M_PI;
-    float theta = ((float)y)/height*M_PI;
-
-    sys.c.look_at_pos.x = -sin(theta)*sin(fi) + sys.c.position.x;
-    sys.c.look_at_pos.y = cos(theta) + sys.c.position.y;
-    sys.c.look_at_pos.z = sin(theta)*cos(fi) + sys.c.position.z;
-    sys.c.update();
+    sys.c.change_look_at_pos(event.motion.xrel,event.motion.y,width,height);
 }
 
 void event_handler(SDL_Event event){
