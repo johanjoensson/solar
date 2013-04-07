@@ -5,7 +5,6 @@
 
 class Camera {
     private:
-        void upload();
         int program;
     public:
         vec3 position;
@@ -18,8 +17,10 @@ class Camera {
         void translate(float dx, float dy, float dz);
         void forward(float d);
         void strafe(float d);
+        void update();
         float radius;
         void point_to(vec3 pos);
+        void upload();
         Camera(int program);
         Camera();
         void print_matrix();

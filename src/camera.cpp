@@ -46,6 +46,12 @@ void Camera::translate(float dx, float dy, float dz)
     upload();
 }
 
+void Camera::update()
+{
+    matrix = lookAtv(position, look_at_pos, up);
+    upload();
+}
+
 void Camera::print_matrix()
 {
     cout << matrix.m[0] << " " << matrix.m[1] << " " << matrix.m[2] << " " << matrix.m[3] << endl;
