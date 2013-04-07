@@ -7,8 +7,6 @@
 #include "camera.h"
 #include "VectorUtils3.h"
 #include "system.h"
-//#include<iostream>
-//using namespace std;
 #include "LoadTGA.h"
 #include "spacebox.h"
 
@@ -28,6 +26,10 @@ System sys;
 
 mat4 projection_matrix;
 
+void handle_keypress(SDL_Event event);
+//void handle_mouse(SDL_Event event);
+static void event_handler(SDL_Event event);
+
 void init(void)
 {
 	dumpInfo();
@@ -41,7 +43,7 @@ void init(void)
 	printError("error loading shaders");
 
     sys = System(program);
-    set_event_handler(sys.event_handler);
+    set_event_handler(event_handler);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
@@ -124,7 +126,29 @@ void handle_keypress(SDL_Event event)
 	}
 }
 
-void handle_mouse(SDL_Event event)
+/*void handle_mouse(SDL_Event event)
 {
     sys.c.rotate('y', 0.01);
+}*/
+
+void event_handler(SDL_Event event){
+	switch(event.type){
+		case SDL_VIDEORESIZE: 
+			resize_window(event);
+			break;
+		case SDL_KEYDOWN:
+			handle_keypress(event);
+			break;
+		case SDL_QUIT:
+			exit_prog(0);
+			break;
+		case SDL_USEREVENT:
+			handle_userevent(event);
+			break;
+        case SDL_MOUSEMOTION:
+            //handle_mouse(event);
+            break;
+		default:
+			break;
+	}
 }

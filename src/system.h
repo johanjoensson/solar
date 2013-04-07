@@ -6,11 +6,7 @@
 #include "camera.h"
 #include "spacebox.h"
 
-
-
 class System {
-    private:
-       
     public:
         enum CUSTOM_CODES{
             CUSTOM_TIMER = 1	
@@ -27,8 +23,6 @@ class System {
 
         Camera cam;
         
-        static void event_handler(SDL_Event event);
-
         void update(Uint32);
         void draw(int);
 
