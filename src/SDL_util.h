@@ -42,7 +42,7 @@ void inf_loop();
 
 void resize_window(SDL_Event event);
 
-void handle_keypress(SDL_Event event);
+//void handle_keypress(SDL_Event event);
 
 void exit_prog(int);
 

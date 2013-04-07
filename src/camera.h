@@ -16,6 +16,8 @@ class Camera {
 
         void rotate(char direction, float angle);
         void translate(float dx, float dy, float dz);
+        void forward(float d);
+        void strafe(float d);
         float radius;
         void point_to(vec3 pos);
         Camera(int program);
