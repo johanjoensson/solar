@@ -1,6 +1,6 @@
 #include "object.h"
 #include "GL_utilities.h"
-#include <SOIL/SOIL.h>
+#include "soil/src/SOIL.h"
 //#include "LoadTGA.h"
 //#include <iostream>
 //using namespace std;
