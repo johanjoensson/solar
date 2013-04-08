@@ -17,9 +17,9 @@ class System {
 
         struct Cel_bodies{
             private:
-                vec3 rk4_accel(float h);
-                vec3 rk4_velocity(float h);
-                void rk4_gravity(float dt);
+                vec3 rk4_accel(float h, vec3 k, Cel_bodies *universe);
+                vec3 rk4_velocity(float h, vec3 acc);
+                void rk4_gravity(float dt, Cel_bodies *universe);
             public:
                 Body *planet;
                 Cel_bodies *next;
@@ -27,7 +27,7 @@ class System {
                 void add_planet(Body*);
                 void remove_planet(Body*);
                 void clear_list();
-                void update();
+                void update(float);
 
                 Cel_bodies();
                 ~Cel_bodies();

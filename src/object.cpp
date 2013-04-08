@@ -58,7 +58,7 @@ void Object::rotate(char direction, float angle)
 
 void Object::translate(float dx, float dy, float dz)
 {
-    trans_mat = T(dx, dy, dz) * trans_mat;
+    trans_mat = T(dx, dy, dz);// * trans_mat;
     matrix = trans_mat * rot_mat;
     //matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
 }

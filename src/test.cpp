@@ -35,21 +35,27 @@ void init(void)
 {
 	dumpInfo();
     b = Body("res/bunnyplus.obj", "res/grass.tga");
-    p = Body("res/bunnyplus.obj", "res/grass.tga");
-    d = Body("res/bunnyplus.obj", "res/grass.tga");
+    p = Body("res/planet.obj", "res/grass.tga");
+    d = Body("res/planet.obj", "res/grass.tga");
     s = Spacebox("res/skybox.obj", "res/SkyBox512.tga");
-    b.translate(0,0,-2);
+
+       
     set_event_handler(sys.event_handler);
 
     b.spin_y = 3.14;
     
-    sys.bodies.add_planet(&b);
+//    b.translate(0,0,-4.0);
+//    d.translate(3.0,0,-4.0);
+
+    b.mass = 10E+4;
+    p.mass = 10E2;
+    b.position = vec3(0.0f, 0.0f, -4.0f);
+    p.position = vec3(3.0f, 2.0f, -3.0f);
+    d.position = vec3(3.0f, 0.0f, -4.0f);
+//    sys.bodies.add_planet(&b);
     sys.bodies.add_planet(&d);
     sys.bodies.add_planet(&p);
 
-    sys.bodies.update();
-//    sys.bodies.clear_list();
-    sys.bodies.update();
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
@@ -77,8 +83,10 @@ void display(void)
 	printError("pre display");
 
 	// clear the screen
-//    s.draw(program);
-//    b.draw(program);
+    s.draw(program);
+    b.draw(program);
+    d.draw(program);
+    p.draw(program);
     //c.rotate('y', 0.01);
 	printError("draw error");
 
@@ -94,6 +102,7 @@ Uint32 OnTimer(Uint32 interval, void* param)
     param = param;
 
     b.update(interval/1000.0);
+    sys.bodies.update(interval/1000.0);
 
 	SDL_Event event;
 	
