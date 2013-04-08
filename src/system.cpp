@@ -2,7 +2,12 @@
 #include "system.h"
 
 System::System(){
-    bodies.next = NULL;
+}
+
+System::Cel_bodies::Cel_bodies()
+{
+    this->next = NULL;
+    
 }
 
 void System::Cel_bodies::add_planet(Body *p)
@@ -44,7 +49,7 @@ void System::Cel_bodies::remove_planet(Body *p)
     delete[] current;
 }
 
-void System::Cel_bodies::clear_list()
+System::Cel_bodies::~Cel_bodies()
 {
     if(this->next == NULL){
         return;
@@ -61,8 +66,14 @@ void System::Cel_bodies::clear_list()
         current = next;
         next = current->next;
     }
-    this->next = NULL;
+//    this->next = NULL;
 }
+
+void rk4_gravity(float dt)
+{
+    
+}
+
 
 void System::Cel_bodies::update()
 {
@@ -74,6 +85,7 @@ void System::Cel_bodies::update()
     }
     return;
 }
+
 
 void System::event_handler(SDL_Event event){
 	switch(event.type){

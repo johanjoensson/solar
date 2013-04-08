@@ -48,7 +48,7 @@ void init(void)
     sys.bodies.add_planet(&p);
 
     sys.bodies.update();
-    sys.bodies.clear_list();
+//    sys.bodies.clear_list();
     sys.bodies.update();
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);

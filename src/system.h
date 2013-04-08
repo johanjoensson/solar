@@ -16,13 +16,21 @@ class System {
         } custom_codes;
 
         struct Cel_bodies{
-            Body *planet;
-            Cel_bodies *next;
+            private:
+                vec3 rk4_accel(float h);
+                vec3 rk4_velocity(float h);
+                void rk4_gravity(float dt);
+            public:
+                Body *planet;
+                Cel_bodies *next;
 
-            void add_planet(Body*);
-            void remove_planet(Body*);
-	    void clear_list();
-            void update();
+                void add_planet(Body*);
+                void remove_planet(Body*);
+                void clear_list();
+                void update();
+
+                Cel_bodies();
+                ~Cel_bodies();
         }bodies;
 
         Camera cam;
