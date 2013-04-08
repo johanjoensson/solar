@@ -6,6 +6,8 @@ SDL_Surface* screen;
 int bpp;
 
 void (*ptdisplay)(void);
+void (*handle_event)(SDL_Event event);
+
 
 void set_sdl_display_func(void (*display_func)(void))
 {
@@ -13,6 +15,15 @@ void set_sdl_display_func(void (*display_func)(void))
 	if(ptdisplay == NULL){
 		fprintf(stderr, "Error setting display function\n");
 	}
+}
+
+void set_event_handler(void (*event_func)(SDL_Event event))
+{
+    handle_event = event_func;
+	if(ptdisplay == NULL){
+		fprintf(stderr, "Error setting event handler\n");
+	}
+
 }
 
 void exit_prog(int value)
@@ -49,7 +60,7 @@ void resize_window(SDL_Event event)
 	glLoadIdentity();
 }
 
-void handle_keypress(SDL_Event event)
+/*void handle_keypress(SDL_Event event)
 {
 	switch(event.key.keysym.sym){
 		case SDLK_ESCAPE:
@@ -60,19 +71,20 @@ void handle_keypress(SDL_Event event)
 			break;
 	}
 }
+*/
 
 void handle_userevent(SDL_Event event)
 {
 	switch(event.user.code){
-		case (int)CUSTOM_TIMER:
+//		case (int)CUSTOM_TIMER:
 				//(*ptdisplay)();
-				break;
+//				break;
 		default:
 			break;
 	}	
 }
 
-void event_handler(SDL_Event event){
+/*void event_handler(SDL_Event event){
 	switch(event.type){
 		case SDL_VIDEORESIZE: 
 			resize_window(event);
@@ -90,6 +102,7 @@ void event_handler(SDL_Event event){
 			break;
 	}
 }
+*/
 
 
 void inf_loop()
@@ -97,7 +110,7 @@ void inf_loop()
 	SDL_Event event;
 	while(1){
 		while(SDL_PollEvent(&event)){
-			event_handler(event);	
+			(*handle_event)(event);	
 		}
 		(*ptdisplay)();
 	}
@@ -146,9 +159,9 @@ void init_SDL()
 		exit_prog(1);
 	}
 	
-	glViewport(0, 0, height >> 1, height >> 1);
+	glViewport(0, 0, width >> 1, height >> 1);
 	glMatrixMode(GL_PROJECTION);
-	glOrtho(0, height >> 1, 0, height >> 1, -1, 1);
+	glOrtho(0, width >> 1, 0, height >> 1, -1, 1);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
