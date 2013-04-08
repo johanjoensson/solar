@@ -7,10 +7,9 @@
 #include "camera.h"
 #include "VectorUtils3.h"
 #include "system.h"
-#include<iostream>
-using namespace std;
 #include "LoadTGA.h"
 #include "spacebox.h"
+#include<stdio.h>
 
 #define near 1
 #define far 30
@@ -21,25 +20,21 @@ using namespace std;
 
 // Globals
 GLfloat a = 0.0;
+const SDL_VideoInfo* info; 
 
 // Reference to shader program
 GLuint program;
-Body b;
-Spacebox s;
-Camera c;
 System sys;
 
 mat4 projection_matrix;
 
+void handle_keypress(SDL_Event event);
+void handle_mouse(SDL_Event event);
+static void event_handler(SDL_Event event);
+
 void init(void)
 {
 	dumpInfo();
-    b = Body("../res/bunnyplus.obj", "../res/grass.tga");
-    s = Spacebox("../res/spacedome.obj", "../res/spacedome.tga");
-    b.translate(0,0,-2);
-    set_event_handler(sys.event_handler);
-
-    b.spin_y = 3.14;
 
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
@@ -49,11 +44,17 @@ void init(void)
 	program = loadShaders("test.vert", "test.frag");
 	printError("error loading shaders");
 
-    // Init camera
-    c = Camera(program);
+    sys = System(program);
+    set_event_handler(event_handler);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
+
+    // Hide the cursor 
+    SDL_ShowCursor(0);
+    
+    // Lock cursor to this program
+    SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
@@ -68,9 +69,7 @@ void display(void)
 	printError("pre display");
 
 	// clear the screen
-    s.draw(program);
-    b.draw(program);
-    //c.rotate('y', 0.01);
+    sys.draw(program); 
 	printError("draw error");
 
 	SDL_GL_SwapBuffers();
@@ -84,7 +83,7 @@ Uint32 OnTimer(Uint32 interval, void* param)
     param = NULL;
     param = param;
 
-    b.update(interval/1000.0);
+    sys.update(interval);
 
 	SDL_Event event;
 	
@@ -109,4 +108,59 @@ int main()
 	}
 
 	inf_loop();
+}
+
+void handle_keypress(SDL_Event event)
+{
+	switch(event.key.keysym.sym){
+		case SDLK_ESCAPE:
+		case SDLK_q:
+			exit_prog(0);
+			break;
+        case SDLK_w:
+            sys.c.forward(0.1);
+            break;
+        case SDLK_a:
+            sys.c.strafe(0.1);
+            break;
+        case SDLK_s:
+            sys.c.forward(-0.1);
+            break;
+        case SDLK_d:
+            sys.c.strafe(-0.1);
+            break;
+		default:
+			break;
+	}
+}
+
+void handle_mouse(SDL_Event event)
+{
+    info = SDL_GetVideoInfo();
+    int width = info->current_w; 
+    int height = info->current_h; 
+
+    sys.c.change_look_at_pos(event.motion.xrel,event.motion.y,width,height);
+}
+
+void event_handler(SDL_Event event){
+	switch(event.type){
+		case SDL_VIDEORESIZE: 
+			resize_window(event);
+			break;
+		case SDL_KEYDOWN:
+			handle_keypress(event);
+			break;
+		case SDL_QUIT:
+			exit_prog(0);
+			break;
+		case SDL_USEREVENT:
+			handle_userevent(event);
+			break;
+        case SDL_MOUSEMOTION:
+            handle_mouse(event);
+            break;
+		default:
+			break;
+	}
 }

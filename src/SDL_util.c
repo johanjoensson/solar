@@ -60,7 +60,7 @@ void resize_window(SDL_Event event)
 	glLoadIdentity();
 }
 
-void handle_keypress(SDL_Event event)
+/*void handle_keypress(SDL_Event event)
 {
 	switch(event.key.keysym.sym){
 		case SDLK_ESCAPE:
@@ -71,6 +71,7 @@ void handle_keypress(SDL_Event event)
 			break;
 	}
 }
+*/
 
 void handle_userevent(SDL_Event event)
 {
@@ -83,7 +84,7 @@ void handle_userevent(SDL_Event event)
 	}	
 }
 
-void event_handler(SDL_Event event){
+/*void event_handler(SDL_Event event){
 	switch(event.type){
 		case SDL_VIDEORESIZE: 
 			resize_window(event);
@@ -101,6 +102,7 @@ void event_handler(SDL_Event event){
 			break;
 	}
 }
+*/
 
 
 void inf_loop()
