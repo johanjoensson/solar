@@ -58,7 +58,7 @@ $(BIN)/%.o: $(SRC)/%.cpp
 # TODO: Att byta ut mot lämpligt namn på programmet!
 # Kompilera vår exekverbara fil med lämpliga flaggor samt bibliotek
 test: $(OBJ)
-	$(CXX) $(LDXFLAGS) $^ -o $@
+	$(CXX) $^ -o $@ $(LDXFLAGS)
 
 # Rensa bort alla temporära filer som skapats
 clean:
