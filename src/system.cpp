@@ -58,7 +58,7 @@ void System::update(Uint32 dt)
 
 System::System(int program){
     b = Body("../res/bunnyplus.obj", "../res/grass.tga");
-    s = Spacebox("../res/spacebox.obj", "../res/Leo.tga");
+    s = Spacebox("../res/spacedome.obj", "../res/spacedome.png");
     b.translate(0,0,-2);
     b.spin_y = 1;
     c = Camera(program);
