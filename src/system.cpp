@@ -56,7 +56,7 @@ System::Cel_bodies::~Cel_bodies()
         return;
     }
     std::cout << "Innan variabeldeklarationerna" << std::endl;
-
+#if 0
     Cel_bodies *current = this->next;;
     Cel_bodies *next = current->next;
 
@@ -68,6 +68,7 @@ System::Cel_bodies::~Cel_bodies()
         next = current->next;
     }
     this->next = NULL;
+#endif
 }
 
 vec3 System::Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)

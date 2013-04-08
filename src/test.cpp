@@ -52,7 +52,7 @@ void init(void)
     b.position = vec3(0.0f, 0.0f, -4.0f);
     p.position = vec3(3.0f, 2.0f, -3.0f);
     d.position = vec3(3.0f, 0.0f, -4.0f);
-//    sys.bodies.add_planet(&b);
+    sys.bodies.add_planet(&b);
     sys.bodies.add_planet(&d);
     sys.bodies.add_planet(&p);
 
