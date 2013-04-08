@@ -3,7 +3,7 @@ CXX = g++
 
 WARN = -Wall -Wextra -W -pedantic 
 ETC = -DGL_GLEXT_PROTOTYPES -g 
-LIB = -lGL  -lm `sdl-config --cflags --libs` 
+LIB = -lGL -lm -lSOIL `sdl-config --cflags --libs` 
 
 CFLAGS = $(WARN) $(ETC) $(LIB) -std=c99
 
