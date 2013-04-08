@@ -80,6 +80,10 @@ void Camera::strafe(float d)
 
 void Camera::change_look_at_pos(int xrel, int y, int width, int height)
 {
+    // FIXME ful lösning är detta
+    if(y==0){
+        y = 1;
+    }
     x += xrel;
     float fi = ((float)x)/width*2*M_PI;
     float theta = ((float)y)/height*M_PI;
