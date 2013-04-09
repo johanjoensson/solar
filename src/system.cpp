@@ -85,7 +85,7 @@ vec3 System::Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)
     a = vec3(0.0, 0.0, 0.0);
     float Mi;
 
-    double G = 6.6738480E-5;//E-11f;
+    double G = 6.6738480E-7 ;//E-11f;
 
     while(tmp != NULL){
         if(tmp->planet != this->planet){
@@ -131,8 +131,6 @@ void System::Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
 
     res_r = rn + dt/6.0f*(kr1+2*kr2+2*kr3 + kr4);
     res_v = vn + dt/6.0f*(kv1 + 2*kv2 + 2*kv3 + kv4);
-//    res_r =  dt/6.0f*(kr1+2*kr2+2*kr3 + kr4);
-//    res_v =  dt/6.0f*(kv1 + 2*kv2 + 2*kv3 + kv4);
 
     this->planet->position = res_r;
     this->planet->velocity = res_v;
@@ -144,9 +142,8 @@ void System::Cel_bodies::update(float interval)
     std::cout << std::endl << std::endl;;
     Cel_bodies *tmp = this->next;
     while(tmp != NULL){
-//        std::cout << "Planetens massa är: " << tmp->planet->mass << std::endl;
         tmp->rk4_gravity(interval, this);
-        tmp->planet->translate(tmp->planet->position.x,tmp->planet->position.y,tmp->planet->position.z);
+        tmp->planet->place(tmp->planet->position);
         std::cout << "Planetens position är: " << tmp->planet->position.x << " "  << tmp->planet->position.y << " " << tmp->planet->position.z << std::endl;
         std::cout << "Planetens hastighet är: " << tmp->planet->velocity.x << " "  << tmp->planet->velocity.y << " "  << tmp->planet->velocity.z << std::endl;
         tmp = tmp->next;
