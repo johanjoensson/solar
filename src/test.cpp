@@ -24,7 +24,7 @@ GLfloat a = 0.0;
 
 // Reference to shader program
 GLuint program;
-Body b,p,d, e, f;
+Body b;
 Spacebox s;
 Camera c;
 System sys;
@@ -35,44 +35,10 @@ void init(void)
 {
 	dumpInfo();
     b = Body("res/bunnyplus.obj", "res/grass.tga");
-    p = Body("res/planet.obj", "res/grass.tga");
-    d = Body("res/planet.obj", "res/grass.tga");
-    e = Body("res/planet.obj", "res/grass.tga");
-    f = Body("res/planet.obj", "res/grass.tga");
     s = Spacebox("res/skybox.obj", "res/SkyBox512.tga");
     set_event_handler(sys.event_handler);
 
     b.spin_y = 3.14;
-    
-//    b.translate(0,0,-4.0);
-//    d.translate(3.0,0,-4.0);
-
-    b.mass = 1E+11;
-//    p.mass = 1E+3;
-//    d.mass = 1E+2;
-
-    b.position = vec3(0.0f, 0.0f, -6.0f);
-
-    d.position = vec3(-4.0f, 0.0f, -6.0f);
-    d.velocity = vec3(0.0, 0.0, 1.0);
-    
-    p.position = vec3(4.0f, 0.0f, -6.0f);
-    p.velocity = vec3(0.0, 1.0, 0.0);
-
-    e.position = vec3(4.0, 4.0, -2.0);
-    e.velocity = vec3(0.0, 0.0, -2.0);
-
-    f.position = vec3(0.0, -6.0, -19.0);
-    f.velocity = vec3(0.5, 0.0, 0.0);
-
-
-
-    sys.bodies.add_planet(&b);
-    sys.bodies.add_planet(&d);
-    sys.bodies.add_planet(&p);
-    sys.bodies.add_planet(&e);
-    sys.bodies.add_planet(&f);
-
 	// GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
@@ -102,11 +68,6 @@ void display(void)
 	// clear the screen
     s.draw(program);
     b.draw(program);
-    d.draw(program);
-    p.draw(program);
-    e.draw(program);
-    f.draw(program);
-    //c.rotate('y', 0.01);
 	printError("draw error");
 
 	SDL_GL_SwapBuffers();

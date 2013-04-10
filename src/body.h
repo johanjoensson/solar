@@ -4,6 +4,12 @@
 #include "object.h"
 #include "VectorUtils3.h"
 
+/******************************************************************************
+ * Styr vilken implementation av rk4-integration vi kör.
+ *****************************************************************************/
+#define GRAV_OPT
+//#undef GRAV_OPT
+
 class Body: public Object {
     private:
     public:
@@ -21,6 +27,9 @@ class Body: public Object {
         Body();
 
 #ifdef GRAV_OPT
+/******************************************************************************
+ * Hjälplutningar till den "optimerade" implementationen av rk4-integration
+ *****************************************************************************/
         vec3 kv1;
         vec3 kv2;
         vec3 kv3;
