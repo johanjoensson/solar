@@ -4,6 +4,7 @@ DETTA SKA GÖRAS:
  / Runge Kutta, 4:e ordningen
  / Gravitation (JJ)
  / SPACE box (GS)
+ x Tangentbord (GS)
  x object 
  x body
  / system (anropar uppdaterings funktionerna för alla objekt)
