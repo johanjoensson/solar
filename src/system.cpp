@@ -98,7 +98,7 @@ vec3 System::Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)
     a = vec3(0.0, 0.0, 0.0);
     float Mi;
 
-    double G = 6.6738480E-11 ;//E-11f;
+    double G = 6.6738480E-7 ;//E-11f;
 
     while(tmp != NULL){
         if(tmp->planet != this->planet){
@@ -182,6 +182,9 @@ void System::Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
  *****************************************************************************/
 vec3 System::Cel_bodies::force(Cel_bodies *second, float h, vec3 first_k, vec3 second_k)
 {
+    if(second == NULL){
+        return vec3(0.0,0.0,0.0);
+    }
     Cel_bodies *first = this;
     vec3 rn = first->planet->position + h*first_k;
     vec3 rp_i, F;
@@ -316,13 +319,17 @@ void System::Cel_bodies::update_gravity(float h)
 {
     Cel_bodies *current = this;
     vec3 new_pos, new_vel;
+    int i = 0;
     while(current != NULL){
-        new_vel = current->planet->velocity + h/6*(current->planet->kv1 + 2*current->planet->kv2 + 2*current->planet->kv3 + current->planet->kv4);
-        current->planet->velocity = new_vel;
 
+        new_vel = current->planet->velocity + h/6*(current->planet->kv1 + 2*current->planet->kv2 + 2*current->planet->kv3 + current->planet->kv4);
+
+        current->planet->velocity = new_vel;
         new_pos = current->planet->position + h/6*(current->planet->kr1 + 2*current->planet->kr2 + 2*current->planet->kr3 + current->planet->kr4);
         current->planet->position = new_pos;
+
         current->reset_k();
+        /*HÄR HÄNDER NÅGOT MYSKO! */
         current->planet->place(current->planet->position);
 
         current = current->next;
@@ -351,7 +358,6 @@ void System::Cel_bodies::calculate_slopes(float dt)
  *****************************************************************************/
 void System::Cel_bodies::update(float interval)
 {
-//    std::cout << std::endl << std::endl;;
     if(this->next == NULL){
         return;
     }
@@ -367,11 +373,11 @@ void System::Cel_bodies::update(float interval)
         current = current->next;
     }
 #endif
-    return;
 }
 
 void System::update(Uint32 dt)
 {
+    bodies.update(dt/1000);
     b.update(dt/1000.0);
 }
 
@@ -379,8 +385,11 @@ System::System(int program){
     b = Body("res/bunnyplus.obj", "res/grass.tga");
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     b.translate(0,0,-2);
+    b.position = vec3(0.0,0.0,0.0);
     b.spin_y = 1;
     c = Camera(program);
+    bodies = Cel_bodies();
+    bodies.add_planet(&b);
 }
 
 void System::draw(int program)
