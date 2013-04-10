@@ -23,9 +23,14 @@ CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c99
 # GL är OpnGL och m är matematik
 LIB = GL m
 
+# Nora har problem med sökvägar och linande
+NORA = /usr/include/GL
+
 # Länka de bibliotek vi behöver
 # sdl-config för att enkelt länka rätt bibliotek
-LDXFLAGS = $(addprefix -l,$(LIB)) `sdl-config --libs`
+LDXFLAGS = $(addprefix -L,$(NORA)) $(addprefix -l,$(LIB)) `sdl-config --libs`
+LIBSOIL = libSOIL.a
+SOILDIR = src/soil/lib
 
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
@@ -37,7 +42,6 @@ COBJ = $(patsubst $(SRC)/%.c,$(BIN)/%.o, $(CSOURCES))
 CXOBJ = $(patsubst $(SRC)/%.cpp,$(BIN)/%.o, $(CXSOURCES))
 
 OBJ = $(CXOBJ) $(COBJ)
-
 # om någon är korkad ska detta inte förstöra min fina Makefile
 .PHONY: all clean src bin
 
@@ -57,8 +61,9 @@ $(BIN)/%.o: $(SRC)/%.cpp
 
 # TODO: Att byta ut mot lämpligt namn på programmet!
 # Kompilera vår exekverbara fil med lämpliga flaggor samt bibliotek
-test: $(OBJ)
-	$(CXX) $(LDXFLAGS) $^ -o $@
+test: $(OBJ) $(SOILDIR)/$(LIBSOIL)
+
+	$(CXX) $^ -o $@ $(LDXFLAGS)
 
 src : 
 	mkdir -p src

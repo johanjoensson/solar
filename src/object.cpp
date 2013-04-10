@@ -1,6 +1,7 @@
 #include "object.h"
 #include "GL_utilities.h"
-#include "LoadTGA.h"
+#include "soil/src/SOIL.h"
+//#include "LoadTGA.h"
 //#include <iostream>
 //using namespace std;
 
@@ -23,7 +24,20 @@ Object::Object(const char *model)
 Object::Object(const char *model, const char *tex)
 {
     m = LoadModelPlus((char*)model);
-    LoadTGATextureSimple(tex, &texture);
+
+    texture = SOIL_load_OGL_texture(
+            tex,
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_INVERT_Y
+            );
+
+    // Typical Texture Generation Using Data From The Bitmap
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+    //LoadTGATextureSimple(tex, &texture);
     reflectivity = 1;
     matrix = IdentityMatrix();
     rot_mat = IdentityMatrix();
@@ -56,9 +70,15 @@ void Object::rotate(char direction, float angle)
     }
 }
 
+void Object::place(vec3 pos)
+{
+    trans_mat = T(pos.x, pos.y, pos.z);
+    matrix = trans_mat * rot_mat;
+}
+
 void Object::translate(float dx, float dy, float dz)
 {
-    trans_mat = T(dx, dy, dz) * trans_mat;
+    trans_mat = T(dx, dy, dz)* trans_mat;
     matrix = trans_mat * rot_mat;
     //matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
 }
