@@ -12,7 +12,7 @@
 #include<stdio.h>
 
 #define near 1
-#define far 30
+#define far 300
 #define right 1
 #define left -1
 #define bottom -1
@@ -31,6 +31,7 @@ mat4 projection_matrix;
 void handle_keypress(SDL_Event event);
 void handle_mouse(SDL_Event event);
 static void event_handler(SDL_Event event);
+void check_keys();
 
 void init(void)
 {
@@ -64,6 +65,8 @@ void init(void)
 
 void display(void)
 {
+    // FIXME check_keys ska kanske inte ligga här
+    check_keys();
 	printError("pre display");
 
     sys.update(20);
@@ -122,18 +125,6 @@ void handle_keypress(SDL_Event event)
 		case SDLK_q:
 			exit_prog(0);
 			break;
-        case SDLK_w:
-            sys.c.forward(0.1);
-            break;
-        case SDLK_a:
-            sys.c.strafe(0.1);
-            break;
-        case SDLK_s:
-            sys.c.forward(-0.1);
-            break;
-        case SDLK_d:
-            sys.c.strafe(-0.1);
-            break;
 		default:
 			break;
 	}
@@ -168,4 +159,22 @@ void event_handler(SDL_Event event){
 		default:
 			break;
 	}
+}
+
+void check_keys(){
+    Uint8 *keystate = SDL_GetKeyState(NULL);
+    if(keystate[SDLK_w])
+    {
+        sys.c.forward(0.1);
+    } else if(keystate[SDLK_s])
+    {
+        sys.c.forward(-0.1);
+    }
+    if(keystate[SDLK_a])
+    {
+        sys.c.strafe(0.1);
+    } else if(keystate[SDLK_d])
+    {
+        sys.c.strafe(-0.1);
+    }
 }
