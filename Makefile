@@ -29,6 +29,8 @@ NORA = /usr/include/GL
 # Länka de bibliotek vi behöver
 # sdl-config för att enkelt länka rätt bibliotek
 LDXFLAGS = $(addprefix -L,$(NORA)) $(addprefix -l,$(LIB)) `sdl-config --libs`
+LIBSOIL = libSOIL.a
+SOILDIR = src/soil/src
 
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
@@ -39,7 +41,7 @@ CSOURCES = $(wildcard $(SRC)/*.c)
 COBJ = $(patsubst $(SRC)/%.c,$(BIN)/%.o, $(CSOURCES))
 CXOBJ = $(patsubst $(SRC)/%.cpp,$(BIN)/%.o, $(CXSOURCES))
 
-OBJ = $(CXOBJ) $(COBJ)
+OBJ = $(CXOBJ) $(COBJ) $(SOILDIR)/$(LIBSOIL)
 
 # om någon är korkad ska detta inte förstöra min fina Makefile
 .PHONY: all clean src bin
