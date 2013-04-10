@@ -1,0 +1,24 @@
+-----------------------------------
+DETTA SKA GÖRAS:
+-----------------------------------
+ / Runge Kutta, 4:e ordningen
+ / Gravitation (JJ)
+ / SPACE box (GS)
+ x object 
+ x body
+ / system (anropar uppdaterings funktionerna för alla objekt)
+-> astroidbälte (christopher??)
+-> Ljussättning
+-> Sol
+-> Rymdskepp (som ska styras manuellt)
+->  
+
+
+------------------------------------
+REGLER FÖR DETTA DOKUMENT:
+------------------------------------
+> -> om det inte är gjort
+> x om det är klart,
+> / om påbörjat (skriv initial på den som jobbar på det!!) 
+> sätt utropstecken då hjälp kan behövas (!)
+> delgrejer tabbas in under huvudgrej

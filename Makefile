@@ -23,9 +23,12 @@ CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c99
 # GL är OpnGL och m är matematik
 LIB = GL m
 
+# Nora har problem med sökvägar och linande
+NORA = /usr/include/GL
+
 # Länka de bibliotek vi behöver
 # sdl-config för att enkelt länka rätt bibliotek
-LDXFLAGS = $(addprefix -l,$(LIB)) `sdl-config --libs`
+LDXFLAGS = $(addprefix -L,$(NORA)) $(addprefix -l,$(LIB)) `sdl-config --libs`
 
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
