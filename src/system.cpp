@@ -319,7 +319,6 @@ void System::Cel_bodies::update_gravity(float h)
 {
     Cel_bodies *current = this;
     vec3 new_pos, new_vel;
-    int i = 0;
     while(current != NULL){
 
         new_vel = current->planet->velocity + h/6*(current->planet->kv1 + 2*current->planet->kv2 + 2*current->planet->kv3 + current->planet->kv4);
@@ -356,44 +355,59 @@ void System::Cel_bodies::calculate_slopes(float dt)
 /******************************************************************************
  * Uppdatera samtliga objekt i världen med nya hastigheter och positioner.
  *****************************************************************************/
-void System::Cel_bodies::update(float interval)
+void System::Cel_bodies::update(float dt)
 {
     if(this->next == NULL){
         return;
     }
-#ifdef GRAV_OPT 
-    Cel_bodies *first = this->next;
-    first->calculate_slopes(interval);
-    first->update_gravity(interval);
-#else // ! GRAV_OPT
     Cel_bodies *current = this->next;
+#ifdef GRAV_OPT 
+    current->calculate_slopes(dt);
+    current->update_gravity(dt);
+#else // ! GRAV_OPT
     while(current != NULL){
-        current->rk4_gravity(interval, this);
+        current->rk4_gravity(dt, this);
         current->planet->place(current->planet->position);
         current = current->next;
     }
 #endif
+    
+    current = this->next;
+    while(current != NULL){
+        current->planet->update(dt);
+
+        current = current->next;
+    }
+    
 }
 
-void System::update(Uint32 dt)
+void System::update(float dt)
 {
     bodies.update(dt/1000);
-    b.update(dt/1000.0);
 }
 
 System::System(int program){
     b = Body("res/bunnyplus.obj", "res/grass.tga");
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     b.translate(0,0,-2);
-    b.position = vec3(0.0,0.0,0.0);
+    b.position = vec3(0.0,0.0,-2.0);
     b.spin_y = 1;
     c = Camera(program);
     bodies = Cel_bodies();
-    bodies.add_planet(&b);
+
+    Body *p = new Body("res/bunnyplus.obj", "res/grass.tga");
+    p->spin_y = 1;
+    p->position = vec3(0.0, 0.0, -2.0);
+    bodies.add_planet(p);
 }
 
 void System::draw(int program)
 {
     s.draw(program);
-    b.draw(program);
+    Cel_bodies *current = this->bodies.next;
+    while(current != NULL){
+        current->planet->draw(program);
+
+        current = current->next;
+    }
 }

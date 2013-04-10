@@ -75,11 +75,6 @@ void display(void)
 	SDL_GL_SwapBuffers();
 }
 
-void updater(Uint32 interval)
-{
-    sys.update(interval);
-
-}
 
 /******************************************************************************
  * Anropa INGA som helst funktioner i denna!
