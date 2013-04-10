@@ -18,7 +18,6 @@ void System::Cel_bodies::add_planet(Body *p)
     tmp->next = this->next;
 
     this->next = tmp;
-    std::cout << "mass: " << tmp->planet->mass << std::endl << "position: " << tmp->planet->position.x << " " << tmp->planet->position.y << " " << tmp->planet->position.z << " " << std::endl;
 
 }
 
@@ -45,7 +44,6 @@ void System::Cel_bodies::remove_planet(Body *p)
         next = current->next;
     }
             
-    std::cout << "Radera sista  planeten i listan." << std::endl;
     prev->next = NULL;
     delete[] current;
 }
@@ -55,22 +53,9 @@ System::Cel_bodies::~Cel_bodies()
     if(this->next == NULL){
         return;
     }
-    std::cout << "Innan variabeldeklarationerna" << std::endl;
-#if 0
-    Cel_bodies *current = this->next;;
-    Cel_bodies *next = current->next;
-
-    std::cout << "Innan loopen" << std::endl;
-    while(current != NULL){
-        std::cout << "Inuti loopen" << std::endl;
-        delete[] current;
-        current = next;
-        next = current->next;
-    }
-    this->next = NULL;
-#endif
 }
 
+#ifndef GRAV_OPT
 vec3 System::Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)
 {
     // No gravity in empty space
@@ -85,7 +70,7 @@ vec3 System::Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)
     a = vec3(0.0, 0.0, 0.0);
     float Mi;
 
-    double G = 6.6738480E-7 ;//E-11f;
+    double G = 6.6738480E-11 ;//E-11f;
 
     while(tmp != NULL){
         if(tmp->planet != this->planet){
@@ -135,42 +120,41 @@ void System::Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
     this->planet->position = res_r;
     this->planet->velocity = res_v;
 }
-
+#else //GRAV_OPT
 vec3 System::Cel_bodies::acceleration(Cel_bodies *second, float h, vec3 first_k, vec3 second_k)
 {
-    Cel_bodies *first = this->next;
+    Cel_bodies *first = this;
     vec3 rn = first->planet->position + h*first_k;
-    vec3 rp_i, a;
+    vec3 rp_i, F;
     float rp_icu, rp_i_val;
-    a = vec3(0.0, 0.0, 0.0);
-    float Mi;
+    
+    F = vec3(0.0, 0.0, 0.0);
+    float Mi,m;
 
-    double G = 6.6738480E-7 ;//E-11f;
+    double G = 6.6738480E-11 ;//E-11f;
 
     rp_i = second->planet->position + h*second_k - rn;
     rp_i_val = Norm(rp_i);
     Mi = second->planet->mass;
+    m = first->planet->mass;
     rp_icu = rp_i_val*rp_i_val*rp_i_val;
 
-    a = G*Mi*rp_i/rp_icu;
+    F = G*m*Mi*rp_i/rp_icu;
 
-    std::cout << "Acceleration: " << a.x << ", " << a.y << ", " << a.z << std::endl;
-
-    return a;
+    return F;
 
 }
 
 void System::Cel_bodies::calculate_k1()
 {
     Cel_bodies *current = this->next;
-    std::cout << "Calculate k1!" << std::endl;
     
-    vec3 a, zero;
+    vec3 F, zero;
     zero = vec3(0.0, 0.0, 0.0);
     while(current != NULL){
-        a = this->acceleration(current, 0.0, zero, zero);
-        this->planet->kv1 = this->planet->kv1 + a;
-        current->planet->kv1 = current->planet->kv1 - a ; 
+        F = acceleration(current, 0.0, zero, zero);
+        this->planet->kv1 = this->planet->kv1 + F/this->planet->mass;
+        current->planet->kv1 = current->planet->kv1 - F/current->planet->mass; 
 
 
         current = current->next;
@@ -182,13 +166,12 @@ void System::Cel_bodies::calculate_k1()
 void System::Cel_bodies::calculate_k2(float h)
 {
     Cel_bodies *current = this->next;
-    std::cout << "Calculate k2!" << std::endl;
     
-    vec3 a;
+    vec3 F;
     while(current != NULL){
-        a = this->acceleration(current, h, this->planet->kv1, current->planet->kv1);
-        this->planet->kv2 = this->planet->kv2 + a;
-        current->planet->kv2 = current->planet->kv2 - a ; 
+        F = this->acceleration(current, h, this->planet->kv1, current->planet->kv1);
+        this->planet->kv2 = this->planet->kv2 + F/this->planet->mass;
+        current->planet->kv2 = current->planet->kv2 - F/current->planet->mass ; 
 
 
         current = current->next;
@@ -200,13 +183,12 @@ void System::Cel_bodies::calculate_k2(float h)
 void System::Cel_bodies::calculate_k3(float h)
 {
     Cel_bodies *current = this->next;
-    std::cout << "Calculate k3!" << std::endl;
     
-    vec3 a;
+    vec3 F;
     while(current != NULL){
-        a = this->acceleration(current, h, this->planet->kv2, current->planet->kv2);
-        this->planet->kv3 = this->planet->kv3 + a;
-        current->planet->kv3 = current->planet->kv3 - a ; 
+        F = this->acceleration(current, h, this->planet->kv2, current->planet->kv2);
+        this->planet->kv3 = this->planet->kv3 + F/this->planet->mass;
+        current->planet->kv3 = current->planet->kv3 - F/current->planet->mass ; 
 
         current = current->next;
     }
@@ -217,13 +199,12 @@ void System::Cel_bodies::calculate_k3(float h)
 void System::Cel_bodies::calculate_k4(float h)
 {
     Cel_bodies *current = this->next;
-    std::cout << "Calculate k4!" << std::endl;
     
-    vec3 a;
+    vec3 F;
     while(current != NULL){
-        a = this->acceleration(current, h, this->planet->kv3, current->planet->kv3);
-        this->planet->kv4 = this->planet->kv4 + a;
-        current->planet->kv4 = current->planet->kv4 - a ; 
+        F = this->acceleration(current, h, this->planet->kv3, current->planet->kv3);
+        this->planet->kv4 = this->planet->kv4 + F/this->planet->mass;
+        current->planet->kv4 = current->planet->kv4 - F/current->planet->mass ; 
 
         current = current->next;
     }
@@ -252,26 +233,11 @@ void System::Cel_bodies::update_gravity(float h)
     Cel_bodies *current = this;
     vec3 new_pos, new_vel;
     while(current != NULL){
-        std::cout << "k1: " << current->planet->kv1.x << ", " << current->planet->kv1.y << ", " << current->planet->kv1.z << "\t";
-        std::cout  << current->planet->kr1.x << ", " << current->planet->kr1.y << ", " << current->planet->kr1.z << "\t" << std::endl;
-
-        std::cout << "k2: " << current->planet->kv2.x << ", " << current->planet->kv2.y << ", " << current->planet->kv2.z << "\t";
-        std::cout  << current->planet->kr2.x << ", " << current->planet->kr2.y << ", " << current->planet->kr2.z << "\t" << std::endl;
-
-        std::cout << "k3: " << current->planet->kv3.x << ", " << current->planet->kv3.y << ", " << current->planet->kv3.z << "\t";
-        std::cout  << current->planet->kr3.x << ", " << current->planet->kr3.y << ", " << current->planet->kr3.z << "\t" << std::endl;
-
-        std::cout << "k4: " << current->planet->kv4.x << ", " << current->planet->kv4.y << ", " << current->planet->kv4.z << "\t";
-        std::cout  << current->planet->kr4.x << ", " << current->planet->kr4.y << ", " << current->planet->kr4.z << "\t" << std::endl;
-
-
-
         new_vel = current->planet->velocity + h/6*(current->planet->kv1 + 2*current->planet->kv2 + 2*current->planet->kv3 + current->planet->kv4);
         current->planet->velocity = new_vel;
 
         new_pos = current->planet->position + h/6*(current->planet->kr1 + 2*current->planet->kr2 + 2*current->planet->kr3 + current->planet->kr4);
         current->planet->position = new_pos;
-
         current->reset_k();
         current->planet->place(current->planet->position);
 
@@ -281,7 +247,6 @@ void System::Cel_bodies::update_gravity(float h)
 void System::Cel_bodies::calculate_slopes(float dt)
 {
     Cel_bodies *current = this;
-    std::cout << "Calculate slopes!" << std::endl;
     while(current != NULL){
         current->calculate_k1();
         current->calculate_k2(dt/2);
@@ -291,25 +256,23 @@ void System::Cel_bodies::calculate_slopes(float dt)
         current = current->next;
     }
 }
+#endif //GRAV_OPT
 
 void System::Cel_bodies::update(float interval)
 {
-    std::cout << std::endl << std::endl;;
+//    std::cout << std::endl << std::endl;;
     if(this->next == NULL){
         return;
     }
-#if 0
+#ifdef GRAV_OPT 
     Cel_bodies *first = this->next;
     first->calculate_slopes(interval);
     first->update_gravity(interval);
-#endif
-#if 1
+#else // ! GRAV_OPT
     Cel_bodies *current = this->next;
     while(current != NULL){
         current->rk4_gravity(interval, this);
         current->planet->place(current->planet->position);
-        std::cout << "Planetens position är: " << current->planet->position.x << " "  << current->planet->position.y << " " << current->planet->position.z << std::endl;
-        std::cout << "Planetens hastighet är: " << current->planet->velocity.x << " "  << current->planet->velocity.y << " "  << current->planet->velocity.z << std::endl;
         current = current->next;
     }
 #endif

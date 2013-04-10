@@ -20,7 +20,7 @@ class Body: public Object {
         Body(const char*, const char*);
         Body();
 
-
+#ifdef GRAV_OPT
         vec3 kv1;
         vec3 kv2;
         vec3 kv3;
@@ -30,5 +30,6 @@ class Body: public Object {
         vec3 kr2;
         vec3 kr3;
         vec3 kr4;
+#endif //GRAV_OPT
 };
 #endif

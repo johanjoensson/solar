@@ -47,18 +47,18 @@ void init(void)
 //    b.translate(0,0,-4.0);
 //    d.translate(3.0,0,-4.0);
 
-    b.mass = 1E+7;
+    b.mass = 1E+11;
 //    p.mass = 1E+3;
 //    d.mass = 1E+2;
 
     b.position = vec3(0.0f, 0.0f, -6.0f);
 
-    p.position = vec3(4.0f, 0.0f, -6.0f);
-    p.velocity = vec3(0.0, 1.0, 0.0);
-
     d.position = vec3(-4.0f, 0.0f, -6.0f);
     d.velocity = vec3(0.0, 0.0, 1.0);
     
+    p.position = vec3(4.0f, 0.0f, -6.0f);
+    p.velocity = vec3(0.0, 1.0, 0.0);
+
     e.position = vec3(4.0, 4.0, -2.0);
     e.velocity = vec3(0.0, 0.0, -2.0);
 

@@ -11,6 +11,7 @@ Body::Body(const char* model, const char *texture) : Object(model, texture)
     velocity = vec3(0.0, 0.0, 0.0);
 
     vec3 zero = vec3(0.0, 0.0, 0.0);
+#ifdef GRAV_OPT
     kv1 = zero;
     kv2 = zero;
     kv3 = zero;
@@ -20,6 +21,7 @@ Body::Body(const char* model, const char *texture) : Object(model, texture)
     kr2 = zero;
     kr3 = zero;
     kr4 = zero;
+#endif //GRAV_OPT
 
 }
 
