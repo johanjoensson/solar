@@ -41,7 +41,7 @@ void init(void)
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("test.vert", "test.frag");
+	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
     sys = System(program);
