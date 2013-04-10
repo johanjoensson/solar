@@ -36,17 +36,15 @@ void check_keys();
 void init(void)
 {
 	dumpInfo();
-
-	// GL inits
+    // GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("test.vert", "test.frag");
+	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
     sys = System(program);
-    set_event_handler(event_handler);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
@@ -71,6 +69,8 @@ void display(void)
     check_keys();
 	printError("pre display");
 
+    sys.update(20);
+
 	// clear the screen
     sys.draw(program); 
 	printError("draw error");
@@ -78,6 +78,17 @@ void display(void)
 	SDL_GL_SwapBuffers();
 }
 
+void updater(Uint32 interval)
+{
+    sys.update(interval);
+
+}
+
+/******************************************************************************
+ * Anropa INGA som helst funktioner i denna!
+ * Det blir bara fel utan någon som helst anledning!
+ * Denna sätter timer-eventet och gör inget annat!
+ *****************************************************************************/
 Uint32 OnTimer(Uint32 interval, void* param)
 {
 	a += 0.1;
@@ -85,8 +96,6 @@ Uint32 OnTimer(Uint32 interval, void* param)
     // För att få bort varningar
     param = NULL;
     param = param;
-
-    sys.update(interval);
 
 	SDL_Event event;
 	
@@ -103,6 +112,7 @@ int main()
 {
 	init_SDL();
 	set_sdl_display_func(&display);
+    set_event_handler(&event_handler);
 	init();
 	SDL_TimerID timer_id;
 	timer_id = SDL_AddTimer(20, &OnTimer, NULL);

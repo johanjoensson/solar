@@ -7,6 +7,22 @@ Body::Body(const char* model, const char *texture) : Object(model, texture)
     spin_y = 0;
     spin_z = 0;
     radius = 1;
+    position = vec3(0.0, 0.0, 0.0);
+    velocity = vec3(0.0, 0.0, 0.0);
+
+    vec3 zero = vec3(0.0, 0.0, 0.0);
+#ifdef GRAV_OPT
+    kv1 = zero;
+    kv2 = zero;
+    kv3 = zero;
+    kv4 = zero;
+    
+    kr1 = zero;
+    kr2 = zero;
+    kr3 = zero;
+    kr4 = zero;
+#endif //GRAV_OPT
+
 }
 
 Body::Body(const char* model) : Object(model)
@@ -16,6 +32,9 @@ Body::Body(const char* model) : Object(model)
     spin_y = 0;
     spin_z = 0;
     radius = 1;
+    position = vec3(0.0, 0.0, 0.0);
+    velocity = vec3(0.0, 0.0, 0.0);
+
 }
 
 Body::Body()
@@ -25,30 +44,8 @@ Body::Body()
     spin_y = 0;
     spin_z= 0;
     radius = 1;
-}
-
-vec3 Body::set_acceleration(float h)
-{
-    GLfloat res = 1.0;
-    return vec3(res,res,res);
-}
-
-void Body::set_velocity(float h)
-{
-    velocity = velocity + h*set_acceleration(h);
-    return;
-}
-
-void Body::set_position(float h)
-{
-    set_velocity(h);
-    position = position + h*velocity;
-    return;
-}
-
-void Body::gravity(float h)
-{
-    set_position(h);
+    position = vec3(0.0, 0.0, 0.0);
+    velocity = vec3(0.0, 0.0, 0.0);
 }
 
 void Body::draw(int program)
@@ -64,7 +61,6 @@ void Body::update(float dt)
     this->rotate('y', dt*spin_y);
     this->rotate('z', dt*spin_z);
 
-    this->gravity(dt);
     //TODO RK4 för resten här
     // Position och hastighet, och så att matrix uppdateras
 }
