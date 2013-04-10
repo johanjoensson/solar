@@ -19,5 +19,16 @@ class Body: public Object {
         Body(const char*);
         Body(const char*, const char*);
         Body();
+
+
+        vec3 kv1;
+        vec3 kv2;
+        vec3 kv3;
+        vec3 kv4;
+
+        vec3 kr1;
+        vec3 kr2;
+        vec3 kr3;
+        vec3 kr4;
 };
 #endif

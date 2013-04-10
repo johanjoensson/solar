@@ -23,6 +23,15 @@ class System {
             public:
                 Body *planet;
                 Cel_bodies *next;
+                
+                vec3 acceleration(Cel_bodies *second, float h, vec3 first_k, vec3 second_k);
+                void calculate_k1();
+                void calculate_k2(float h);
+                void calculate_k3(float h);
+                void calculate_k4(float h);
+                void update_gravity(float dt);
+                void reset_k();
+                void calculate_slopes(float dt);
 
                 void add_planet(Body*);
                 void remove_planet(Body*);

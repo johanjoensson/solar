@@ -40,8 +40,6 @@ void init(void)
     e = Body("res/planet.obj", "res/grass.tga");
     f = Body("res/planet.obj", "res/grass.tga");
     s = Spacebox("res/skybox.obj", "res/SkyBox512.tga");
-
-       
     set_event_handler(sys.event_handler);
 
     b.spin_y = 3.14;

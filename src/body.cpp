@@ -10,6 +10,17 @@ Body::Body(const char* model, const char *texture) : Object(model, texture)
     position = vec3(0.0, 0.0, 0.0);
     velocity = vec3(0.0, 0.0, 0.0);
 
+    vec3 zero = vec3(0.0, 0.0, 0.0);
+    kv1 = zero;
+    kv2 = zero;
+    kv3 = zero;
+    kv4 = zero;
+    
+    kr1 = zero;
+    kr2 = zero;
+    kr3 = zero;
+    kr4 = zero;
+
 }
 
 Body::Body(const char* model) : Object(model)
