@@ -20,6 +20,7 @@ class Object {
 
         void rotate(char direction, float angle);
         void translate(float dx, float dy, float dz);
+        void place(vec3 pos);
         void update();
         void draw(int);
         void print_matrix();

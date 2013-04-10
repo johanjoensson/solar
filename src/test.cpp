@@ -35,8 +35,7 @@ static void event_handler(SDL_Event event);
 void init(void)
 {
 	dumpInfo();
-
-	// GL inits
+    // GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
 
