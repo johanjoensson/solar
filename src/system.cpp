@@ -193,7 +193,7 @@ vec3 System::Cel_bodies::force(Cel_bodies *second, float h, vec3 first_k, vec3 s
     F = vec3(0.0, 0.0, 0.0);
     float Mi,m;
 
-    double G = 6.6738480E-11 ;//E-11f;
+    double G = 6.6738480E-10 ;//E-11f;
 
     rp_i = second->planet->position + h*second_k - rn;
     rp_i_val = Norm(rp_i);
@@ -396,8 +396,18 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *p = new Body("res/bunnyplus.obj", "res/grass.tga");
+    Body *q = new Body("res/planet.obj", "res/skyBox512.tga");
     p->spin_y = 1;
+    p->mass = 1E10;
     p->position = vec3(0.0, 0.0, -2.0);
+
+
+    q->spin_x = 1;
+    q->mass = 1;
+    q->position = vec3(5.0, 0.0, -2.0);
+    q->velocity = vec3(0.0, 0.78, 0.0);
+
+    bodies.add_planet(q);
     bodies.add_planet(p);
 }
 
