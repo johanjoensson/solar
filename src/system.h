@@ -77,7 +77,7 @@ class System {
 
         Camera cam;
         
-        void update(Uint32);
+        void update(float);
         void draw(int);
 
         Body b;
