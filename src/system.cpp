@@ -411,6 +411,49 @@ System::System(int program){
     bodies.add_planet(p);
 }
 
+System::System(int program, int n_planets)
+{
+    int pos_range = 15;
+    int vel_range = 2;
+    int mass_range = 2E6;
+    int spin_range = 3;
+
+    s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    c = Camera(program);
+    bodies = Cel_bodies();
+    Body *p;
+    for(int i=0; i<n_planets; i++){
+        p = new Body("res/planet.obj", "res/grass.tga");
+
+        p->spin_x = (float)rand()/(float)RAND_MAX/spin_range - spin_range/2.0;
+        p->spin_y = (float)rand()/(float)RAND_MAX/spin_range - spin_range/2.0;;
+        p->spin_z = (float)rand()/(float)RAND_MAX/spin_range - spin_range/2.0;;
+
+        p->mass = rand() % mass_range;
+
+        p->position = vec3(
+                (float)rand() / ((float)RAND_MAX/pos_range) - pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/pos_range) - pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/pos_range) - pos_range/2.0);
+
+        p->velocity = vec3(
+                (float)rand() / ((float)RAND_MAX/vel_range) - vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/vel_range) - vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/vel_range) - vel_range/2.0);
+        bodies.add_planet(p);
+    }
+
+    // En sol
+    p = new Body("res/bunnyplus.obj", "res/grass.tga");
+    p->spin_y = 1;
+    p->mass = 1E10;
+    p->position = vec3(0.0, 0.0, -2.0);
+    std::cout << RAND_MAX << std::endl;
+
+    bodies.add_planet(p);
+    
+}
+
 void System::draw(int program)
 {
     s.draw(program);
