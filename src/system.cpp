@@ -411,12 +411,18 @@ System::System(int program){
     bodies.add_planet(p);
 }
 
-System::System(int program, int n_planets)
+System::System(int program, int n_planets, int n_suns)
 {
-    int pos_range = 15;
-    int vel_range = 2;
-    int mass_range = 2E6;
-    int spin_range = 3;
+    int p_pos_range = 15;
+    int p_vel_range = 2;
+    int p_mass_range = 2E6;
+    int p_spin_range = 3;
+
+    int s_pos_range = 36;
+    int s_vel_range = 1;
+    long int s_mass_range = 6E10;
+    long int s_mass_min = 1E10;
+    int s_spin_range = 1;
 
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     c = Camera(program);
@@ -425,33 +431,44 @@ System::System(int program, int n_planets)
     for(int i=0; i<n_planets; i++){
         p = new Body("res/planet.obj", "res/grass.tga");
 
-        p->spin_x = (float)rand()/(float)RAND_MAX/spin_range - spin_range/2.0;
-        p->spin_y = (float)rand()/(float)RAND_MAX/spin_range - spin_range/2.0;;
-        p->spin_z = (float)rand()/(float)RAND_MAX/spin_range - spin_range/2.0;;
+        p->spin_x = (float)rand()/(float)RAND_MAX/p_spin_range - p_spin_range/2.0;
+        p->spin_y = (float)rand()/(float)RAND_MAX/p_spin_range - p_spin_range/2.0;;
+        p->spin_z = (float)rand()/(float)RAND_MAX/p_spin_range - p_spin_range/2.0;;
 
-        p->mass = rand() % mass_range;
+        p->mass = rand() % p_mass_range;
 
         p->position = vec3(
-                (float)rand() / ((float)RAND_MAX/pos_range) - pos_range/2.0,
-                (float)rand() / ((float)RAND_MAX/pos_range) - pos_range/2.0,
-                (float)rand() / ((float)RAND_MAX/pos_range) - pos_range/2.0);
+                (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0);
 
         p->velocity = vec3(
-                (float)rand() / ((float)RAND_MAX/vel_range) - vel_range/2.0,
-                (float)rand() / ((float)RAND_MAX/vel_range) - vel_range/2.0,
-                (float)rand() / ((float)RAND_MAX/vel_range) - vel_range/2.0);
+                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0);
         bodies.add_planet(p);
     }
 
-    // En sol
-    p = new Body("res/bunnyplus.obj", "res/grass.tga");
-    p->spin_y = 1;
-    p->mass = 1E10;
-    p->position = vec3(0.0, 0.0, -2.0);
-    std::cout << RAND_MAX << std::endl;
+    for(int i=0; i<n_suns; i++){
+        p = new Body("res/bunnyplus.obj", "res/grass.tga");
 
-    bodies.add_planet(p);
-    
+        p->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+
+        p->mass = rand() % s_mass_range + s_mass_min;
+
+        p->position = vec3(
+                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
+
+        p->velocity = vec3(
+                (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
+        bodies.add_planet(p);
+    }
 }
 
 void System::draw(int program)
