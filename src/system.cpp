@@ -386,6 +386,21 @@ void System::update(float dt)
     bodies.update(dt/1000);
 }
 
+int System::check_collision(Body *p, Body *q)
+{
+     int collide = 0;     
+          
+     vec3 diff = VectorSub(q->position, p->position);
+     float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+     float rsquare = (q->radius + p->radius)*(q->radius + p-> radius);
+
+     if(dsquare <= rsquare){
+         collide = 1;
+     }
+
+     return collide;
+}
+
 System::System(int program){
     b = Body("res/bunnyplus.obj", "res/grass.tga");
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
@@ -404,11 +419,12 @@ System::System(int program){
 
     q->spin_x = 1;
     q->mass = 1;
-    q->position = vec3(5.0, 0.0, -2.0);
-    q->velocity = vec3(0.0, 0.78, 0.0);
+    q->position = vec3(1.9, 0.0, -2.0);
+    //q->velocity = vec3(0.0, 0.78, 0.0);
 
     bodies.add_planet(q);
     bodies.add_planet(p);
+    std::cout << check_collision(p, q) << std::endl;
 }
 
 System::System(int program, int n_planets, int n_suns)

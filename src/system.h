@@ -79,7 +79,10 @@ class System {
         
         void update(float);
         void draw(int);
-
+        
+        //Kollar om två kroppar kolliderar
+        int check_collision(Body*, Body*); 
+        
         Body b;
         Spacebox s;
         Camera c;
