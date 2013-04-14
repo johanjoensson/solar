@@ -386,6 +386,9 @@ void System::update(float dt)
     bodies.update(dt/1000);
 }
 
+/******************************************************************************
+ * Kollar om två kroppar kolliderar.
+ *****************************************************************************/
 int System::check_collision(Body *p, Body *q)
 {
      int collide = 0;     
