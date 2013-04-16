@@ -413,12 +413,12 @@ System::System(int program){
 
 System::System(int program, int n_planets, int n_suns)
 {
-    int p_pos_range = 15;
+    int p_pos_range = 4*sqrt(n_planets*n_suns);
     int p_vel_range = 2;
     int p_mass_range = 2E6;
     int p_spin_range = 3;
 
-    int s_pos_range = 36;
+    int s_pos_range = 25*sqrt(n_suns);
     int s_vel_range = 1;
     long int s_mass_range = 6E10;
     long int s_mass_min = 1E10;

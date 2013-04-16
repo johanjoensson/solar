@@ -44,7 +44,7 @@ void init(void)
 	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
-    sys = System(program, 10, 2);
+    sys = System(program, 14, 3);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
