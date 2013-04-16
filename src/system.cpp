@@ -391,17 +391,22 @@ void System::update(float dt)
  *****************************************************************************/
 int System::check_collision(Body *p, Body *q)
 {
-     int collide = 0;     
+    int collide = 0;     
           
-     vec3 diff = VectorSub(q->position, p->position);
-     float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
-     float rsquare = (q->radius + p->radius)*(q->radius + p-> radius);
+    vec3 diff = VectorSub(q->position, p->position);
+    float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+    float rsquare = (q->radius + p->radius)*(q->radius + p-> radius);
 
-     if(dsquare <= rsquare){
+    if(dsquare <= rsquare){
          collide = 1;
-     }
+    }
 
-     return collide;
+    return collide;
+}
+
+void System::update_collisions(Cel_bodies*)
+{
+    
 }
 
 System::System(int program){
