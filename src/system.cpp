@@ -419,13 +419,14 @@ System::System(int program, int n_planets, int n_suns)
     int p_vel_range = 2;
     int p_mass_range = 2E6;
     int p_spin_range = 3;
-    int p_radius_range = 2;
+    int p_radius_range = 3;
 
     int s_pos_range = 25*sqrt(n_suns);
     int s_vel_range = 1;
     long int s_mass_range = 6E10;
     long int s_mass_min = 1E10;
     int s_spin_range = 1;
+    int s_radius_range = 6;
 
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     c = Camera(program);
@@ -461,6 +462,8 @@ System::System(int program, int n_planets, int n_suns)
         p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
 
         p->mass = rand() % s_mass_range + s_mass_min;
+
+        p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
 
         p->position = vec3(
                 (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
