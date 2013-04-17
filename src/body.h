@@ -17,7 +17,8 @@ class Body: public Object {
         float spin_y;
         float spin_z;
         float mass;
-        float radius;
+        void set_radius(float);
+        float get_radius();
         vec3 velocity;
 
         void update(float);

@@ -388,28 +388,27 @@ void System::update(float dt)
 }
 
 System::System(int program){
-    b = Body("res/bunnyplus.obj", "res/grass.tga");
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
-    b.translate(0,0,-2);
-    b.position = vec3(0.0,0.0,-2.0);
-    b.spin_y = 1;
     c = Camera(program);
     bodies = Cel_bodies();
 
-    Body *p = new Body("res/bunnyplus.obj", "res/grass.tga");
+    Body *a = new Body("res/planet.obj", "res/grass.tga");
     Body *q = new Body("res/planet.obj", "res/skyBox512.tga");
-    p->spin_y = 1;
-    p->mass = 1E10;
-    p->position = vec3(0.0, 0.0, -2.0);
 
+    a->set_scale(1);
+    a->spin_x = 1;
+    a->mass = 1;
+    a->position = vec3(0.0, 5.0, -2.0);
+    a->velocity = vec3(0, 0, 0.0);
 
+    q->set_scale(3);
     q->spin_x = 1;
     q->mass = 1;
     q->position = vec3(5.0, 0.0, -2.0);
-    q->velocity = vec3(0.0, 0.78, 0.0);
+    q->velocity = vec3(0.0, 0, 0.0);
 
+    bodies.add_planet(a);
     bodies.add_planet(q);
-    bodies.add_planet(p);
 }
 
 System::System(int program, int n_planets, int n_suns)
@@ -420,6 +419,7 @@ System::System(int program, int n_planets, int n_suns)
     int p_vel_range = 2;
     int p_mass_range = 2E6;
     int p_spin_range = 3;
+    int p_radius_range = 2;
 
     int s_pos_range = 25*sqrt(n_suns);
     int s_vel_range = 1;
@@ -439,6 +439,7 @@ System::System(int program, int n_planets, int n_suns)
         p->spin_z = (float)rand()/(float)RAND_MAX/p_spin_range - p_spin_range/2.0;;
 
         p->mass = rand() % p_mass_range;
+        p->set_radius(1 + (float)rand()/((float)RAND_MAX/p_radius_range));
 
         p->position = vec3(
                 (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,

@@ -45,6 +45,7 @@ void init(void)
 	printError("error loading shaders");
 
     sys = System(program, 14, 3);
+    //sys = System(program);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
@@ -53,7 +54,7 @@ void init(void)
     SDL_ShowCursor(0);
     
     // Lock cursor to this program
-    //SDL_WM_GrabInput( SDL_GRAB_ON );
+    SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
