@@ -439,7 +439,7 @@ System::System(int program, int n_planets, int n_suns)
         p->spin_z = (float)rand()/(float)RAND_MAX/p_spin_range - p_spin_range/2.0;;
 
         p->mass = rand() % p_mass_range;
-        p->set_radius(1 + (float)rand()/((float)RAND_MAX/p_radius_range));
+        p->set_radius(0.3 + (float)rand()/((float)RAND_MAX/p_radius_range));
 
         p->position = vec3(
                 (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
