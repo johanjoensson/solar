@@ -8,6 +8,7 @@
 #include "camera.h"
 #include "spacebox.h"
 #include "VectorUtils3.h"
+#include <time.h>
 
 System::System(){
 }
@@ -413,6 +414,8 @@ System::System(int program){
 
 System::System(int program, int n_planets, int n_suns)
 {
+    // Sätt fröet för slumpade värden
+    srand(time(NULL));
     int p_pos_range = 4*sqrt(n_planets*n_suns);
     int p_vel_range = 2;
     int p_mass_range = 2E6;
