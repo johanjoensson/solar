@@ -25,17 +25,17 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
-    Body *a = new Body("res/planet.obj", "res/grass.tga");
-    Body *q = new Body("res/planet.obj", "res/skyBox512.tga");
+    Body *a = new Body("res/planet.obj", "res/moon.png");
+    Body *q = new Body("res/planet.obj", "res/mars.png");
 
     a->set_scale(1);
-    a->spin_x = 1;
+    //a->spin_x = 1;
     a->mass = 1;
     a->position = vec3(0.0, 5.0, -2.0);
     a->velocity = vec3(0, 0, 0.0);
 
     q->set_scale(3);
-    q->spin_x = 1;
+    ////q->spin_x = 1;
     q->mass = 1;
     q->position = vec3(5.0, 0.0, -2.0);
     q->velocity = vec3(0.0, 0, 0.0);
@@ -70,15 +70,15 @@ System::System(int program, int n_planets, int n_suns)
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
         if(rand_value < 0.2) {
-            p = new Body("res/earth.obj", "res/earth.png");
+            p = new Body("res/planet.obj", "res/earth.png");
         } else if(rand_value < 0.4) {
-            p = new Body("res/earth.obj", "res/mars.png");
+            p = new Body("res/planet.obj", "res/mars.png");
         } else if(rand_value < 0.6) {
-            p = new Body("res/earth.obj", "res/moon.png");
+            p = new Body("res/planet.obj", "res/moon.png");
         } else if(rand_value < 0.8) {
-            p = new Body("res/earth.obj", "res/venus.png");
+            p = new Body("res/planet.obj", "res/venus.png");
         } else {
-            p = new Body("res/earth.obj", "res/mars_elevation.png");
+            p = new Body("res/planet.obj", "res/mars_elevation.png");
         }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
