@@ -55,7 +55,7 @@ System::System(int program, int n_planets, int n_suns)
     int p_radius_range = 3;
 
     int s_pos_range = 25*sqrt(n_suns);
-    int s_vel_range = 1;
+    float s_vel_range = 0.1;
     long int s_mass_range = 6E10;
     long int s_mass_min = 1E10;
     int s_spin_range = 1;
