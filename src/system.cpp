@@ -25,7 +25,7 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
-    Body *a = new Body("res/planet.obj", "res/moon.png");
+    Body *a = new Body("res/planet.obj", "res/jupiter.png");
     Body *q = new Body("res/planet.obj", "res/mars.png");
 
     a->set_scale(1);
@@ -69,16 +69,18 @@ System::System(int program, int n_planets, int n_suns)
     Body *p;
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
-        if(rand_value < 0.2) {
+        if(rand_value < 0.167) {
             p = new Body("res/planet.obj", "res/earth.png");
-        } else if(rand_value < 0.4) {
+        } else if(rand_value < 0.33) {
             p = new Body("res/planet.obj", "res/mars.png");
-        } else if(rand_value < 0.6) {
+        } else if(rand_value < 0.5) {
             p = new Body("res/planet.obj", "res/moon.png");
-        } else if(rand_value < 0.8) {
+        } else if(rand_value < 0.667) {
             p = new Body("res/planet.obj", "res/venus.png");
-        } else {
+        } else if (rand_value < 0.83) {
             p = new Body("res/planet.obj", "res/mars_elevation.png");
+        } else {
+            p = new Body("res/planet.obj", "res/jupiter.png");
         }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
