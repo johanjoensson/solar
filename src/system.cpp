@@ -61,12 +61,25 @@ System::System(int program, int n_planets, int n_suns)
     int s_spin_range = 1;
     int s_radius_range = 6;
 
+    float rand_value;
+
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     c = Camera(program);
     bodies = Cel_bodies();
     Body *p;
     for(int i=0; i<n_planets; i++){
-        p = new Body("res/earth.obj", "res/mars.png");
+        rand_value = (float)rand() / (float)RAND_MAX;
+        if(rand_value < 0.2) {
+            p = new Body("res/earth.obj", "res/earth.png");
+        } else if(rand_value < 0.4) {
+            p = new Body("res/earth.obj", "res/mars.png");
+        } else if(rand_value < 0.6) {
+            p = new Body("res/earth.obj", "res/moon.png");
+        } else if(rand_value < 0.8) {
+            p = new Body("res/earth.obj", "res/venus.png");
+        } else {
+            p = new Body("res/earth.obj", "res/mars_elevation.png");
+        }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
         p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
