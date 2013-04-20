@@ -51,7 +51,7 @@ System::System(int program, int n_planets, int n_suns)
     int p_pos_range = 4*sqrt(n_planets*n_suns);
     int p_vel_range = 2;
     int p_mass_range = 2E6;
-    float p_spin_range = 2;
+    float p_spin_range = 0.1;
     int p_radius_range = 3;
 
     int s_pos_range = 25*sqrt(n_suns);
@@ -66,7 +66,7 @@ System::System(int program, int n_planets, int n_suns)
     bodies = Cel_bodies();
     Body *p;
     for(int i=0; i<n_planets; i++){
-        p = new Body("res/earth.obj", "res/earth.png");
+        p = new Body("res/earth.obj", "res/mars.png");
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
         p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;

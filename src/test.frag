@@ -8,10 +8,13 @@ out vec4 out_Color;
 uniform sampler2D texUnit;
 uniform int spacebox;
 
+vec3 normal;
+
 void main(void)
 {
         if(spacebox == 0){
-                out_Color = texture(texUnit, out_tex_coord) * vec4(out_normal, 0);
+                normal = normalize(out_normal);
+                out_Color = texture(texUnit, out_tex_coord);
         } else {
                 out_Color = texture(texUnit, out_tex_coord);
         }
