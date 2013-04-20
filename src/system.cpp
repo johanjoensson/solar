@@ -61,7 +61,7 @@ System::System(int program, int n_planets, int n_suns)
     int s_spin_range = 1;
     int s_radius_range = 6;
 
-    s = Spacebox("res/spacedome_test.obj", "res/spacedome.png");
+    s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     c = Camera(program);
     bodies = Cel_bodies();
     Body *p;
