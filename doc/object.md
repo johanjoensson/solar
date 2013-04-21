@@ -6,13 +6,17 @@ Methods:
 --------
   * Rotate
   * Translate
+  * Place
   * Update
   * Draw
   * Constructor
   * Destructor
+  * Set scale
+  * Get scale
 
 Attributes:
 -----------
+  * Model
   * Texture/Color
   * Vertices
   * Reflectivity

@@ -11,7 +11,7 @@ uniform int spacebox;
 void main(void)
 {
         if(spacebox == 0){
-                out_Color = texture(texUnit, out_tex_coord) * vec4(out_normal, 0);
+                out_Color = texture(texUnit, out_tex_coord) * length(out_normal);
         } else {
                 out_Color = texture(texUnit, out_tex_coord);
         }

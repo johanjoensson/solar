@@ -1,13 +1,12 @@
 #include "object.h"
 #include "GL_utilities.h"
 #include "soil/src/SOIL.h"
-//#include "LoadTGA.h"
-//#include <iostream>
-//using namespace std;
 
 Object::Object(){
     reflectivity = 1;
+    scale = 1;
     matrix = IdentityMatrix();
+    scale_mat = S(scale, scale, scale);
     rot_mat = IdentityMatrix();
     trans_mat = IdentityMatrix();
 }
@@ -16,7 +15,9 @@ Object::Object(const char *model)
 {
     m = LoadModelPlus((char*)model);
     reflectivity = 1;
+    scale = 1;
     matrix = IdentityMatrix();
+    scale_mat = S(scale, scale, scale);
     rot_mat = IdentityMatrix();
     trans_mat = IdentityMatrix();
 }
@@ -39,9 +40,22 @@ Object::Object(const char *model, const char *tex)
 
     //LoadTGATextureSimple(tex, &texture);
     reflectivity = 1;
+    scale = 1;
     matrix = IdentityMatrix();
+    scale_mat = S(scale, scale, scale);
     rot_mat = IdentityMatrix();
     trans_mat = IdentityMatrix();
+}
+
+void Object::set_scale(float s)
+{
+    scale = s;
+    scale_mat = S(scale,scale,scale);
+}
+
+float Object::get_scale()
+{
+    return scale;
 }
 
 void Object::draw(int program){
@@ -55,17 +69,17 @@ void Object::rotate(char direction, float angle)
         case 'x':
             // Rotate around x
             rot_mat = Rx(angle) * rot_mat;
-            matrix = trans_mat * rot_mat; 
+            update();
             break;
         case 'y':
             // Rotate around y
             rot_mat = Ry(angle) * rot_mat;
-            matrix = trans_mat * rot_mat; 
+            update();
             break;
         case 'z':
             // Rotate around z
             rot_mat = Rz(angle) * rot_mat;
-            matrix = trans_mat * rot_mat; 
+            update();
             break;
     }
 }
@@ -73,21 +87,16 @@ void Object::rotate(char direction, float angle)
 void Object::place(vec3 pos)
 {
     trans_mat = T(pos.x, pos.y, pos.z);
-    matrix = trans_mat * rot_mat;
+    update();
 }
 
 void Object::translate(float dx, float dy, float dz)
 {
     trans_mat = T(dx, dy, dz)* trans_mat;
-    matrix = trans_mat * rot_mat;
-    //matrix = Mult(T(dx, dy, dz), matrix); // Temporärt för VU3 funkar ej
+    update();
 }
 
-void Object::print_matrix()
+void Object::update()
 {
-    /*cout << matrix.m[0] << " " << matrix.m[1] << " " << matrix.m[2] << " " << matrix.m[3] << endl;
-    cout << matrix.m[4] << " " << matrix.m[5] << " " << matrix.m[6] << " " << matrix.m[7] << endl;
-    cout << matrix.m[8] << " " << matrix.m[9] << " " << matrix.m[10] << " " << matrix.m[11] << endl;
-    cout << matrix.m[12] << " " << matrix.m[13] << " " << matrix.m[14] << " " << matrix.m[15] << endl;
-    cout << endl;*/
+    matrix = trans_mat * rot_mat * scale_mat;
 }

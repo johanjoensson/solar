@@ -9,11 +9,20 @@ class Object {
     protected:
         mat4 rot_mat;
         mat4 trans_mat;
+        mat4 scale_mat;
+
+        // För att skala objekt
+        float scale;
     public:
         Model *m;
 
         mat4 matrix;
         vec3 position;
+
+        // För att sätta skalan
+        void set_scale(float);
+        // För att returnera skala
+        float get_scale(); 
 
         float reflectivity;
         GLuint texture;
@@ -23,7 +32,6 @@ class Object {
         void place(vec3 pos);
         void update();
         void draw(int);
-        void print_matrix();
 
         Object();
         Object(const char*);
