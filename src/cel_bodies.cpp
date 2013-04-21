@@ -42,7 +42,7 @@ void Cel_bodies::remove_planet(Body *p)
         if(current->planet == p){
 //            std::cout << "Radera planeten i listan." << std::endl;
             prev->next = next;
-            delete[] current;
+            delete current;
             return;
         }
         prev = current;
@@ -51,7 +51,7 @@ void Cel_bodies::remove_planet(Body *p)
     }
             
     prev->next = NULL;
-    delete[] current;
+    delete current;
 }
 
 /* TODO */

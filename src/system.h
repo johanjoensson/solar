@@ -31,7 +31,7 @@ class System {
         //Kollar om två kroppar kolliderar
         int check_collision(Body*, Body*); 
         //Uppdaterar collisioner
-        void update_collisions(Cel_bodies *universe);
+        void update_collisions();
 
         Body b;
         Spacebox s;

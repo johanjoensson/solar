@@ -18,6 +18,7 @@ System::System(){
 void System::update(float dt)
 {
     bodies.update(dt/1000);
+    update_collisions();
 }
 
 /******************************************************************************
@@ -29,7 +30,7 @@ int System::check_collision(Body *p, Body *q)
           
     vec3 diff = VectorSub(q->position, p->position);
     float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
-    float rsquare = (q->radius + p->radius)*(q->radius + p-> radius);
+    float rsquare = (q->get_radius() + p->get_radius())*(q->get_radius() + p->get_radius());
 
     if(dsquare <= rsquare){
          collide = 1;
@@ -38,9 +39,35 @@ int System::check_collision(Body *p, Body *q)
     return collide;
 }
 
-void System::update_collisions(Cel_bodies*)
+/******************************************************************************
+ * Uppdaterar kollisioner
+ *****************************************************************************/
+void System::update_collisions()
 {
-    
+   Cel_bodies *current = this->bodies.next;
+   Cel_bodies *next;
+   float r, rcube;
+   int collide;
+
+   while(current->next != NULL){        
+        next = current->next;
+        collide = check_collision(current->planet, next->planet);
+        
+        if(collide == 1){
+            //Lägger ihop massor, räknar ut ny radie och tar bort next ur listan
+            current->planet->mass = current->planet->mass + next->planet->mass;
+            std::cout << current->planet->mass << std::endl;
+            rcube = pow(current->planet->get_radius(), 3) + pow(next->planet->get_radius(), 3);            
+            r = pow(rcube, (1.0/3));
+            std::cout << rcube << std::endl << r << std::endl;
+            current->planet->set_radius(r);
+            bodies.remove_planet(next->planet);
+        }
+        
+        if(current->next != NULL){  
+            current = current->next;
+        }
+   }
 }
 
 System::System(int program){
@@ -60,11 +87,14 @@ System::System(int program){
     q->set_scale(3);
     ////q->spin_x = 1;
     q->mass = 1;
-    q->position = vec3(5.0, 0.0, -2.0);
+    q->position = vec3(0.0, 3.0, -2.0);
     q->velocity = vec3(0.0, 0, 0.0);
 
     bodies.add_planet(a);
     bodies.add_planet(q);
+    //Test för collision. Ta bort sen
+    //std::cout << check_collision(a, q) << std::endl;
+    //update_collisions();
 }
 
 System::System(int program, int n_planets, int n_suns)
