@@ -51,7 +51,7 @@ void Cel_bodies::remove_planet(Body *p)
     }
             
     prev->next = NULL;
-    delete[] current;
+    delete current;
 }
 
 /* TODO */
