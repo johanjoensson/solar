@@ -29,6 +29,8 @@ bool Frustum::inside_frustum(Body p, Camera cam)
     vec3 up = Normalize(cam.up);
     vec3 right_vec = CrossProduct(L,up);
 
+    float radius = p.radius;
+
     vec3 r_L;
 
     r_L.z = -DotProduct(r, L);
@@ -38,11 +40,11 @@ bool Frustum::inside_frustum(Body p, Camera cam)
     float h = -r_L.z*top/near;
     float w = h*right/top;
 
-    if(r_L.z > -near || r_L.z < -far){
+    if(r_L.z > -near || r_L.z < -far - radius){
         return false;
-    }else if(r_L.y < -h || r_L.y > h){
+    }else if(r_L.y < -h - radius || r_L.y > h + radius){
         return false;
-    }else if(r_L.x < -w || r_L.x > w){
+    }else if(r_L.x < -w - radius || r_L.x > w + radius){
         return false;
 
     }
