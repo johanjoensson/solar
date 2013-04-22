@@ -47,7 +47,6 @@ struct Cel_bodies{
                 void update(float);
 
                 Cel_bodies();
-                ~Cel_bodies();
         };
 
 #endif // CEL_BODIES_H

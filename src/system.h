@@ -10,6 +10,7 @@
 #include "SDL_util.h"
 #include "body.h"
 #include "camera.h"
+#include "frustum.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
 
@@ -31,6 +32,7 @@ class System {
         Body b;
         Spacebox s;
         Camera c;
+        Frustum f;
         
         /**********************************************************************
          * OBS: första objektet i listan är ingen planet i systemet,
@@ -39,7 +41,7 @@ class System {
          *
          * bodies.next är första objektet i listan!
          *********************************************************************/
-        Cel_bodies bodies;
+        Cel_bodies bodies, visible;
 
         System();
         System(int);

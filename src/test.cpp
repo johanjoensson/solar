@@ -9,6 +9,7 @@
 #include "system.h"
 #include "LoadTGA.h"
 #include "spacebox.h"
+#include "cel_bodies.h"
 #include<stdio.h>
 
 #define near 1
@@ -45,6 +46,7 @@ void init(void)
 	printError("error loading shaders");
 
     sys = System(program);
+    sys.f = Frustum(near, far, bottom, top, left, right);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
@@ -116,6 +118,7 @@ int main()
 	}
 
 	inf_loop();
+    sys.bodies.clear_list();
 }
 
 void handle_keypress(SDL_Event event)
