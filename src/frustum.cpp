@@ -29,7 +29,7 @@ bool Frustum::inside_frustum(Body p, Camera cam)
     vec3 up = Normalize(cam.up);
     vec3 right_vec = CrossProduct(L,up);
 
-    float radius = p.radius;
+    float radius = p.get_radius();
 
     vec3 r_L;
 
