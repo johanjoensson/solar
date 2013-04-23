@@ -26,6 +26,8 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
+    ship = Object("res/spaceship.obj");
+
     Body *a = new Body("res/planet.obj", "res/jupiter.png");
     Body *q = new Body("res/planet.obj", "res/mars.png");
 
@@ -130,6 +132,7 @@ System::System(int program, int n_planets, int n_suns)
 void System::draw(int program)
 {
     s.draw(program);
+    ship.draw(program);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
     while(current != NULL){

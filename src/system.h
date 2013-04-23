@@ -30,6 +30,7 @@ class System {
         void draw(int);
 
         Body b;
+        Object ship;
         Spacebox s;
         Camera c;
         Frustum f;
