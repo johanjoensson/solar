@@ -30,17 +30,17 @@ void Cel_bodies::add_planet(Body *p)
 void Cel_bodies::remove_planet(Body *p)
 {
     if(this->next == NULL){
-//        std::cout << "Inga planeter i listan" << std::endl;
         return;
     }
 
     Cel_bodies *current = this;
+    current->planet = NULL;
     Cel_bodies *prev, *next;
+    prev = NULL;
     next = current->next;
     
     while(next != NULL){
         if(current->planet == p){
-//            std::cout << "Radera planeten i listan." << std::endl;
             prev->next = next;
             delete current;
             return;
@@ -54,7 +54,6 @@ void Cel_bodies::remove_planet(Body *p)
     delete current;
 }
 
-/* TODO */
 void Cel_bodies::clear_list()
 {
     Cel_bodies *current = this->next;

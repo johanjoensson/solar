@@ -108,6 +108,7 @@ void handle_userevent(SDL_Event event)
 void inf_loop()
 {
 	SDL_Event event;
+
 	while(1){
 		while(SDL_PollEvent(&event)){
 			(*handle_event)(event);	
