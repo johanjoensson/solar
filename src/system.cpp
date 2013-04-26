@@ -1,71 +1,142 @@
+/******************************************************************************
+ * Implementationen av samtliga klasser och funktioner definierade i system.h
+ *****************************************************************************/
+
 #include <iostream>
 #include "system.h"
 #include "body.h"
 #include "camera.h"
 #include "spacebox.h"
+#include "VectorUtils3.h"
+#include <time.h>
+#include "cel_bodies.h"
 
 System::System(){
-    bodies.next = NULL;
 }
 
-void System::Cel_bodies::add_planet(Body *p)
+
+void System::update(float dt)
 {
-    Cel_bodies *tmp = new Cel_bodies;
-    tmp->planet = *p;
-    tmp->next = NULL;
-
-    this->next = tmp;
-    std::cout << "mass: " << tmp->planet.mass << std::endl << "radius: " << tmp->planet.radius << std::endl;
-
-}
-
-void System::Cel_bodies::remove_planet(Body *p)
-{
-    Cel_bodies *current = this;
-    Cel_bodies *prev, *next;
-    next = current->next;
-    
-    while(next != NULL){
-        if(&current->planet == p){
-            prev->next = next;
-            delete[] current;
-            return;
-        }
-        std::cout << "Radera planeten i listan." << std::endl;
-        prev = current;
-        current = next;
-        next = current->next;
-    }
-
-    delete[] current;
-}
-
-void System::Cel_bodies::update()
-{
-    std::cout << "Hejsan!" << std::endl;
-    Cel_bodies *tmp = this;
-    while(tmp != NULL){
-        std::cout << "Planetens massa är: " << tmp->planet.mass << std::endl;
-        tmp = tmp->next;
-    }
-    return;
-}
-
-void System::update(Uint32 dt)
-{
-    b.update(dt/1000.0);
+    bodies.update(dt/1000);
+    visible.next = f.cull_frustum(bodies.next, c);
 }
 
 System::System(int program){
-    b = Body("../res/bunnyplus.obj", "../res/grass.tga");
-    s = Spacebox("../res/spacedome.obj", "../res/spacedome.png");
-    b.translate(0,0,-2);
-    b.spin_y = 1;
+    s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     c = Camera(program);
+    bodies = Cel_bodies();
+
+    Body *a = new Body("res/planet.obj", "res/jupiter.png");
+    Body *q = new Body("res/planet.obj", "res/mars.png");
+
+    a->set_scale(1);
+    //a->spin_x = 1;
+    a->mass = 1;
+    a->position = vec3(0.0, 5.0, -2.0);
+    a->velocity = vec3(0, 0, 0.0);
+
+    q->set_scale(3);
+    ////q->spin_x = 1;
+    q->mass = 1;
+    q->position = vec3(5.0, 0.0, -2.0);
+    q->velocity = vec3(0.0, 0, 0.0);
+
+    bodies.add_planet(a);
+    bodies.add_planet(q);
+}
+
+System::System(int program, int n_planets, int n_suns)
+{
+    // Sätt fröet för slumpade värden
+    srand(time(NULL));
+    int p_pos_range = 4*sqrt(n_planets*n_suns);
+    int p_vel_range = 2;
+    int p_mass_range = 2E6;
+    float p_spin_range = 0.1;
+    int p_radius_range = 3;
+
+    int s_pos_range = 25*sqrt(n_suns);
+    float s_vel_range = 0.1;
+    long int s_mass_range = 6E10;
+    long int s_mass_min = 1E10;
+    int s_spin_range = 1;
+    int s_radius_range = 6;
+
+    float rand_value;
+
+    s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    c = Camera(program);
+    bodies = Cel_bodies();
+    Body *p;
+    for(int i=0; i<n_planets; i++){
+        rand_value = (float)rand() / (float)RAND_MAX;
+        if(rand_value < 0.167) {
+            p = new Body("res/planet.obj", "res/earth.png");
+        } else if(rand_value < 0.33) {
+            p = new Body("res/planet.obj", "res/mars.png");
+        } else if(rand_value < 0.5) {
+            p = new Body("res/planet.obj", "res/moon.png");
+        } else if(rand_value < 0.667) {
+            p = new Body("res/planet.obj", "res/venus.png");
+        } else if (rand_value < 0.83) {
+            p = new Body("res/planet.obj", "res/mars_elevation.png");
+        } else {
+            p = new Body("res/planet.obj", "res/jupiter.png");
+        }
+
+        p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
+        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
+        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
+
+        p->mass = rand() % p_mass_range;
+        p->set_radius(0.3 + (float)rand()/((float)RAND_MAX/p_radius_range));
+
+        p->position = vec3(
+                (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0);
+
+        p->velocity = vec3(
+                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0);
+        bodies.add_planet(p);
+    }
+
+    for(int i=0; i<n_suns; i++){
+        p = new Body("res/bunnyplus.obj", "res/grass.tga");
+
+        p->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+
+        p->mass = rand() % s_mass_range + s_mass_min;
+
+        p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+
+        p->position = vec3(
+                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
+
+        p->velocity = vec3(
+                (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
+                (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
+        bodies.add_planet(p);
+    }
 }
 
 void System::draw(int program)
 {
     s.draw(program);
-    b.draw(program);
+    Cel_bodies *current = this->visible.next;
+    Cel_bodies *next;
+    while(current != NULL){
+        next = current->next;
+        current->planet->draw(program);
+        this->visible.remove_planet(current->planet);
+
+        current = next;
+    }
 }

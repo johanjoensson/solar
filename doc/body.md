@@ -7,6 +7,9 @@ Methods:
   * Update
     - Position
     - Rotation
+  * Draw
+  * Set radius
+  * Get radius
   * Constructor 
   * Destructor 
 

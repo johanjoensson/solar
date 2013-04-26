@@ -9,10 +9,11 @@
 #include "system.h"
 #include "LoadTGA.h"
 #include "spacebox.h"
+#include "cel_bodies.h"
 #include<stdio.h>
 
 #define near 1
-#define far 30
+#define far 300
 #define right 1
 #define left -1
 #define bottom -1
@@ -31,21 +32,22 @@ mat4 projection_matrix;
 void handle_keypress(SDL_Event event);
 void handle_mouse(SDL_Event event);
 static void event_handler(SDL_Event event);
+void check_keys();
 
 void init(void)
 {
 	dumpInfo();
-
-	// GL inits
+    // GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
 
 	// Load and compile shader
-	program = loadShaders("test.vert", "test.frag");
+	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
-    sys = System(program);
-    set_event_handler(event_handler);
+    sys = System(program, 7, 1);
+    //sys = System(program);
+    sys.f = Frustum(near, far, bottom, top, left, right);
 
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
@@ -66,7 +68,11 @@ void init(void)
 
 void display(void)
 {
+    // FIXME check_keys ska kanske inte ligga här
+    check_keys();
 	printError("pre display");
+
+    sys.update(20);
 
 	// clear the screen
     sys.draw(program); 
@@ -75,6 +81,12 @@ void display(void)
 	SDL_GL_SwapBuffers();
 }
 
+
+/******************************************************************************
+ * Anropa INGA som helst funktioner i denna!
+ * Det blir bara fel utan någon som helst anledning!
+ * Denna sätter timer-eventet och gör inget annat!
+ *****************************************************************************/
 Uint32 OnTimer(Uint32 interval, void* param)
 {
 	a += 0.1;
@@ -82,8 +94,6 @@ Uint32 OnTimer(Uint32 interval, void* param)
     // För att få bort varningar
     param = NULL;
     param = param;
-
-    sys.update(interval);
 
 	SDL_Event event;
 	
@@ -100,6 +110,7 @@ int main()
 {
 	init_SDL();
 	set_sdl_display_func(&display);
+    set_event_handler(&event_handler);
 	init();
 	SDL_TimerID timer_id;
 	timer_id = SDL_AddTimer(20, &OnTimer, NULL);
@@ -108,6 +119,7 @@ int main()
 	}
 
 	inf_loop();
+    sys.bodies.clear_list();
 }
 
 void handle_keypress(SDL_Event event)
@@ -117,18 +129,6 @@ void handle_keypress(SDL_Event event)
 		case SDLK_q:
 			exit_prog(0);
 			break;
-        case SDLK_w:
-            sys.c.forward(0.1);
-            break;
-        case SDLK_a:
-            sys.c.strafe(0.1);
-            break;
-        case SDLK_s:
-            sys.c.forward(-0.1);
-            break;
-        case SDLK_d:
-            sys.c.strafe(-0.1);
-            break;
 		default:
 			break;
 	}
@@ -163,4 +163,22 @@ void event_handler(SDL_Event event){
 		default:
 			break;
 	}
+}
+
+void check_keys(){
+    Uint8 *keystate = SDL_GetKeyState(NULL);
+    if(keystate[SDLK_w])
+    {
+        sys.c.forward(0.1);
+    } else if(keystate[SDLK_s])
+    {
+        sys.c.forward(-0.1);
+    }
+    if(keystate[SDLK_a])
+    {
+        sys.c.strafe(0.1);
+    } else if(keystate[SDLK_d])
+    {
+        sys.c.strafe(-0.1);
+    }
 }
