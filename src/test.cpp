@@ -19,12 +19,17 @@
 #define bottom -1
 #define top 1
 
+#define MAX_SPEED 20
+#define MAX_SIMULATION_SPEED 15
+
 // Globals
 const SDL_VideoInfo* info; 
 
 // Reference to shader program
 GLuint program;
 System sys;
+int speed = 4;
+int simulation_speed = 1;
 
 mat4 projection_matrix;
 
@@ -56,7 +61,7 @@ void init(void)
     SDL_ShowCursor(0);
     
     // Lock cursor to this program
-    //SDL_WM_GrabInput( SDL_GRAB_ON );
+    SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
@@ -74,10 +79,7 @@ void update(int interval)
 
 void display(void)
 {
-    // FIXME check_keys ska kanske inte ligga här
 	printError("pre display");
-
-    //sys.update(20);
     sys.draw(program); 
 	// clear the screen
 	printError("draw error");
@@ -148,6 +150,30 @@ void handle_keypress(SDL_Event event)
 		case SDLK_q:
 			exit_prog(0);
 			break;
+        case SDLK_UP:
+            speed++;
+            if(speed > MAX_SPEED){
+                speed = MAX_SPEED;
+            }
+            break;
+        case SDLK_DOWN:
+            speed--;
+            if(speed < 1){
+                speed = 1;
+            }
+            break;
+        case SDLK_LEFT:
+            simulation_speed--;
+            if(simulation_speed < 1){
+                 simulation_speed = 1;
+            }
+            break;
+        case SDLK_RIGHT:
+            simulation_speed++;
+            if(simulation_speed > MAX_SIMULATION_SPEED){
+                 simulation_speed = MAX_SIMULATION_SPEED;
+            }
+            break;
 		default:
 			break;
 	}
@@ -189,14 +215,14 @@ void check_keys()
 {
     Uint8 *keystate = SDL_GetKeyState(NULL);
     if(keystate[SDLK_w]) {
-        sys.c.forward(0.1);
+        sys.c.forward(0.1*speed);
     } else if(keystate[SDLK_s]) {
-        sys.c.forward(-0.1);
+        sys.c.forward(-0.1*speed);
     }
     if(keystate[SDLK_a]) {
-        sys.c.strafe(0.1);
+        sys.c.strafe(0.1*speed);
     } else if(keystate[SDLK_d]) {
-        sys.c.strafe(-0.1);
+        sys.c.strafe(-0.1*speed);
     }
 }
 
@@ -207,7 +233,7 @@ void handle_userevent(SDL_Event event)
             display();
             break;
         case (int)System::UPDATE_TIMER:
-            update(*((Uint32*)(&event.user.data1)));
+            update(simulation_speed * *((Uint32*)(&event.user.data1)));
             break;
         default:
             break;
