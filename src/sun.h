@@ -5,7 +5,7 @@
 #include "VectorUtils3.h"
 class Sun : public Body {
     public:
-        vec3 color;
+        vec3 emit_color;
 }
 
 #endif
