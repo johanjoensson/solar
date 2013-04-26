@@ -140,3 +140,24 @@ void System::draw(int program)
         current = next;
     }
 }
+
+int System::check_distance(Body *b, int max_distance)
+{
+    vec3 pos = b->position;
+    return ((pos.x * pos.x + pos.y * pos.y + pos.z * pos.z) > max_distance * max_distance);
+}
+
+void System::clean(int max_distance)
+{
+    Cel_bodies *current = bodies.next;
+    Cel_bodies *tmp;
+
+    while(current != NULL){
+        // Om planet längre bort från origo än max_distance, ta bort den
+        if(check_distance(current->planet, max_distance)){
+            tmp = current;
+            bodies.remove_planet(tmp->planet);
+        }
+        current = current->next;
+    }
+}

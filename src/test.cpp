@@ -21,6 +21,8 @@
 
 #define MAX_SPEED 20
 #define MAX_SIMULATION_SPEED 15
+#define MAX_DISTANCE 400
+
 
 // Globals
 const SDL_VideoInfo* info; 
@@ -61,7 +63,7 @@ void init(void)
     SDL_ShowCursor(0);
     
     // Lock cursor to this program
-    SDL_WM_GrabInput( SDL_GRAB_ON );
+    //SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
@@ -127,6 +129,23 @@ Uint32 update_timer(Uint32 interval, void* param)
 	return interval;
 }
 
+Uint32 clean_timer(Uint32 interval, void* param)
+{
+    // För att få bort varningar
+    param = NULL;
+    param = param;
+
+	SDL_Event event;
+	
+	event.type = SDL_USEREVENT;
+	event.user.code = (int)System::CLEAN_TIMER;
+	event.user.data1 = 0;
+	event.user.data2 = 0;
+
+	SDL_PushEvent(&event);
+	return interval;
+}
+
 int main()
 {
 	init_SDL();
@@ -135,6 +154,7 @@ int main()
 	SDL_TimerID timer_id;
 	timer_id = SDL_AddTimer(20, &display_timer, NULL);
 	timer_id = SDL_AddTimer(10, &update_timer, NULL);
+	timer_id = SDL_AddTimer(1000, &clean_timer, NULL);
 	if(timer_id == NULL){
 		fprintf(stderr, "Error setting timer function: %s", SDL_GetError());
 	}
@@ -234,6 +254,9 @@ void handle_userevent(SDL_Event event)
             break;
         case (int)System::UPDATE_TIMER:
             update(simulation_speed * *((Uint32*)(&event.user.data1)));
+            break;
+        case (int)System::CLEAN_TIMER:
+            sys.clean(MAX_DISTANCE);
             break;
         default:
             break;
