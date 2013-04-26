@@ -18,6 +18,7 @@ System::System(){
 void System::update(float dt)
 {
     bodies.update(dt/1000);
+    visible.next = f.cull_frustum(bodies.next, c);
     update_collisions();
 }
 
@@ -182,10 +183,13 @@ System::System(int program, int n_planets, int n_suns)
 void System::draw(int program)
 {
     s.draw(program);
-    Cel_bodies *current = this->bodies.next;
+    Cel_bodies *current = this->visible.next;
+    Cel_bodies *next;
     while(current != NULL){
+        next = current->next;
         current->planet->draw(program);
+        this->visible.remove_planet(current->planet);
 
-        current = current->next;
+        current = next;
     }
 }
