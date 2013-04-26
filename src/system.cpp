@@ -45,30 +45,51 @@ int System::check_collision(Body *p, Body *q)
  *****************************************************************************/
 void System::update_collisions()
 {
-   Cel_bodies *current = this->bodies.next;
-   Cel_bodies *next;
-   float r, rcube;
-   int collide;
+    Cel_bodies *current = this->bodies.next;
+    Cel_bodies *next, *tmp;
+    float r, rcube, mass;
+    int collide;
 
-   while(current->next != NULL){        
+    while(current->next != NULL){        
         next = current->next;
-        collide = check_collision(current->planet, next->planet);
-        
-        if(collide == 1){
-            //Lägger ihop massor, räknar ut ny radie och tar bort next ur listan
-            current->planet->mass = current->planet->mass + next->planet->mass;
-            std::cout << current->planet->mass << std::endl;
-            rcube = pow(current->planet->get_radius(), 3) + pow(next->planet->get_radius(), 3);            
-            r = pow(rcube, (1.0/3));
-            std::cout << rcube << std::endl << r << std::endl;
-            current->planet->set_radius(r);
-            bodies.remove_planet(next->planet);
+        while(next != NULL){
+
+            collide = check_collision(current->planet, next->planet);
+
+            if(collide == 1){          
+              
+                mass = current->planet->mass + next->planet->mass;                
+                rcube = pow(current->planet->get_radius(), 3) + pow(next->planet->get_radius(), 3);            
+                r = pow(rcube, (1.0/3));
+
+                //Kollar vilken planet som ska tas bort, uppdaterar radie och massa
+                if((current->planet->mass) >= (next->planet->mass)){  
+                    std::cout << "collision1" << std::endl;    
+                    current->planet->mass = mass;
+                    current->planet->set_radius(r);
+                } else{
+                    std::cout << "collision2" << std::endl; 
+                    next->planet->mass = mass;
+                    next->planet->set_radius(r);
+                    tmp = current;
+                    current->planet = next->planet;
+                    next->planet = tmp->planet;
+                }
+                tmp = next;
+                std::cout << "next" << std::endl; 
+                next = next->next;
+                std::cout << "remove" << std::endl; 
+                bodies.remove_planet(tmp->planet);
+                std::cout << "slut" << std::endl; 
+            } else{
+                next = next->next;
+            }
         }
-        
-        if(current->next != NULL){  
+
+        if(current->next !=NULL){
             current = current->next;
         }
-   }
+    }
 }
 
 System::System(int program){
