@@ -46,7 +46,7 @@ void resize_window(SDL_Event event);
 
 void exit_prog(int);
 
-void handle_userevent(SDL_Event event);
+//void handle_userevent(SDL_Event event);
 
 #ifdef __cplusplus
 }
