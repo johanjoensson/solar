@@ -21,7 +21,9 @@
 class System {
     public:
         enum CUSTOM_CODES{
-            CUSTOM_TIMER = 1	
+            CUSTOM_TIMER = 1,
+            DISPLAY_TIMER = 2,
+            UPDATE_TIMER = 3	
         } custom_codes;
 
         Camera cam;
