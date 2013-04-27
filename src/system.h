@@ -21,13 +21,29 @@
 class System {
     public:
         enum CUSTOM_CODES{
-            CUSTOM_TIMER = 1	
+            CUSTOM_TIMER = 1,
+            DISPLAY_TIMER = 2,
+            UPDATE_TIMER = 3,	
+            CLEAN_TIMER = 4	
         } custom_codes;
 
         Camera cam;
         
         void update(float);
         void draw(int);
+
+        /********************************************************
+         * clean(int max_distance)
+         * Tar bort planeter som är långra bort än max_instance
+         ********************************************************/
+        void clean(int max_distance);
+
+        /**************************************************************
+         * check_distance(Body *b, int max_distance)
+         * returnerar 1 om b är längre bort från origo än max_distance, 
+         * 0 annars
+         **************************************************************/
+        int check_distance(Body* b, int max_distance);
 
         Body b;
         Object ship;

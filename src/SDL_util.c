@@ -23,7 +23,6 @@ void set_event_handler(void (*event_func)(SDL_Event event))
 	if(ptdisplay == NULL){
 		fprintf(stderr, "Error setting event handler\n");
 	}
-
 }
 
 void exit_prog(int value)
@@ -60,19 +59,7 @@ void resize_window(SDL_Event event)
 	glLoadIdentity();
 }
 
-/*void handle_keypress(SDL_Event event)
-{
-	switch(event.key.keysym.sym){
-		case SDLK_ESCAPE:
-		case SDLK_q:
-			exit_prog(0);
-			break;
-		default:
-			break;
-	}
-}
-*/
-
+/*
 void handle_userevent(SDL_Event event)
 {
 	switch(event.user.code){
@@ -83,39 +70,18 @@ void handle_userevent(SDL_Event event)
 			break;
 	}	
 }
-
-/*void event_handler(SDL_Event event){
-	switch(event.type){
-		case SDL_VIDEORESIZE: 
-			resize_window(event);
-			break;
-		case SDL_KEYDOWN:
-			handle_keypress(event);
-			break;
-		case SDL_QUIT:
-			exit_prog(0);
-			break;
-		case SDL_USEREVENT:
-			handle_userevent(event);
-			break;
-		default:
-			break;
-	}
-}
 */
 
 
 void inf_loop()
 {
 	SDL_Event event;
+
 	while(1){
 		while(SDL_PollEvent(&event)){
 			(*handle_event)(event);	
 		}
-		(*ptdisplay)();
 	}
-
-		
 }
 
 void init_SDL()
