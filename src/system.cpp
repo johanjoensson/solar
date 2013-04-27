@@ -26,7 +26,7 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
-    ship = Object("res/spaceship.obj");
+    ship = Object("res/spaceship.obj", "res/spaceship.png");
 
     Body *a = new Body("res/planet.obj", "res/jupiter.png");
     Body *q = new Body("res/planet.obj", "res/mars.png");
