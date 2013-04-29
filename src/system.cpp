@@ -50,6 +50,7 @@ void System::update_collisions()
     Cel_bodies *next, *tmp2;
     float r, rcube, mass;
     int collide;
+    vec3 v;
 
     while(current->next != NULL){        
         next = current->next;
@@ -58,24 +59,26 @@ void System::update_collisions()
             collide = check_collision(current->planet, next->planet);
 
             if(collide == 1){          
-              
+                //räknar ut massa, radie och hastighet för sammanslagen kroppp
                 mass = current->planet->mass + next->planet->mass;                
                 rcube = pow(current->planet->get_radius(), 3) + pow(next->planet->get_radius(), 3);            
                 r = pow(rcube, (1.0/3));
-
-                //Kollar vilken planet som ska tas bort, uppdaterar radie och massa
+                v = (current->planet->mass*current->planet->velocity + next->planet->mass*next->planet->velocity)/mass;
+                
+                //Kollar vilken planet som ska tas bort
                 if((current->planet->mass) >= (next->planet->mass)){  
                     std::cout << "collision1" << std::endl;    
-                    current->planet->mass = mass;
-                    current->planet->set_radius(r);
                 } else{
                     std::cout << "collision2" << std::endl; 
-                    next->planet->mass = mass;
-                    next->planet->set_radius(r);
                     tmp = current->planet;
                     current->planet = next->planet;
                     next->planet = tmp;
                 }
+ 
+                current->planet->mass = mass;
+                current->planet->set_radius(r);
+                current->planet->velocity = v;
+                
                 tmp2 = next;
                 std::cout << "next" << std::endl; 
                 next = next->next;

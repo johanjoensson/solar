@@ -50,8 +50,8 @@ void init(void)
 	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
-    //sys = System(program, 7, 1);
-    sys = System(program);
+    sys = System(program, 20, 1);
+    //sys = System(program);
     sys.f = Frustum(near, far, bottom, top, left, right);
 
     // Set Texture units
@@ -61,7 +61,7 @@ void init(void)
     SDL_ShowCursor(0);
     
     // Lock cursor to this program
-//    SDL_WM_GrabInput( SDL_GRAB_ON );
+    SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
