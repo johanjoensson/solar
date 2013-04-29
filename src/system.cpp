@@ -46,7 +46,8 @@ int System::check_collision(Body *p, Body *q)
 void System::update_collisions()
 {
     Cel_bodies *current = this->bodies.next;
-    Cel_bodies *next, *tmp;
+    Body *tmp;
+    Cel_bodies *next, *tmp2;
     float r, rcube, mass;
     int collide;
 
@@ -71,15 +72,15 @@ void System::update_collisions()
                     std::cout << "collision2" << std::endl; 
                     next->planet->mass = mass;
                     next->planet->set_radius(r);
-                    tmp = current;
+                    tmp = current->planet;
                     current->planet = next->planet;
-                    next->planet = tmp->planet;
+                    next->planet = tmp;
                 }
-                tmp = next;
+                tmp2 = next;
                 std::cout << "next" << std::endl; 
                 next = next->next;
                 std::cout << "remove" << std::endl; 
-                bodies.remove_planet(tmp->planet);
+                bodies.remove_planet(tmp2->planet);
                 std::cout << "slut" << std::endl; 
             } else{
                 next = next->next;
@@ -98,22 +99,41 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/jupiter.png");
-    Body *q = new Body("res/planet.obj", "res/mars.png");
+    Body *b = new Body("res/planet.obj", "res/mars.png");
+    Body *d = new Body("res/planet.obj", "res/venus.png");
+    Body *p = new Body("res/planet.obj", "res/moon.png");
+    Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
 
     a->set_scale(1);
     //a->spin_x = 1;
-    a->mass = 1;
+    a->mass = 6;
     a->position = vec3(0.0, 5.0, -2.0);
-    a->velocity = vec3(0, 0, 0.0);
+    a->velocity = vec3(0.0, 0, 0.0);
+    b->mass = 2;
+    b->position = vec3(0.0, 10.0, -2.0);
+    b->velocity = vec3(0, 0.0, 0.0);
+    d->mass = 3;
+    d->position = vec3(10.0, 5.0, -2.0);
+    d->velocity = vec3(0, 0, 0.0);
+    p->mass = 4;
+    p->position = vec3(5.0, 5.0, -2.0);
+    p->velocity = vec3(-1.0, 0, 0.0);
+
+
+
 
     q->set_scale(3);
     ////q->spin_x = 1;
-    q->mass = 1;
-    q->position = vec3(0.0, 3.0, -2.0);
+    q->mass = 5;
+    q->position = vec3(15.0, 3.0, -2.0);
     q->velocity = vec3(0.0, 0, 0.0);
 
-    bodies.add_planet(a);
     bodies.add_planet(q);
+    bodies.add_planet(a);
+
+    bodies.add_planet(b);
+    bodies.add_planet(p);
+    bodies.add_planet(d);
     //Test för collision. Ta bort sen
     //std::cout << check_collision(a, q) << std::endl;
     //update_collisions();
