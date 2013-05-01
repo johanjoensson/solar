@@ -19,6 +19,77 @@ void System::update(float dt)
 {
     bodies.update(dt/1000);
     visible.next = f.cull_frustum(bodies.next, c);
+    update_collisions();
+}
+
+/******************************************************************************
+ * Kollar om två kroppar kolliderar.
+ *****************************************************************************/
+int System::check_collision(Body *p, Body *q)
+{
+    int collide = 0;     
+          
+    vec3 diff = VectorSub(q->position, p->position);
+    float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+    float rsquare = (q->get_radius() + p->get_radius())*(q->get_radius() + p->get_radius());
+
+    if(dsquare <= rsquare){
+         collide = 1;
+    }
+
+    return collide;
+}
+
+/******************************************************************************
+ * Uppdaterar kollisioner
+ *****************************************************************************/
+void System::update_collisions()
+{
+    Cel_bodies *current = this->bodies.next;
+    Body *tmp;
+    Cel_bodies *next, *tmp2;
+    float r, rcube, mass;
+    int collide;
+    vec3 v;
+
+    while(current->next != NULL){        
+        next = current->next;
+        while(next != NULL){
+
+            collide = check_collision(current->planet, next->planet);
+
+            if(collide == 1){          
+                //räknar ut massa, radie och hastighet för sammanslagen kroppp
+                mass = current->planet->mass + next->planet->mass;                
+                rcube = pow(current->planet->get_radius(), 3) + pow(next->planet->get_radius(), 3);            
+                r = pow(rcube, (1.0/3));
+                v = (current->planet->mass*current->planet->velocity + next->planet->mass*next->planet->velocity)/mass;
+                
+                //Kollar vilken planet som ska tas bort
+                if((current->planet->mass) <= (next->planet->mass)){  
+                    tmp = current->planet;
+                    current->planet = next->planet;
+                    next->planet = tmp;
+                }
+ 
+                current->planet->mass = mass;
+                current->planet->set_radius(r);
+                current->planet->velocity = v;
+                
+                std::cout << r << std::endl; 
+                tmp2 = next;
+                next = next->next;
+                bodies.remove_planet(tmp2->planet);
+                 
+            } else{
+                next = next->next;
+            }
+        }
+
+        if(current->next !=NULL){
+            current = current->next;
+        }
+    }
 }
 
 System::System(int program){
@@ -27,22 +98,43 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/jupiter.png");
-    Body *q = new Body("res/planet.obj", "res/mars.png");
+    //Body *b = new Body("res/planet.obj", "res/mars.png");
+    //Body *d = new Body("res/planet.obj", "res/venus.png");
+    Body *p = new Body("res/planet.obj", "res/moon.png");
+    //Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
 
-    a->set_scale(1);
+    a->set_scale(1.5);
+            
     //a->spin_x = 1;
-    a->mass = 1;
-    a->position = vec3(0.0, 5.0, -2.0);
-    a->velocity = vec3(0, 0, 0.0);
+    a->position = vec3(0.0, 0.0, -2.0);
+    a->position = vec3(0.0, 0.0, -2.0);
+    a->velocity = vec3(0.0, 0, 0.0);
+    //b->mass = 2;
+    //b->position = vec3(0.0, 10.0, -2.0);
+    //b->velocity = vec3(0, 0.0, 0.0);
+    //d->mass = 3;
+    //d->position = vec3(10.0, 5.0, -2.0);
+    //d->velocity = vec3(0, 0, 0.0);
+    p->mass = 1;
+    p->position = vec3(5.0, 0.0, -2.0);
+    p->velocity = vec3(-1.0, 0, 0.0);
+    p->set_scale(1.5);
 
-    q->set_scale(3);
+
+
+
+    //q->set_scale(1);
     ////q->spin_x = 1;
-    q->mass = 1;
-    q->position = vec3(5.0, 0.0, -2.0);
-    q->velocity = vec3(0.0, 0, 0.0);
+    //q->mass = 5;
+    //q->position = vec3(15.0, 3.0, -2.0);
+    //q->velocity = vec3(0.0, 0, 0.0);
 
+    //bodies.add_planet(q);
     bodies.add_planet(a);
-    bodies.add_planet(q);
+
+    //bodies.add_planet(b);
+    bodies.add_planet(p);
+    //bodies.add_planet(d);
 }
 
 System::System(int program, int n_planets, int n_suns)

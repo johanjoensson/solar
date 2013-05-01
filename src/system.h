@@ -31,6 +31,11 @@ class System {
         
         void update(float);
         void draw(int);
+        
+        //Kollar om två kroppar kolliderar
+        int check_collision(Body*, Body*); 
+        //Uppdaterar collisioner
+        void update_collisions();
 
         /********************************************************
          * clean(int max_distance)
