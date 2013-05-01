@@ -98,26 +98,31 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/jupiter.png");
-    //Body *b = new Body("res/planet.obj", "res/mars.png");
-    //Body *d = new Body("res/planet.obj", "res/venus.png");
+    Body *b = new Body("res/planet.obj", "res/mars.png");
+    Body *d = new Body("res/planet.obj", "res/venus.png");
     Body *p = new Body("res/planet.obj", "res/moon.png");
     //Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
 
-    a->set_scale(1.5);
+    a->set_scale(8);
             
-    //a->spin_x = 1;
+    a->spin_x = 1;
     a->position = vec3(0.0, 0.0, -2.0);
     a->position = vec3(0.0, 0.0, -2.0);
     a->velocity = vec3(0.0, 0, 0.0);
-    //b->mass = 2;
-    //b->position = vec3(0.0, 10.0, -2.0);
-    //b->velocity = vec3(0, 0.0, 0.0);
-    //d->mass = 3;
-    //d->position = vec3(10.0, 5.0, -2.0);
-    //d->velocity = vec3(0, 0, 0.0);
-    p->mass = 1;
-    p->position = vec3(5.0, 0.0, -2.0);
-    p->velocity = vec3(-1.0, 0, 0.0);
+    a->mass = 5E10;
+    
+    b->mass = 1E7;
+    b->position = vec3(0.0, 65.0, -2.0);
+    b->velocity = vec3(0.7, 0.0, 0.0);
+    b->set_scale(4);
+    
+    d->mass = 1E3;
+    d->position = vec3(50.0, 0.0, -2.0);
+    d->velocity = vec3(0.0, 0.7, 0.0);
+    d->set_scale(2.5);
+    p->mass = 2E2;
+    p->position = vec3(15.0, 0.0, -2.0);
+    p->velocity = vec3(0.0, 1.4, 0.0);
     p->set_scale(1.5);
 
 
@@ -132,9 +137,9 @@ System::System(int program){
     //bodies.add_planet(q);
     bodies.add_planet(a);
 
-    //bodies.add_planet(b);
+    bodies.add_planet(b);
     bodies.add_planet(p);
-    //bodies.add_planet(d);
+    bodies.add_planet(d);
 }
 
 System::System(int program, int n_planets, int n_suns)
