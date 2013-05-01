@@ -66,10 +66,7 @@ void System::update_collisions()
                 v = (current->planet->mass*current->planet->velocity + next->planet->mass*next->planet->velocity)/mass;
                 
                 //Kollar vilken planet som ska tas bort
-                if((current->planet->mass) >= (next->planet->mass)){  
-                    std::cout << "collision1" << std::endl;    
-                } else{
-                    std::cout << "collision2" << std::endl; 
+                if((current->planet->mass) <= (next->planet->mass)){  
                     tmp = current->planet;
                     current->planet = next->planet;
                     next->planet = tmp;
@@ -79,12 +76,11 @@ void System::update_collisions()
                 current->planet->set_radius(r);
                 current->planet->velocity = v;
                 
+                std::cout << r << std::endl; 
                 tmp2 = next;
-                std::cout << "next" << std::endl; 
                 next = next->next;
-                std::cout << "remove" << std::endl; 
                 bodies.remove_planet(tmp2->planet);
-                std::cout << "slut" << std::endl; 
+                 
             } else{
                 next = next->next;
             }
@@ -102,44 +98,43 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/jupiter.png");
-    Body *b = new Body("res/planet.obj", "res/mars.png");
-    Body *d = new Body("res/planet.obj", "res/venus.png");
+    //Body *b = new Body("res/planet.obj", "res/mars.png");
+    //Body *d = new Body("res/planet.obj", "res/venus.png");
     Body *p = new Body("res/planet.obj", "res/moon.png");
-    Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
+    //Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
 
-    a->set_scale(1);
+    a->set_scale(1.5);
+            
     //a->spin_x = 1;
-    a->mass = 6;
-    a->position = vec3(0.0, 5.0, -2.0);
+    a->position = vec3(0.0, 0.0, -2.0);
+    a->position = vec3(0.0, 0.0, -2.0);
     a->velocity = vec3(0.0, 0, 0.0);
-    b->mass = 2;
-    b->position = vec3(0.0, 10.0, -2.0);
-    b->velocity = vec3(0, 0.0, 0.0);
-    d->mass = 3;
-    d->position = vec3(10.0, 5.0, -2.0);
-    d->velocity = vec3(0, 0, 0.0);
-    p->mass = 4;
-    p->position = vec3(5.0, 5.0, -2.0);
+    //b->mass = 2;
+    //b->position = vec3(0.0, 10.0, -2.0);
+    //b->velocity = vec3(0, 0.0, 0.0);
+    //d->mass = 3;
+    //d->position = vec3(10.0, 5.0, -2.0);
+    //d->velocity = vec3(0, 0, 0.0);
+    p->mass = 1;
+    p->position = vec3(5.0, 0.0, -2.0);
     p->velocity = vec3(-1.0, 0, 0.0);
+    p->set_scale(1.5);
 
 
 
 
-    q->set_scale(3);
+    //q->set_scale(1);
     ////q->spin_x = 1;
-    q->mass = 5;
-    q->position = vec3(15.0, 3.0, -2.0);
-    q->velocity = vec3(0.0, 0, 0.0);
+    //q->mass = 5;
+    //q->position = vec3(15.0, 3.0, -2.0);
+    //q->velocity = vec3(0.0, 0, 0.0);
 
-    bodies.add_planet(q);
+    //bodies.add_planet(q);
     bodies.add_planet(a);
 
-    bodies.add_planet(b);
+    //bodies.add_planet(b);
     bodies.add_planet(p);
-    bodies.add_planet(d);
-    //Test för collision. Ta bort sen
-    //std::cout << check_collision(a, q) << std::endl;
-    //update_collisions();
+    //bodies.add_planet(d);
 }
 
 System::System(int program, int n_planets, int n_suns)
