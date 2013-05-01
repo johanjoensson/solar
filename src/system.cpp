@@ -75,8 +75,7 @@ void System::update_collisions()
                 current->planet->mass = mass;
                 current->planet->set_radius(r);
                 current->planet->velocity = v;
-                
-                std::cout << r << std::endl; 
+                 
                 tmp2 = next;
                 next = next->next;
                 bodies.remove_planet(tmp2->planet);
