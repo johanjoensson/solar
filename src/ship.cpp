@@ -14,7 +14,8 @@ Ship::Ship(const char* model, const char *texture) : Object(model, texture)
 {
     static_rotation = Rz(M_PI) * Ry(3.14/2);
     rotate('y', 3.14/2);
-    translate(0,-2,-13);
+    translate(0,-0.2,-1.2);
+    set_scale(1.0/30);
 
 }
 
