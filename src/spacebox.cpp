@@ -3,8 +3,7 @@
 #include <GL/gl.h>
 
 Spacebox::Spacebox(const char* model, const char* tex) : Object(model, tex)
-{
-}
+{}
 
 Spacebox::Spacebox()
 {}

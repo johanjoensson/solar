@@ -6,6 +6,7 @@
 #include "system.h"
 #include "body.h"
 #include "camera.h"
+#include "ship.h"
 #include "spacebox.h"
 #include "VectorUtils3.h"
 #include <time.h>
@@ -26,25 +27,7 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
-    ship = Object("res/spaceship.obj", "res/spaceship.png");
-
-    Body *a = new Body("res/planet.obj", "res/jupiter.png");
-    Body *q = new Body("res/planet.obj", "res/mars.png");
-
-    a->set_scale(1);
-    //a->spin_x = 1;
-    a->mass = 1;
-    a->position = vec3(0.0, 5.0, -2.0);
-    a->velocity = vec3(0, 0, 0.0);
-
-    q->set_scale(3);
-    ////q->spin_x = 1;
-    q->mass = 1;
-    q->position = vec3(5.0, 0.0, -2.0);
-    q->velocity = vec3(0.0, 0, 0.0);
-
-    bodies.add_planet(a);
-    bodies.add_planet(q);
+    ship = Ship("res/spaceship.obj", "res/spaceship.png");
 }
 
 System::System(int program, int n_planets, int n_suns)
