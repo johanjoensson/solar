@@ -13,6 +13,7 @@
 #include "frustum.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
+#include "ship.h"
 
 
 /******************************************************************************
@@ -51,6 +52,7 @@ class System {
         int check_distance(Body* b, int max_distance);
 
         Body b;
+        Ship ship;
         Spacebox s;
         Camera c;
         Frustum f;

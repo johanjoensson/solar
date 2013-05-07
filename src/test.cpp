@@ -63,7 +63,7 @@ void init(void)
     SDL_ShowCursor(0);
     
     // Lock cursor to this program
-    //SDL_WM_GrabInput( SDL_GRAB_ON );
+    SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
     projection_matrix = frustum(left, right, bottom, top, near, far);
@@ -206,6 +206,7 @@ void handle_mouse(SDL_Event event)
     int height = info->current_h; 
 
     sys.c.change_look_at_pos(event.motion.xrel,event.motion.y,width,height);
+    sys.ship.handle_movement(event.motion.xrel,event.motion.yrel,width,height);
 }
 
 void event_handler(SDL_Event event)

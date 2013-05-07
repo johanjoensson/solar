@@ -6,6 +6,7 @@
 #include "system.h"
 #include "body.h"
 #include "camera.h"
+#include "ship.h"
 #include "spacebox.h"
 #include "VectorUtils3.h"
 #include <time.h>
@@ -93,6 +94,7 @@ void System::update_collisions()
 
 System::System(int program){
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
     bodies = Cel_bodies();
 
@@ -156,6 +158,7 @@ System::System(int program, int n_planets, int n_suns)
     float rand_value;
 
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
     bodies = Cel_bodies();
     Body *p;
@@ -221,6 +224,7 @@ System::System(int program, int n_planets, int n_suns)
 void System::draw(int program)
 {
     s.draw(program);
+    ship.draw(program);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
     while(current != NULL){
