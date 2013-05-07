@@ -50,6 +50,7 @@ System::System(int program, int n_planets, int n_suns)
     float rand_value;
 
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
     bodies = Cel_bodies();
     Body *p;
