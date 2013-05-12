@@ -98,10 +98,10 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
-    Body *a = new Body("res/planet.obj", "res/jupiter.png");
+    Body *a = new Body("res/planet.obj", "res/neptunemap.png");
     //Body *b = new Body("res/planet.obj", "res/mars.png");
     //Body *d = new Body("res/planet.obj", "res/venus.png");
-    Body *p = new Body("res/planet.obj", "res/moon.png");
+    Body *p = new Body("res/planet.obj", "res/neptunemap.png");
     //Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
 
     a->set_scale(1.5);
@@ -164,16 +164,26 @@ System::System(int program, int n_planets, int n_suns)
     Body *p;
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
-        if(rand_value < 0.167) {
+        if(rand_value < 0.09) {
             p = new Body("res/planet.obj", "res/earth.png");
-        } else if(rand_value < 0.33) {
+        } else if(rand_value < 0.18) {
             p = new Body("res/planet.obj", "res/mars.png");
-        } else if(rand_value < 0.5) {
+        } else if(rand_value < 0.27) {
             p = new Body("res/planet.obj", "res/moon.png");
-        } else if(rand_value < 0.667) {
+        } else if(rand_value < 0.36) {
             p = new Body("res/planet.obj", "res/venus.png");
-        } else if (rand_value < 0.83) {
+        } else if (rand_value < 0.45) {
             p = new Body("res/planet.obj", "res/mars_elevation.png");
+        } else if (rand_value < 0.55) {
+            p = new Body("res/planet.obj", "res/saturnmap.png");
+        } else if (rand_value < 0.64) {
+            p = new Body("res/planet.obj", "res/uranusmap.png");
+        } else if (rand_value < 0.73) {
+            p = new Body("res/planet.obj", "res/neptunemap.png");
+        } else if (rand_value < 0.82) {
+            p = new Body("res/planet.obj", "res/plutomap1k.png");
+        } else if (rand_value < 0.91) {
+            p = new Body("res/planet.obj", "res/mercurymap.png");
         } else {
             p = new Body("res/planet.obj", "res/jupiter.png");
         }
