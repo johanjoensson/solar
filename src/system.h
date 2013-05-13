@@ -69,7 +69,7 @@ class System {
         System();
         System(int);
         // Konstruktor för slumpat starttillstånd
-        System(int, int, int);
+        System(int, int, int, long, long);
 
 };
 #endif //SYSTEM_H

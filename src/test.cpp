@@ -10,7 +10,8 @@
 #include "LoadTGA.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
-#include<stdio.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #define near 1
 #define far 300
@@ -41,7 +42,7 @@ static void event_handler(SDL_Event event);
 void check_keys();
 void handle_userevent(SDL_Event event);
 
-void init(void)
+void init(int argc, char *argv[])
 {
 	dumpInfo();
     // GL inits
@@ -52,8 +53,34 @@ void init(void)
 	program = loadShaders("src/test.vert", "src/test.frag");
 	printError("error loading shaders");
 
-    sys = System(program, 20, 1);
-    //sys = System(program);
+    int nsun = 0;
+    int nplanet = 0;
+    long p_mass_range = 2E6;
+    long s_mass_range = 6E10;
+    int c;
+    while ((c = getopt(argc, argv, "p:s:m:n:")) != -1) {
+        switch(c) {
+            case 'p':
+                nplanet = atoi(optarg);
+                break;
+            case 's':
+                nsun = atoi(optarg);
+                break;
+            case 'm':
+                p_mass_range = atol(optarg);
+                break;
+            case 'n':
+                s_mass_range = atol(optarg);
+                break;
+        }
+    }
+
+    if (nsun == 0 && nplanet == 0) {
+        sys = System(program);
+    } else {
+        sys = System(program, nplanet, nsun, p_mass_range, s_mass_range);
+    }
+
     sys.f = Frustum(near, far, bottom, top, left, right);
 
     // Set Texture units
@@ -146,11 +173,11 @@ Uint32 clean_timer(Uint32 interval, void* param)
 	return interval;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
 	init_SDL();
     set_event_handler(&event_handler);
-	init();
+	init(argc, argv);
 	SDL_TimerID timer_id;
 	timer_id = SDL_AddTimer(20, &display_timer, NULL);
 	timer_id = SDL_AddTimer(10, &update_timer, NULL);

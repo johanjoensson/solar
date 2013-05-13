@@ -138,22 +138,18 @@ System::System(int program){
     //bodies.add_planet(d);
 }
 
-System::System(int program, int n_planets, int n_suns)
+System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range)
 {
     // Sätt fröet för slumpade värden
     srand(time(NULL));
-    int p_pos_range = 4*sqrt(n_planets*n_suns);
+    int p_pos_range = 4*sqrt(n_planets*(n_suns + 1));
     int p_vel_range = 2;
-    int p_mass_range = 2E6;
     float p_spin_range = 0.1;
-    int p_radius_range = 3;
 
     int s_pos_range = 25*sqrt(n_suns);
     float s_vel_range = 0.1;
-    long int s_mass_range = 6E10;
     long int s_mass_min = 1E10;
     int s_spin_range = 1;
-    int s_radius_range = 6;
 
     float rand_value;
 
@@ -193,7 +189,7 @@ System::System(int program, int n_planets, int n_suns)
         p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
 
         p->mass = rand() % p_mass_range;
-        p->set_radius(0.3 + (float)rand()/((float)RAND_MAX/p_radius_range));
+        p->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/10)/8);
 
         p->position = vec3(
                 (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
@@ -216,7 +212,8 @@ System::System(int program, int n_planets, int n_suns)
 
         p->mass = rand() % s_mass_range + s_mass_min;
 
-        p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+        //p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+        p->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/8);
 
         p->position = vec3(
                 (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
