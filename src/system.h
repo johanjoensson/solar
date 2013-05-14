@@ -13,6 +13,7 @@
 #include "frustum.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
+#include "planetoids.h"
 
 
 /******************************************************************************
@@ -44,6 +45,7 @@ class System {
          * bodies.next är första objektet i listan!
          *********************************************************************/
         Cel_bodies bodies, visible;
+        Planetoids asteroids;
 
         System();
         System(int);

@@ -14,6 +14,8 @@ class Planetoids: public Body {
         mat4* trans_mat;
         mat4* scale_mat;
 
+        vec3* rot_axis;
+
         // För att skala objekt
         float* scale;
 
@@ -35,8 +37,8 @@ class Planetoids: public Body {
         Planetoids(int, const char*, const char*,  const char*, const char*);
 
 
-        void rotate(char direction, float angle, int index);
-        void translate(float dx, float dy, float dz, int index);
+        void rotate(vec3 direction, float angle, int index);
+        void translate(vec3, int index);
         void place(vec3 pos, int index);
 
 
