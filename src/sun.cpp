@@ -30,18 +30,12 @@ void Sun::draw(int program)
 {
     glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
     glBindTexture(GL_TEXTURE_2D, texture);
-    cout << "det är inte fel på rad två i sun.draw" << endl;
     DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
-    cout << "om jag kommer heller ej på rad tre/fyra" << cout;
-    emit_color[0] = 1.0;
-    emit_color[1] = 1.0;
-    emit_color[2] = 1.0;
-    sun_position[0] = (GLfloat) (this->position.x);
-    sun_position[1] = (GLfloat) (this->position.y);
-    sun_position[2] = (GLfloat) (this->position.z);
-    glUniform3fv(glGetUniformLocation(program, "sun_position"), 3, (const GLfloat*) (sun_position));
-    glUniform3fv(glGetUniformLocation(program, "emit_color"), 3, emit_color);
-    cout << "uploadz emit color from sun::draw" << endl;
-    glUniform1f(glGetUniformLocation(program, "specularExponent"), specularExponent);
-    
+    emit_color = vec3(1,1,1);
+    sun_position = this->position;
+    glUniform3f(glGetUniformLocation(program, "sun_position"), sun_position.x, sun_position.y, sun_position.z);
+    glUniform3f(glGetUniformLocation(program, "emit_color"), emit_color.x, emit_color.y, emit_color.z);
+    //FIXME ändra så att det är specularExponent som skickar upp och ej 10.0
+    //direkt
+    glUniform1f(glGetUniformLocation(program, "specularExponent"), 10.0);
 }

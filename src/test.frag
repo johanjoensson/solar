@@ -4,58 +4,60 @@ in vec2 out_tex_coord;
 in vec3 out_normal;
 in vec3 out_position; 
 in vec3 out_surface_camera;
+in vec3 out_position_cam;
 
 out vec4 out_Color;
 
 uniform sampler2D texUnit;
 uniform int spacebox;
+uniform mat4 cam_matrix;
 
-uniform float sun_position[3];
-uniform float emit_color[3];
+uniform vec3 sun_position;
+uniform vec3 emit_color;
 uniform float specularExponent;
 
+mat3 light_cam_matrix = mat3(cam_matrix);
+
+vec3 s;
+vec3 n;
+vec3 eye;
+vec3 tmp_colors;
+vec3 colors;
+
+vec3 diffuse;
+vec3 specular;
+vec3 reflection;
+
+float cos_angle;
 
 
 void main(void)
 {
         if(spacebox == 0){
+                colors = vec3(0,0,0);
+                tmp_colors = vec3(texture(texUnit, out_tex_coord));
+                s = normalize(light_cam_matrix * sun_position - out_position);
+                n = normalize(out_normal);
 
-		vec4 diffuse = vec4(0.0);
-		vec4 specular = vec4(0.0);
-		float shade;
-		float spec;
-		vec3 direction;
-		vec3 r;	
-		vec3 da_color;
+                // FIXME dett är fult och borde göras annorlunda
+                float lambert = dot(n, s)-0.001;
+                //float lambert = dot(n, s);
 
-		  /* Vector from surface to light source */
-		direction.x = out_position.x - sun_position[0];
-		direction.y = out_position.y - sun_position[1];
-		direction.z = out_position.z - sun_position[2]; 
-		  /* Diffuse shading */
-		shade = dot(normalize(out_normal), normalize(-direction));
-		shade = clamp(shade, 0, 1);
+                if(lambert > 0){
+                        diffuse = (emit_color*tmp_colors)*lambert;
+                        colors += diffuse;
 
-		/* Specular shading */
-		r = reflect(direction, out_normal);
-		/* Add the specular exponent to the cosine function */
-		spec = pow(dot(normalize(r), normalize(out_surface_camera)), specularExponent);
-		spec = clamp(spec, 0, 1);       
- 		
+                        reflection = reflect(s, n);
+                        eye = normalize(out_position_cam);
 
-		out_Color = texture(texUnit, out_tex_coord) * length(out_normal);
-		
-		da_color.x = emit_color[0]; 
-		da_color.y = emit_color[1];
-		da_color.z = emit_color[2];		
+                        cos_angle = dot(reflection, eye);
+                        cos_angle = max(0, cos_angle);
 
-		diffuse = out_Color*vec4(shade*da_color, 1.0);
-		specular = out_Color*vec4(spec*da_color, 1.0);
-        	out_Color = diffuse; // + specular;
-
+                        specular = (emit_color*tmp_colors)*pow(cos_angle, specularExponent);
+                        colors += specular;
+                }
+                out_Color = vec4(colors, 1);
         } else {
-
                 out_Color = texture(texUnit, out_tex_coord);
-
         }
 }

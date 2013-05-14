@@ -8,6 +8,7 @@ out vec3 out_normal;
 out vec2 out_tex_coord;
 out vec3 out_position;
 out vec3 out_surface_camera;
+out vec3 out_position_cam;
 
 uniform mat4 proj_matrix;
 uniform mat4 mdl_matrix;
@@ -27,6 +28,6 @@ void main(void)
                 gl_Position = proj_matrix * mat4(mat3(cam_matrix)) * mdl_matrix * vec4(in_position, 1.0);
         }
 	
-	
+        out_position_cam = vec3(cam_matrix * mdl_matrix * vec4(in_position, 1));
 	out_surface_camera = camera_pos - out_position;	
 }
