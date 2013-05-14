@@ -194,6 +194,18 @@ void handle_keypress(SDL_Event event)
                  simulation_speed = MAX_SIMULATION_SPEED;
             }
             break;
+        case SDLK_g: 
+            {
+                SDL_GrabMode mode = SDL_WM_GrabInput(SDL_GRAB_QUERY);
+                if(mode == SDL_GRAB_ON) {
+                    SDL_WM_GrabInput(SDL_GRAB_OFF);
+                }
+                else {
+                    SDL_WM_GrabInput(SDL_GRAB_ON);
+                }
+            }
+            break;
+            
 		default:
 			break;
 	}
