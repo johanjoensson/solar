@@ -12,6 +12,7 @@
 #include "cel_bodies.h"
 #include <stdio.h>
 #include <unistd.h>
+#include "soil/src/SOIL.h"
 
 #define near 1
 #define far 300
@@ -33,6 +34,7 @@ GLuint program;
 System sys;
 int speed = 4;
 int simulation_speed = 1;
+int screenshot_nr = 0;
 
 mat4 projection_matrix;
 
@@ -41,6 +43,7 @@ void handle_mouse(SDL_Event event);
 static void event_handler(SDL_Event event);
 void check_keys();
 void handle_userevent(SDL_Event event);
+void take_screenshot();
 
 void init(int argc, char *argv[])
 {
@@ -243,7 +246,10 @@ void handle_keypress(SDL_Event event)
                 }
             }
             break;
-            
+
+        case SDLK_p:
+            take_screenshot();
+            break;
 		default:
 			break;
 	}
@@ -312,4 +318,17 @@ void handle_userevent(SDL_Event event)
         default:
             break;
     }
+}
+
+void take_screenshot()
+{
+    info = SDL_GetVideoInfo();
+    int width = info->current_w; 
+    int height = info->current_h; 
+    int save_result = SOIL_save_screenshot(
+            "space.bmp",
+            SOIL_SAVE_TYPE_BMP,
+            0, 0, width, height
+            );
+    screenshot_nr++;
 }
