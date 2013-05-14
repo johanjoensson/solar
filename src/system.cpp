@@ -95,6 +95,7 @@ void System::update_collisions()
 System::System(int program){
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     ship = Ship("res/spaceship.obj", "res/spaceship.png");
+    ship.place(vec3(0,0,-10));
     c = Camera(program);
     bodies = Cel_bodies();
 
@@ -138,15 +139,18 @@ System::System(int program){
     //bodies.add_planet(d);
 }
 
-System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range)
+System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
 {
     // Sätt fröet för slumpade värden
     srand(time(NULL));
     int p_pos_range = 4*sqrt(n_planets*(n_suns + 1));
-    int p_vel_range = 2;
+    if(p_pos_range_in) {
+        p_pos_range = p_pos_range_in;
+    } 
+    //int p_vel_range = 2;
     float p_spin_range = 0.1;
 
-    int s_pos_range = 25*sqrt(n_suns);
+    //int s_pos_range = 25*sqrt(n_suns);
     float s_vel_range = 0.1;
     long int s_mass_min = 1E10;
     int s_spin_range = 1;
@@ -197,12 +201,14 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
                 (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0);
 
         p->velocity = vec3(
-                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
-                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
-                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0);
+                rand() / (RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                rand() / (RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                rand() / (RAND_MAX/p_vel_range) - p_vel_range/2.0);
         bodies.add_planet(p);
     }
 
+    // Kan bara ljussätta en sol, så vi kan bara ha en eller ingen sol. Men 
+    // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
     for(int i=0; i<n_suns; i++){
         p = new Body("res/bunnyplus.obj", "res/grass.tga");
 
@@ -215,10 +221,12 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
         //p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
         p->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/8);
 
-        p->position = vec3(
-                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
-                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
-                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
+        p->position = vec3(0,0,-10);
+        /*p->position = vec3(
+          (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+          (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+          (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
+          */
 
         p->velocity = vec3(
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,

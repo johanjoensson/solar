@@ -69,7 +69,7 @@ class System {
         System();
         System(int);
         // Konstruktor för slumpat starttillstånd
-        System(int, int, int, long, long);
+        System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
 
 };
 #endif //SYSTEM_H

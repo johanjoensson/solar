@@ -57,14 +57,16 @@ void init(int argc, char *argv[])
     int nplanet = 0;
     long p_mass_range = 2E6;
     long s_mass_range = 6E10;
+    float p_vel_range = 2;
+    int p_pos_range = 0;
     int c;
-    while ((c = getopt(argc, argv, "p:s:m:n:")) != -1) {
+    while ((c = getopt(argc, argv, "p:sm:n:v:r:")) != -1) {
         switch(c) {
             case 'p':
                 nplanet = atoi(optarg);
                 break;
             case 's':
-                nsun = atoi(optarg);
+                nsun = 1;
                 break;
             case 'm':
                 p_mass_range = atol(optarg);
@@ -72,13 +74,19 @@ void init(int argc, char *argv[])
             case 'n':
                 s_mass_range = atol(optarg);
                 break;
+            case 'v':
+                p_vel_range = atof(optarg);
+                break;
+            case 'r':
+                p_pos_range = atoi(optarg);
+                break;
         }
     }
 
     if (nsun == 0 && nplanet == 0) {
         sys = System(program);
     } else {
-        sys = System(program, nplanet, nsun, p_mass_range, s_mass_range);
+        sys = System(program, nplanet, nsun, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
 
     sys.f = Frustum(near, far, bottom, top, left, right);
@@ -180,7 +188,7 @@ int main(int argc, char* argv[])
 	init(argc, argv);
 	SDL_TimerID timer_id;
 	timer_id = SDL_AddTimer(20, &display_timer, NULL);
-	timer_id = SDL_AddTimer(10, &update_timer, NULL);
+	timer_id = SDL_AddTimer(5, &update_timer, NULL);
 	timer_id = SDL_AddTimer(1000, &clean_timer, NULL);
 	if(timer_id == NULL){
 		fprintf(stderr, "Error setting timer function: %s", SDL_GetError());
