@@ -24,7 +24,7 @@ class Planetoids: public Body {
         int nb;
         mat4* matrix;
         vec3* position;
-        vec3* velocity;
+        float* velocity;
         float* mass;
         float* spin_x;
         float* spin_y;
@@ -34,7 +34,7 @@ class Planetoids: public Body {
         Planetoids();
         Planetoids(int, const char*);
         Planetoids(int, const char*, const char*);
-        Planetoids(int, const char*, const char*,  const char*, const char*);
+        Planetoids(int, float, const char*, const char*,  const char*, const char*);
 
 
         void rotate(vec3 direction, float angle, int index);

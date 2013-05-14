@@ -126,7 +126,7 @@ System::System(int program, int n_planets, int n_suns)
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
         bodies.add_planet(p);
     }
-    asteroids = Planetoids(1, "res/planet.obj", "res/jupiter.png", "src/test.vert", "src/test.frag");
+    asteroids = Planetoids(1000, 90, "res/planet.obj", "res/asteroid.tga", "src/test.vert", "src/test.frag");
 }
 
 void System::draw(int program)

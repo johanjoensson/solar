@@ -26,7 +26,7 @@ Planetoids::Planetoids(int num, const char* model) : Body()
         trans_mat[i] = IdentityMatrix();
 
         position[i] = vec3(0,0,0);
-        velocity[i] = vec3(0,0,0);
+        velocity[i] = 0;
     }
 }
 
@@ -56,13 +56,14 @@ Planetoids::Planetoids(int num, const char *model, const char *tex) : Body()
         trans_mat[i]  = IdentityMatrix();
 
         position[i] = vec3(0,0,0);
-        velocity[i] = vec3(0,0,0);
+        velocity[i] = 0;
 
     }
 }
 
-Planetoids::Planetoids(int num, const char *model, const char *tex, const char* vertex_shader, const char* fragment_shader) : Body()
+Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, const char* vertex_shader, const char* fragment_shader) : Body()
 {
+    nb = num;
     reflectivity = new float[num];
     scale = new float[num];
 
@@ -72,10 +73,12 @@ Planetoids::Planetoids(int num, const char *model, const char *tex, const char* 
     trans_mat = new mat4[num];
 
     position = new vec3[num];
-    velocity = new vec3[num];
+    velocity = new float[num];
     rot_axis = new vec3[num];
+    
     // Frö för slumpvärden
     srand(time(NULL));
+
     m = LoadModelPlus((char*)model);
 	program = loadShaders(vertex_shader, fragment_shader);
 
@@ -92,18 +95,24 @@ Planetoids::Planetoids(int num, const char *model, const char *tex, const char* 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
     //LoadTGATextureSimple(tex, &texture);
+
+    vec3 tmp;
+    tmp = vec3(((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2);
     for(int i = 0; i < num; i++){
         reflectivity[i] = 1;
-        scale[i]  = 0.3;
+        scale[i]  = (float) rand()/RAND_MAX * 0.8;
         matrix[i]  = IdentityMatrix();
         scale_mat[i]  = S(scale[i], scale[i], scale[i]);
         rot_mat[i]  = IdentityMatrix();
         trans_mat[i]  = IdentityMatrix();
 
-        position[i] = vec3(10,0,0);
-        velocity[i] = vec3(0,1,0);
+        rot_mat[i] = ArbRotate(tmp, (float) rand()/RAND_MAX * 2*M_PI);
+        position[i] = rot_mat[i]*(vec3(dist,dist,dist)+dist*vec3(((float) rand()/RAND_MAX * 2 -1)/5,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2));
+        velocity[i] = (float) rand()/RAND_MAX * 20;
 
-        rot_axis[i] = CrossProduct(position[i], velocity[i]);
+        rot_axis[i] = tmp;
+
+        place(position[i], i);
 
     }
 }
@@ -133,23 +142,20 @@ void Planetoids::translate(vec3 d, int index)
 
 void Planetoids::update(float dt)
 {
-    vec3 ds;
     float a;
+    vec3 v,ds;
     for(int i = 0; i < nb; i++){
-        ds = dt*velocity[i];
-        a = Norm(velocity[i])/Norm(position[i]) * dt;
-        translate(ds, i);
-        position[i] = position[i] + ds;
-        velocity[i] = ArbRotate(rot_axis[i], a)*velocity[i];
+        v = velocity[i]*Normalize(CrossProduct(rot_axis[i], position[i]));
+        position[i] = position[i] + dt*v;
+        place(position[i], i);
     }
 }
 
 void Planetoids::draw()
 {
-   std::cout << "Ritar!" << std::endl; 
+        glBindTexture(GL_TEXTURE_2D, texture);
     for(int i = 0; i < nb; i++){
         glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix[i].m);
-        glBindTexture(GL_TEXTURE_2D, texture);
         DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
-    }
+    }        
 }
