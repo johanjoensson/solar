@@ -34,10 +34,10 @@ uniform int spaceship;
 
 void main(void)
 {
-        if(sun == 1) {
+        if(sun == 1 || spacebox == 1 || spaceship == 1) {
                 out_Color = texture(texUnit, out_tex_coord);
         } else if(spacebox == 0){
-                colors = vec3(0.03,0.03,0.01);
+                colors = vec3(0.08,0.08,0.01);
                 tmp_colors = vec3(texture(texUnit, out_tex_coord));
                 s = normalize(light_cam_matrix * sun_position - out_position);
                 n = normalize(out_normal);

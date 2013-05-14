@@ -7,8 +7,8 @@
 
 class Ship: public Object {
     private:
-        void set_rotation(vec3 rotation);
         mat4 static_rotation;
+        void set_rotation(vec3 rotation);
     public:
         void draw(int);
         Ship() : Object(){};
