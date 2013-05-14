@@ -22,7 +22,7 @@ class Body: public Object {
         vec3 velocity;
 
         void update(float);
-        void draw(int);
+        virtual void draw(int);
         Body(const char*);
         Body(const char*, const char*);
         Body();

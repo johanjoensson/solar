@@ -48,6 +48,9 @@ void init(int argc, char *argv[])
     // GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
 
 	// Load and compile shader
 	program = loadShaders("src/test.vert", "src/test.frag");
@@ -229,6 +232,18 @@ void handle_keypress(SDL_Event event)
                  simulation_speed = MAX_SIMULATION_SPEED;
             }
             break;
+        case SDLK_g: 
+            {
+                SDL_GrabMode mode = SDL_WM_GrabInput(SDL_GRAB_QUERY);
+                if(mode == SDL_GRAB_ON) {
+                    SDL_WM_GrabInput(SDL_GRAB_OFF);
+                }
+                else {
+                    SDL_WM_GrabInput(SDL_GRAB_ON);
+                }
+            }
+            break;
+            
 		default:
 			break;
 	}

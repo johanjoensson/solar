@@ -5,6 +5,7 @@
 #include <iostream>
 #include "system.h"
 #include "body.h"
+#include "sun.h"
 #include "camera.h"
 #include "ship.h"
 #include "spacebox.h"
@@ -12,9 +13,10 @@
 #include <time.h>
 #include "cel_bodies.h"
 
+using namespace std;
+
 System::System(){
 }
-
 
 void System::update(float dt)
 {
@@ -100,43 +102,22 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/neptunemap.png");
-    //Body *b = new Body("res/planet.obj", "res/mars.png");
-    //Body *d = new Body("res/planet.obj", "res/venus.png");
-    Body *p = new Body("res/planet.obj", "res/neptunemap.png");
-    //Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
+    Sun *s = new Sun("res/planet.obj", "res/venus.png");
 
+    s->specularExponent = 14;
     a->set_scale(1.5);
+    s->set_scale(3);
+    s->mass = 2;
+    s->emit_color = vec3(1,1,0);
             
-    //a->spin_x = 1;
+    a->spin_x = 1;
+    s->position = vec3(0,0,-15);
     a->position = vec3(0.0, 0.0, -2.0);
     a->position = vec3(0.0, 0.0, -2.0);
-    a->velocity = vec3(0.0, 0, 0.0);
-    //b->mass = 2;
-    //b->position = vec3(0.0, 10.0, -2.0);
-    //b->velocity = vec3(0, 0.0, 0.0);
-    //d->mass = 3;
-    //d->position = vec3(10.0, 5.0, -2.0);
-    //d->velocity = vec3(0, 0, 0.0);
-    p->mass = 1;
-    p->position = vec3(5.0, 0.0, -2.0);
-    p->velocity = vec3(-1.0, 0, 0.0);
-    p->set_scale(1.5);
+    a->velocity = vec3(1, 0, 0);
 
-
-
-
-    //q->set_scale(1);
-    ////q->spin_x = 1;
-    //q->mass = 5;
-    //q->position = vec3(15.0, 3.0, -2.0);
-    //q->velocity = vec3(0.0, 0, 0.0);
-
-    //bodies.add_planet(q);
     bodies.add_planet(a);
-
-    //bodies.add_planet(b);
-    bodies.add_planet(p);
-    //bodies.add_planet(d);
+    bodies.add_planet(s);
 }
 
 System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
@@ -189,8 +170,8 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
         }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
-        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
-        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
+        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
+        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
 
         p->mass = rand() % p_mass_range;
         p->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/10)/8);
@@ -209,30 +190,34 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
 
     // Kan bara ljussätta en sol, så vi kan bara ha en eller ingen sol. Men 
     // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
+    Sun *s;
     for(int i=0; i<n_suns; i++){
-        p = new Body("res/bunnyplus.obj", "res/grass.tga");
+        s = new Sun("res/planet.obj", "res/venus.png");
+        s->emit_color = vec3(1,1,1);
 
-        p->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
-        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+        s->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
 
-        p->mass = rand() % s_mass_range + s_mass_min;
+        s->mass = rand() % s_mass_range + s_mass_min;
 
-        //p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
-        p->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/8);
+        //s->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+        s->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/8);
 
-        p->position = vec3(0,0,-10);
-        /*p->position = vec3(
+        s->position = vec3(0,0,-10);
+        /*s->position = vec3(
           (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
           (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
           (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
           */
 
-        p->velocity = vec3(
+        s->velocity = vec3(
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
-        bodies.add_planet(p);
+
+        bodies.add_planet(s);
+	cout << "added suuun" << endl;
     }
 }
 
@@ -242,6 +227,7 @@ void System::draw(int program)
     ship.draw(program);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
+   
     while(current != NULL){
         next = current->next;
         current->planet->draw(program);
