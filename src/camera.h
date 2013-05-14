@@ -23,6 +23,7 @@ class Camera {
         void strafe(float d);
         void update();
         float radius;
+	float cam_position[3];
         void point_to(vec3 pos);
 
         /*************************************************************

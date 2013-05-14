@@ -5,92 +5,176 @@
 #include <iostream>
 #include "system.h"
 #include "body.h"
+#include "sun.h"
 #include "camera.h"
+#include "ship.h"
 #include "spacebox.h"
 #include "VectorUtils3.h"
 #include <time.h>
 #include "cel_bodies.h"
 
+using namespace std;
+
 System::System(){
 }
-
 
 void System::update(float dt)
 {
     bodies.update(dt/1000);
     asteroids.update(dt/1000);
     visible.next = f.cull_frustum(bodies.next, c);
+    update_collisions();
+}
+
+/******************************************************************************
+ * Kollar om två kroppar kolliderar.
+ *****************************************************************************/
+int System::check_collision(Body *p, Body *q)
+{
+    int collide = 0;     
+          
+    vec3 diff = VectorSub(q->position, p->position);
+    float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+    float rsquare = (q->get_radius() + p->get_radius())*(q->get_radius() + p->get_radius());
+
+    if(dsquare <= rsquare){
+         collide = 1;
+    }
+
+    return collide;
+}
+
+/******************************************************************************
+ * Uppdaterar kollisioner
+ *****************************************************************************/
+void System::update_collisions()
+{
+    Cel_bodies *current = this->bodies.next;
+    Body *tmp;
+    Cel_bodies *next, *tmp2;
+    float r, rcube, mass;
+    int collide;
+    vec3 v;
+
+    while(current->next != NULL){        
+        next = current->next;
+        while(next != NULL){
+
+            collide = check_collision(current->planet, next->planet);
+
+            if(collide == 1){          
+                //räknar ut massa, radie och hastighet för sammanslagen kroppp
+                mass = current->planet->mass + next->planet->mass;                
+                rcube = pow(current->planet->get_radius(), 3) + pow(next->planet->get_radius(), 3);            
+                r = pow(rcube, (1.0/3));
+                v = (current->planet->mass*current->planet->velocity + next->planet->mass*next->planet->velocity)/mass;
+                
+                //Kollar vilken planet som ska tas bort
+                if((current->planet->mass) <= (next->planet->mass)){  
+                    tmp = current->planet;
+                    current->planet = next->planet;
+                    next->planet = tmp;
+                }
+ 
+                current->planet->mass = mass;
+                current->planet->set_radius(r);
+                current->planet->velocity = v;
+                 
+                tmp2 = next;
+                next = next->next;
+                bodies.remove_planet(tmp2->planet);
+                 
+            } else{
+                next = next->next;
+            }
+        }
+
+        if(current->next !=NULL){
+            current = current->next;
+        }
+    }
 }
 
 System::System(int program){
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
     bodies = Cel_bodies();
 
-    Body *a = new Body("res/planet.obj", "res/jupiter.png");
-    Body *q = new Body("res/planet.obj", "res/mars.png");
+    Body *a = new Body("res/planet.obj", "res/neptunemap.png");
+    Sun *s = new Sun("res/planet.obj", "res/sunmap.png");
 
-    a->set_scale(1);
-    //a->spin_x = 1;
-    a->mass = 1;
-    a->position = vec3(0.0, 5.0, -2.0);
-    a->velocity = vec3(0, 0, 0.0);
+    s->specularExponent = 14;
+    s->set_scale(3);
+    s->mass = 2;
+    s->emit_color = vec3(1,1,0);
+    s->position = vec3(0,0,-15);
+            
+    bodies.add_planet(s);
 
-    q->set_scale(3);
-    ////q->spin_x = 1;
-    q->mass = 1;
-    q->position = vec3(5.0, 0.0, -2.0);
-    q->velocity = vec3(0.0, 0, 0.0);
+    a->spin_x = 1;
+    a->position = vec3(0.0, 0.0, -2.0);
+    a->position = vec3(0.0, 0.0, -2.0);
+    a->velocity = vec3(1, 0, 0);
 
     bodies.add_planet(a);
-    bodies.add_planet(q);
 }
 
-System::System(int program, int n_planets, int n_suns)
+System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
 {
     // Sätt fröet för slumpade värden
     srand(time(NULL));
-    int p_pos_range = 4*sqrt(n_planets*n_suns);
-    int p_vel_range = 2;
-    int p_mass_range = 2E6;
+    int p_pos_range = 4*sqrt(n_planets*(n_suns + 1));
+    if(p_pos_range_in) {
+        p_pos_range = p_pos_range_in;
+    } 
+    //int p_vel_range = 2;
     float p_spin_range = 0.1;
-    int p_radius_range = 3;
 
-    int s_pos_range = 25*sqrt(n_suns);
+    //int s_pos_range = 25*sqrt(n_suns);
     float s_vel_range = 0.1;
-    long int s_mass_range = 6E10;
     long int s_mass_min = 1E10;
     int s_spin_range = 1;
-    int s_radius_range = 6;
 
     float rand_value;
 
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
+    ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
     bodies = Cel_bodies();
     Body *p;
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
-        if(rand_value < 0.167) {
+        if(rand_value < 0.09) {
             p = new Body("res/planet.obj", "res/earth.png");
-        } else if(rand_value < 0.33) {
+        } else if(rand_value < 0.18) {
             p = new Body("res/planet.obj", "res/mars.png");
-        } else if(rand_value < 0.5) {
+        } else if(rand_value < 0.27) {
             p = new Body("res/planet.obj", "res/moon.png");
-        } else if(rand_value < 0.667) {
+        } else if(rand_value < 0.36) {
             p = new Body("res/planet.obj", "res/venus.png");
-        } else if (rand_value < 0.83) {
+        } else if (rand_value < 0.45) {
             p = new Body("res/planet.obj", "res/mars_elevation.png");
+        } else if (rand_value < 0.55) {
+            p = new Body("res/planet.obj", "res/saturnmap.png");
+        } else if (rand_value < 0.64) {
+            p = new Body("res/planet.obj", "res/uranusmap.png");
+        } else if (rand_value < 0.73) {
+            p = new Body("res/planet.obj", "res/neptunemap.png");
+        } else if (rand_value < 0.82) {
+            p = new Body("res/planet.obj", "res/plutomap1k.png");
+        } else if (rand_value < 0.91) {
+            p = new Body("res/planet.obj", "res/mercurymap.png");
         } else {
             p = new Body("res/planet.obj", "res/jupiter.png");
         }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
-        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
-        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
+        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
+        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
 
         p->mass = rand() % p_mass_range;
-        p->set_radius(0.3 + (float)rand()/((float)RAND_MAX/p_radius_range));
+        p->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/10)/8);
 
         p->position = vec3(
                 (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0,
@@ -98,33 +182,41 @@ System::System(int program, int n_planets, int n_suns)
                 (float)rand() / ((float)RAND_MAX/p_pos_range) - p_pos_range/2.0);
 
         p->velocity = vec3(
-                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
-                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0,
-                (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0);
+                rand() / (RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                rand() / (RAND_MAX/p_vel_range) - p_vel_range/2.0,
+                rand() / (RAND_MAX/p_vel_range) - p_vel_range/2.0);
         bodies.add_planet(p);
     }
 
+    // Kan bara ljussätta en sol, så vi kan bara ha en eller ingen sol. Men 
+    // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
+    Sun *s;
     for(int i=0; i<n_suns; i++){
-        p = new Body("res/bunnyplus.obj", "res/grass.tga");
+        s = new Sun("res/planet.obj", "res/sunmap.png");
+        s->emit_color = vec3(1,1,1);
 
-        p->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
-        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+        s->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
 
-        p->mass = rand() % s_mass_range + s_mass_min;
+        s->mass = rand() % s_mass_range + s_mass_min;
 
-        p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+        //s->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+        s->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/2);
 
-        p->position = vec3(
-                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
-                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
-                (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
+        s->position = vec3(0,0,-10);
+        /*s->position = vec3(
+          (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+          (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
+          (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
+          */
 
-        p->velocity = vec3(
+        s->velocity = vec3(
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
-        bodies.add_planet(p);
+
+        bodies.add_planet(s);
     }
     asteroids = Planetoids(1000, 90, "res/planet.obj", "res/asteroid.tga", "src/test.vert", "src/test.frag");
 }
@@ -132,8 +224,10 @@ System::System(int program, int n_planets, int n_suns)
 void System::draw(int program)
 {
     s.draw(program);
+    ship.draw(program);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
+   
     while(current != NULL){
         next = current->next;
         current->planet->draw(program);
@@ -142,4 +236,25 @@ void System::draw(int program)
         current = next;
     }
     asteroids.draw();
+}
+
+int System::check_distance(Body *b, int max_distance)
+{
+    vec3 pos = b->position;
+    return ((pos.x * pos.x + pos.y * pos.y + pos.z * pos.z) > max_distance * max_distance);
+}
+
+void System::clean(int max_distance)
+{
+    Cel_bodies *current = bodies.next;
+    Cel_bodies *tmp;
+
+    while(current != NULL){
+        // Om planet längre bort från origo än max_distance, ta bort den
+        if(check_distance(current->planet, max_distance)){
+            tmp = current;
+            bodies.remove_planet(tmp->planet);
+        }
+        current = current->next;
+    }
 }

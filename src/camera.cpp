@@ -21,6 +21,13 @@ void Camera::upload()
 {
     // Upload camera matrix here
     glUniformMatrix4fv(glGetUniformLocation(program, "cam_matrix"), 1, GL_TRUE, matrix.m);
+    
+    cam_position[0] = position.x;
+    cam_position[1] = position.y;
+    cam_position[2] = position.z;
+        
+    glUniform3fv(glGetUniformLocation(program, "camera_pos"), 1, (const GLfloat*) (cam_position));
+    
 }
 void Camera::update()
 {

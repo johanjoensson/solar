@@ -36,7 +36,7 @@ all : $(EXE)
 %.o : %.cpp
 	$(CXX) $(CXFLAGS) -c $^ -o $@
 
-test: test.o SDL_util.o VectorUtils3.o object.o body.o GL_utilities.o loadobj.o LoadTGA.o camera.o spacebox.o system.o soil/lib/libSOIL.a
+test: test.o SDL_util.o VectorUtils3.o object.o body.o sun.o GL_utilities.o loadobj.o LoadTGA.o camera.o spacebox.o system.o soil/lib/libSOIL.a
 	$(CXX) $(CXFLAGS) $^ -o test
 
 clean:

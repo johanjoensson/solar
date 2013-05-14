@@ -4,7 +4,6 @@
 
 
 
-
 Cel_bodies::Cel_bodies()
 {
     this->next = NULL;

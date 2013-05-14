@@ -14,6 +14,7 @@
 #include "spacebox.h"
 #include "cel_bodies.h"
 #include "planetoids.h"
+#include "ship.h"
 
 
 /******************************************************************************
@@ -24,15 +25,35 @@ class System {
         enum CUSTOM_CODES{
             CUSTOM_TIMER = 1,
             DISPLAY_TIMER = 2,
-            UPDATE_TIMER = 3	
+            UPDATE_TIMER = 3,	
+            CLEAN_TIMER = 4	
         } custom_codes;
 
         Camera cam;
         
         void update(float);
         void draw(int);
+        
+        //Kollar om två kroppar kolliderar
+        int check_collision(Body*, Body*); 
+        //Uppdaterar collisioner
+        void update_collisions();
+
+        /********************************************************
+         * clean(int max_distance)
+         * Tar bort planeter som är långra bort än max_instance
+         ********************************************************/
+        void clean(int max_distance);
+
+        /**************************************************************
+         * check_distance(Body *b, int max_distance)
+         * returnerar 1 om b är längre bort från origo än max_distance, 
+         * 0 annars
+         **************************************************************/
+        int check_distance(Body* b, int max_distance);
 
         Body b;
+        Ship ship;
         Spacebox s;
         Camera c;
         Frustum f;
@@ -50,7 +71,7 @@ class System {
         System();
         System(int);
         // Konstruktor för slumpat starttillstånd
-        System(int, int, int);
+        System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
 
 };
 #endif //SYSTEM_H
