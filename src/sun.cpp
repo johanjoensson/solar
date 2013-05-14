@@ -22,20 +22,22 @@ Sun::Sun(const char* model, const char* texture) : Body(model, texture)
     kr2 = zero;
     kr3 = zero;
     kr4 = zero;
+    specularExponent = 2;
 #endif //GRAV_OPT
 
 }
 
 void Sun::draw(int program)
 {
+    glUniform1i(glGetUniformLocation(program, "sun"), 1);
     glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
     glBindTexture(GL_TEXTURE_2D, texture);
     DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
-    emit_color = vec3(1,1,1);
     sun_position = this->position;
     glUniform3f(glGetUniformLocation(program, "sun_position"), sun_position.x, sun_position.y, sun_position.z);
     glUniform3f(glGetUniformLocation(program, "emit_color"), emit_color.x, emit_color.y, emit_color.z);
     //FIXME ändra så att det är specularExponent som skickar upp och ej 10.0
     //direkt
-    glUniform1f(glGetUniformLocation(program, "specularExponent"), 10.0);
+    glUniform1f(glGetUniformLocation(program, "specularExponent"), (const GLfloat) specularExponent);
+    glUniform1i(glGetUniformLocation(program, "sun"), 0);
 }

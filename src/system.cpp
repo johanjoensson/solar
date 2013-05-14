@@ -18,7 +18,6 @@ using namespace std;
 System::System(){
 }
 
-
 void System::update(float dt)
 {
     bodies.update(dt/1000);
@@ -102,20 +101,21 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/neptunemap.png");
-    Sun *s = new Sun("res/planet.obj", "res/venus.venus.png");
+    Sun *s = new Sun("res/planet.obj", "res/venus.png");
 
+    s->specularExponent = 14;
     a->set_scale(1.5);
     s->set_scale(3);
+    s->mass = 2;
+    s->emit_color = vec3(1,1,0);
             
     a->spin_x = 1;
     s->position = vec3(0,0,-15);
     a->position = vec3(0.0, 0.0, -2.0);
     a->position = vec3(0.0, 0.0, -2.0);
-    a->velocity = vec3(0.0, 0, 0.0);
-    s->mass = 2;
+    a->velocity = vec3(1, 0, 0);
 
     bodies.add_planet(a);
-
     bodies.add_planet(s);
 }
 
@@ -188,28 +188,30 @@ System::System(int program, int n_planets, int n_suns)
         bodies.add_planet(p);
     }
     
+    Sun *s;
     for(int i=0; i<n_suns; i++){
-        p = new Sun("res/bunnyplus.obj", "res/grass.tga");
+        s = new Sun("res/planet.obj", "res/venus.png");
+        s->emit_color = vec3(1,1,1);
 
-        p->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
 
-        p->mass = rand() % s_mass_range + s_mass_min;
+        s->mass = rand() % s_mass_range + s_mass_min;
 
-        p->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
+        s->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
 
-        p->position = vec3(
+        s->position = vec3(
                 (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0);
 
-        p->velocity = vec3(
+        s->velocity = vec3(
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
 
-        bodies.add_planet(p);
+        bodies.add_planet(s);
 	cout << "added suuun" << endl;
     }
 }

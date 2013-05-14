@@ -14,6 +14,8 @@ uniform mat4 cam_matrix;
 uniform vec3 sun_position;
 uniform vec3 emit_color;
 uniform float specularExponent;
+uniform int sun;
+uniform mat4 mdl_matrix;
 
 mat3 light_cam_matrix = mat3(cam_matrix);
 
@@ -32,11 +34,14 @@ uniform int spaceship;
 
 void main(void)
 {
-        if(spacebox == 0){
-                colors = vec3(0,0,0);
+        if(sun == 1) {
+                out_Color = texture(texUnit, out_tex_coord);
+        } else if(spacebox == 0){
+                colors = vec3(0.03,0.03,0.01);
                 tmp_colors = vec3(texture(texUnit, out_tex_coord));
                 s = normalize(light_cam_matrix * sun_position - out_position);
                 n = normalize(out_normal);
+                //colors = n;
 
                 float lambert = dot(n, s);
 
@@ -51,10 +56,9 @@ void main(void)
                         cos_angle = max(0, cos_angle);
 
                         specular = (emit_color*tmp_colors)*pow(cos_angle, specularExponent);
-                        //colors += specular;
+                        colors += specular;
                 }
                 out_Color = vec4(colors, 1);
-
         } else {
                 out_Color = texture(texUnit, out_tex_coord);
         }

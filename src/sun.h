@@ -10,7 +10,7 @@ class Sun : public Body
   vec3 emit_color;
   vec3 sun_position;
   //FIXME
-  //const GLfloat specularExponent = 10.0;
+  float specularExponent;
   void draw(int);
   Sun(const char*, const char*, const float);
   Sun(const char*, const char*);
