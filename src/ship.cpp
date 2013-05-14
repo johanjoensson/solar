@@ -12,10 +12,11 @@ void Ship::draw(int program)
 
 Ship::Ship(const char* model, const char *texture) : Object(model, texture)
 {
-    static_rotation = Rz(M_PI) * Ry(3.14/2);
+    //static_rotation = Rz(M_PI) * Ry(3.14/2);
+    static_rotation = Rz(0) * Ry(M_PI) * Rx(-0.5);
     rotate('y', 3.14/2);
-    translate(0,-0.2,-1.2);
-    set_scale(1.0/30);
+    translate(0,-1.0,-2.2);
+    //set_scale(1/30.0);
 
 }
 
@@ -29,5 +30,6 @@ void Ship::handle_movement(int xrel, int yrel, int width, int height)
     float d_fi = ((float)xrel)/width*8*M_PI;
     float d_theta = ((float)yrel)/height*4*M_PI;
 
-    set_rotation(vec3(-d_fi,0,-d_theta));
+    set_rotation(vec3(d_theta,0,d_fi));
+    //set_rotation(vec3(-d_fi,0,-d_theta));
 }
