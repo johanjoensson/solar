@@ -21,6 +21,7 @@ System::System(){
 void System::update(float dt)
 {
     bodies.update(dt/1000);
+    asteroids.update(dt/1000);
     visible.next = f.cull_frustum(bodies.next, c);
     update_collisions();
 }
@@ -101,26 +102,82 @@ System::System(int program){
     c = Camera(program);
     bodies = Cel_bodies();
 
-    Body *a = new Body("res/planet.obj", "res/neptunemap.png");
+    Body *a = new Body("res/planet.obj", "res/mercurymap.png");
     Sun *s = new Sun("res/planet.obj", "res/sunmap.png");
 
     s->specularExponent = 14;
-    s->set_scale(3);
-    s->mass = 2;
-    s->emit_color = vec3(1,1,0);
-    s->position = vec3(0,0,-15);
-            
+    s->set_scale(10);
+    s->mass = 5E10;
+    s->emit_color = vec3(1,1,1);
+    s->position = vec3(0,0,-2);
+         
     bodies.add_planet(s);
 
     a->spin_x = 1;
-    a->position = vec3(0.0, 0.0, -2.0);
-    a->position = vec3(0.0, 0.0, -2.0);
-    a->velocity = vec3(1, 0, 0);
-
+    a->position = vec3(15.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, 1.4);
+    a->set_scale(1);
+    a->mass = 2E2;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/venus.png");
+    a->spin_y = 0.5;
+    a->position = vec3(50.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, 0.7);
+    a->set_scale(1.5);
+    a->mass = 1E3;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/earth.png");
+    a->spin_y = -0.2;
+    a->position = vec3(65.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, -0.7);
+    a->set_scale(1.8);
+    a->mass = 4E3;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/mars.png");
+    a->spin_y = 0.1;
+    a->position = vec3(75.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, 0.7);
+    a->set_scale(1.4);
+    a->mass = 2E3;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/jupiter.png");
+    a->spin_y = -0.1;
+    a->position = vec3(-105.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, -0.6);
+    a->set_scale(6);
+    a->mass = 3E5;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/saturnmap.png");
+    a->spin_y = 0.3;
+    a->position = vec3(125.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, -0.57);
+    a->set_scale(4);
+    a->mass = 3E4;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/uranusmap.png");
+    a->spin_y = 0.1;
+    a->position = vec3(-140.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, 0.55);
+    a->set_scale(3);
+    a->mass = 1E4;
+    bodies.add_planet(a);
+    
+    a = new Body("res/planet.obj", "res/neptunemap.png");
+    a->spin_y = 0.23;
+    a->position = vec3(155.0, 0.0, -2.0);
+    a->velocity = vec3(0, 0.0, -0.53);
+    a->set_scale(3);
+    a->mass = 1E4;
     bodies.add_planet(a);
 }
 
-System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
+System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
 {
     // Sätt fröet för slumpade värden
     srand(time(NULL));
@@ -220,6 +277,7 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
 
         bodies.add_planet(s);
     }
+    asteroids = Planetoids(n_asteroids, 90, "res/planet.obj", "res/asteroid.tga", "src/test.vert", "src/test.frag");
 }
 
 void System::draw(int program)
@@ -236,6 +294,7 @@ void System::draw(int program)
 
         current = next;
     }
+    asteroids.draw();
 }
 
 int System::check_distance(Body *b, int max_distance)

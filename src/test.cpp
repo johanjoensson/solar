@@ -10,8 +10,11 @@
 #include "LoadTGA.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
+#include "planetoids.h"
+#include<stdio.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "soil/src/SOIL.h"
 
 #define near 1
 #define far 300
@@ -33,6 +36,7 @@ GLuint program;
 System sys;
 int speed = 4;
 int simulation_speed = 1;
+int screenshot_nr = 0;
 
 mat4 projection_matrix;
 
@@ -41,7 +45,25 @@ void handle_mouse(SDL_Event event);
 static void event_handler(SDL_Event event);
 void check_keys();
 void handle_userevent(SDL_Event event);
+void take_screenshot();
 
+void display_help()
+{
+	fprintf(stdout,"How to use the different flags:\n");
+	fprintf(stdout,"-s\tcreates a sun\n");
+	fprintf(stdout,"-p nb\tcreates nb planets (randomized attributes)\n");
+	fprintf(stdout,"-r nb\tset the maximum distance from origin in which planets can be created\n");
+	fprintf(stdout,"-m nb\tsets the maximum mass of planets\n");
+	fprintf(stdout,"-n nb\tsets the maximum mass of the sun\n");
+	fprintf(stdout,"-v nb\tsets the maximum initial velocity of the planets\n");
+	fprintf(stdout,"-a nb\tcreates an asteroid belt wil nb asteroids\n");
+	fprintf(stdout,"\nUseful things:\n");
+	fprintf(stdout,"Pressing 'g' while running the program will release the keyboard and mouse, allowing you to use them for other things.\n");
+	fprintf(stdout,"Pressing 'p' while running the program will take a snapshot of the program running.\n");
+	fprintf(stdout,"\nThank you for reading this, now go and play god/alien invader!\n");
+
+
+}
 void init(int argc, char *argv[])
 {
 	dumpInfo();
@@ -62,8 +84,9 @@ void init(int argc, char *argv[])
     long s_mass_range = 6E10;
     float p_vel_range = 2;
     int p_pos_range = 0;
+    int nasteroid = 0;
     int c;
-    while ((c = getopt(argc, argv, "p:sm:n:v:r:")) != -1) {
+    while ((c = getopt(argc, argv, "p:sm:n:v:r:ha:")) != -1) {
         switch(c) {
             case 'p':
                 nplanet = atoi(optarg);
@@ -83,13 +106,20 @@ void init(int argc, char *argv[])
             case 'r':
                 p_pos_range = atoi(optarg);
                 break;
+            case 'a':
+                nasteroid = atoi(optarg);
+                break;
+            case 'h':
+                display_help();
+                exit(0);
+
         }
     }
 
     if (nsun == 0 && nplanet == 0) {
         sys = System(program);
     } else {
-        sys = System(program, nplanet, nsun, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
+        sys = System(program, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
 
     sys.f = Frustum(near, far, bottom, top, left, right);
@@ -243,7 +273,10 @@ void handle_keypress(SDL_Event event)
                 }
             }
             break;
-            
+
+        case SDLK_p:
+            take_screenshot();
+            break;
 		default:
 			break;
 	}
@@ -312,4 +345,17 @@ void handle_userevent(SDL_Event event)
         default:
             break;
     }
+}
+
+void take_screenshot()
+{
+    info = SDL_GetVideoInfo();
+    int width = info->current_w; 
+    int height = info->current_h; 
+    int save_result = SOIL_save_screenshot(
+            "space.bmp",
+            SOIL_SAVE_TYPE_BMP,
+            0, 0, width, height
+            );
+    screenshot_nr++;
 }
