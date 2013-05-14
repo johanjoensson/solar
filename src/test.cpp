@@ -10,6 +10,7 @@
 #include "LoadTGA.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
+#include "planetoids.h"
 #include<stdio.h>
 
 #define near 1
