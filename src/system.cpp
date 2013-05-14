@@ -97,27 +97,26 @@ void System::update_collisions()
 System::System(int program){
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     ship = Ship("res/spaceship.obj", "res/spaceship.png");
-    ship.place(vec3(0,0,-10));
     c = Camera(program);
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/neptunemap.png");
-    Sun *s = new Sun("res/planet.obj", "res/venus.png");
+    Sun *s = new Sun("res/planet.obj", "res/sunmap.png");
 
     s->specularExponent = 14;
-    a->set_scale(1.5);
     s->set_scale(3);
     s->mass = 2;
     s->emit_color = vec3(1,1,0);
-            
-    a->spin_x = 1;
     s->position = vec3(0,0,-15);
+            
+    bodies.add_planet(s);
+
+    a->spin_x = 1;
     a->position = vec3(0.0, 0.0, -2.0);
     a->position = vec3(0.0, 0.0, -2.0);
     a->velocity = vec3(1, 0, 0);
 
     bodies.add_planet(a);
-    bodies.add_planet(s);
 }
 
 System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
@@ -192,7 +191,7 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
     // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
     Sun *s;
     for(int i=0; i<n_suns; i++){
-        s = new Sun("res/planet.obj", "res/venus.png");
+        s = new Sun("res/planet.obj", "res/sunmap.png");
         s->emit_color = vec3(1,1,1);
 
         s->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
@@ -202,7 +201,7 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
         s->mass = rand() % s_mass_range + s_mass_min;
 
         //s->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
-        s->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/8);
+        s->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/2);
 
         s->position = vec3(0,0,-10);
         /*s->position = vec3(
@@ -217,7 +216,6 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
 
         bodies.add_planet(s);
-	cout << "added suuun" << endl;
     }
 }
 
