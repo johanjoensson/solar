@@ -106,7 +106,7 @@ System::System(int program){
     s->specularExponent = 14;
     s->set_scale(10);
     s->mass = 5E10;
-    s->emit_color = vec3(1,1,0);
+    s->emit_color = vec3(1,1,1);
     s->position = vec3(0,0,-2);
          
     bodies.add_planet(s);
