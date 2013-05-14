@@ -37,11 +37,10 @@ void main(void)
         if(sun == 1 || spacebox == 1 || spaceship == 1) {
                 out_Color = texture(texUnit, out_tex_coord);
         } else if(spacebox == 0){
-                colors = vec3(0.08,0.08,0.01);
                 tmp_colors = vec3(texture(texUnit, out_tex_coord));
+                colors = vec3(0.1,0.1,0.00)*tmp_colors;
                 s = normalize(light_cam_matrix * sun_position - out_position);
                 n = normalize(out_normal);
-                //colors = n;
 
                 float lambert = dot(n, s);
 
