@@ -108,7 +108,7 @@ Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, 
 
         rot_mat[i] = ArbRotate(tmp, (float) rand()/RAND_MAX * 2*M_PI);
         position[i] = rot_mat[i]*(vec3(dist,dist,dist)+dist*vec3(((float) rand()/RAND_MAX * 2 -1)/5,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2));
-        velocity[i] = (float) rand()/RAND_MAX * 20;
+        velocity[i] = (float) rand()/RAND_MAX * 5;
 
         rot_axis[i] = tmp;
 

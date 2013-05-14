@@ -120,7 +120,7 @@ System::System(int program){
     bodies.add_planet(a);
 }
 
-System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
+System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
 {
     // Sätt fröet för slumpade värden
     srand(time(NULL));
@@ -218,7 +218,7 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
 
         bodies.add_planet(s);
     }
-    asteroids = Planetoids(1000, 90, "res/planet.obj", "res/asteroid.tga", "src/test.vert", "src/test.frag");
+    asteroids = Planetoids(n_asteroids, 90, "res/planet.obj", "res/asteroid.tga", "src/test.vert", "src/test.frag");
 }
 
 void System::draw(int program)

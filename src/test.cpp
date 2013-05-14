@@ -64,8 +64,9 @@ void init(int argc, char *argv[])
     long s_mass_range = 6E10;
     float p_vel_range = 2;
     int p_pos_range = 0;
+    int nasteroid = 0;
     int c;
-    while ((c = getopt(argc, argv, "p:sm:n:v:r:")) != -1) {
+    while ((c = getopt(argc, argv, "p:sm:n:v:r:a:")) != -1) {
         switch(c) {
             case 'p':
                 nplanet = atoi(optarg);
@@ -85,13 +86,16 @@ void init(int argc, char *argv[])
             case 'r':
                 p_pos_range = atoi(optarg);
                 break;
+            case 'a':
+                nasteroid = atoi(optarg);
+                break;
         }
     }
 
     if (nsun == 0 && nplanet == 0) {
         sys = System(program);
     } else {
-        sys = System(program, nplanet, nsun, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
+        sys = System(program, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
 
     sys.f = Frustum(near, far, bottom, top, left, right);
