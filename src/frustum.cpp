@@ -43,7 +43,9 @@ bool Frustum::inside_frustum(Body p, Camera cam)
     if(r_L.z > -near || r_L.z < -far - radius){
         return false;
     }else if(r_L.y < -h - radius || r_L.y > h + radius){
-        return false;
+    /* Så länge upp-vektorn inte räknas ut korrekt bör vi skippa frustum culling i höjdled */
+        return true;
+//        return false;
     }else if(r_L.x < -w - radius || r_L.x > w + radius){
         return false;
 

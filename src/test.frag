@@ -3,7 +3,6 @@
 in vec2 out_tex_coord;
 in vec3 out_normal;
 in vec3 out_position; 
-in vec3 out_surface_camera;
 in vec3 out_position_cam;
 
 out vec4 out_Color;
@@ -29,6 +28,7 @@ vec3 specular;
 vec3 reflection;
 
 float cos_angle;
+uniform int spaceship;
 
 
 void main(void)
@@ -57,6 +57,7 @@ void main(void)
                         colors += specular;
                 }
                 out_Color = vec4(colors, 1);
+
         } else {
                 out_Color = texture(texUnit, out_tex_coord);
         }
