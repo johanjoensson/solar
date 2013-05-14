@@ -40,6 +40,9 @@ void init(void)
     // GL inits
 	glClearColor(0.5,0.2,0.2,1.0);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
 
 	// Load and compile shader
 	program = loadShaders("src/test.vert", "src/test.frag");

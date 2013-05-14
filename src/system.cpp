@@ -5,11 +5,14 @@
 #include <iostream>
 #include "system.h"
 #include "body.h"
+#include "sun.h"
 #include "camera.h"
 #include "spacebox.h"
 #include "VectorUtils3.h"
 #include <time.h>
 #include "cel_bodies.h"
+
+using namespace std;
 
 System::System(){
 }
@@ -85,8 +88,8 @@ System::System(int program, int n_planets, int n_suns)
         }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
-        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
-        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;;
+        p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
+        p->spin_z = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
 
         p->mass = rand() % p_mass_range;
         p->set_radius(0.3 + (float)rand()/((float)RAND_MAX/p_radius_range));
@@ -102,13 +105,13 @@ System::System(int program, int n_planets, int n_suns)
                 (float)rand() / ((float)RAND_MAX/p_vel_range) - p_vel_range/2.0);
         bodies.add_planet(p);
     }
-
+    
     for(int i=0; i<n_suns; i++){
-        p = new Body("res/bunnyplus.obj", "res/grass.tga");
+        p = new Sun("res/bunnyplus.obj", "res/grass.tga");
 
         p->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
-        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;;
+        p->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        p->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
 
         p->mass = rand() % s_mass_range + s_mass_min;
 
@@ -123,7 +126,9 @@ System::System(int program, int n_planets, int n_suns)
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0,
                 (float)rand() / ((float)RAND_MAX/s_vel_range) - s_vel_range/2.0);
+
         bodies.add_planet(p);
+	cout << "added suuun" << endl;
     }
 }
 
@@ -132,6 +137,7 @@ void System::draw(int program)
     s.draw(program);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
+   
     while(current != NULL){
         next = current->next;
         current->planet->draw(program);
