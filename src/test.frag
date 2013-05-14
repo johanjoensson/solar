@@ -30,7 +30,6 @@ vec3 reflection;
 float cos_angle;
 uniform int spaceship;
 
-
 void main(void)
 {
         if(spacebox == 0){
@@ -39,9 +38,7 @@ void main(void)
                 s = normalize(light_cam_matrix * sun_position - out_position);
                 n = normalize(out_normal);
 
-                // FIXME dett är fult och borde göras annorlunda
-                float lambert = dot(n, s)-0.001;
-                //float lambert = dot(n, s);
+                float lambert = dot(n, s);
 
                 if(lambert > 0){
                         diffuse = (emit_color*tmp_colors)*lambert;
@@ -54,7 +51,7 @@ void main(void)
                         cos_angle = max(0, cos_angle);
 
                         specular = (emit_color*tmp_colors)*pow(cos_angle, specularExponent);
-                        colors += specular;
+                        //colors += specular;
                 }
                 out_Color = vec4(colors, 1);
 

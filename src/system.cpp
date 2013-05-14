@@ -102,43 +102,21 @@ System::System(int program){
     bodies = Cel_bodies();
 
     Body *a = new Body("res/planet.obj", "res/neptunemap.png");
-    //Body *b = new Body("res/planet.obj", "res/mars.png");
-    //Body *d = new Body("res/planet.obj", "res/venus.png");
-    Body *p = new Body("res/planet.obj", "res/neptunemap.png");
-    //Body *q = new Body("res/planet.obj", "res/mars_elevation.png");
+    Sun *s = new Sun("res/planet.obj", "res/venus.venus.png");
 
     a->set_scale(1.5);
+    s->set_scale(3);
             
-    //a->spin_x = 1;
+    a->spin_x = 1;
+    s->position = vec3(0,0,-15);
     a->position = vec3(0.0, 0.0, -2.0);
     a->position = vec3(0.0, 0.0, -2.0);
     a->velocity = vec3(0.0, 0, 0.0);
-    //b->mass = 2;
-    //b->position = vec3(0.0, 10.0, -2.0);
-    //b->velocity = vec3(0, 0.0, 0.0);
-    //d->mass = 3;
-    //d->position = vec3(10.0, 5.0, -2.0);
-    //d->velocity = vec3(0, 0, 0.0);
-    p->mass = 1;
-    p->position = vec3(5.0, 0.0, -2.0);
-    p->velocity = vec3(-1.0, 0, 0.0);
-    p->set_scale(1.5);
+    s->mass = 2;
 
-
-
-
-    //q->set_scale(1);
-    ////q->spin_x = 1;
-    //q->mass = 5;
-    //q->position = vec3(15.0, 3.0, -2.0);
-    //q->velocity = vec3(0.0, 0, 0.0);
-
-    //bodies.add_planet(q);
     bodies.add_planet(a);
 
-    //bodies.add_planet(b);
-    bodies.add_planet(p);
-    //bodies.add_planet(d);
+    bodies.add_planet(s);
 }
 
 System::System(int program, int n_planets, int n_suns)
