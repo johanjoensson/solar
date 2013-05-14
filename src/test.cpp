@@ -42,6 +42,22 @@ static void event_handler(SDL_Event event);
 void check_keys();
 void handle_userevent(SDL_Event event);
 
+void display_help()
+{
+	fprintf(stdout,"How to use the different flags:\n");
+	fprintf(stdout,"-s\tcreates a sun\n");
+	fprintf(stdout,"-p nb\tcreates nb planets (randomized attributes)\n");
+	fprintf(stdout,"-r nb\tset the maximum distance from origin in which planets can be created\n");
+	fprintf(stdout,"-m\tsets the maximum mass of planets\n");
+	fprintf(stdout,"-n\tsets the maximum mass of the sun\n");
+	fprintf(stdout,"-v\tsets the maximum initial velocity of the planets\n");
+	fprintf(stdout,"\nUseful things:\n");
+	fprintf(stdout,"Pressing 'g' while running the program will release the keyboard and mouse, allowing you to use them for other things.\n");
+	fprintf(stdout,"Pressing 'p' while running the program will take a snapshot of the program running.\n");
+	fprintf(stdout,"\nThank you for reading this, now go and play god/alien invader!\n");
+
+
+}
 void init(int argc, char *argv[])
 {
 	dumpInfo();
@@ -63,7 +79,7 @@ void init(int argc, char *argv[])
     float p_vel_range = 2;
     int p_pos_range = 0;
     int c;
-    while ((c = getopt(argc, argv, "p:sm:n:v:r:")) != -1) {
+    while ((c = getopt(argc, argv, "p:sm:n:v:ra:h")) != -1) {
         switch(c) {
             case 'p':
                 nplanet = atoi(optarg);
@@ -83,6 +99,10 @@ void init(int argc, char *argv[])
             case 'r':
                 p_pos_range = atoi(optarg);
                 break;
+        
+            case 'h':
+                display_help();
+                exit(0);
         }
     }
 
