@@ -195,6 +195,7 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
     for(int i=0; i<n_suns; i++){
         s = new Sun("res/planet.obj", "res/sunmap.png");
         s->emit_color = vec3(1,1,1);
+        s->specularExponent = 5;
 
         s->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
         s->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
