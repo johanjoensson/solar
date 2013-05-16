@@ -56,7 +56,7 @@ void display_help()
 	fprintf(stdout,"-m nb\tsets the maximum mass of planets\n");
 	fprintf(stdout,"-n nb\tsets the maximum mass of the sun\n");
 	fprintf(stdout,"-v nb\tsets the maximum initial velocity of the planets\n");
-	fprintf(stdout,"-a nb\tcreates an asteroid belt wil nb asteroids\n");
+	fprintf(stdout,"-a nb\tcreates an asteroid belt with nb asteroids\n");
 	fprintf(stdout,"\nUseful things:\n");
 	fprintf(stdout,"Pressing 'g' while running the program will release the keyboard and mouse, allowing you to use them for other things.\n");
 	fprintf(stdout,"Pressing 'p' while running the program will take a snapshot of the program running.\n");
