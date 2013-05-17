@@ -1,5 +1,4 @@
 \documentclass[a4paper,12pt]{article} \usepackage{graphicx}
-%\usepackage{epstopdf} %\usepackage{gensymb} \usepackage{longtable}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{caption}
@@ -26,7 +25,44 @@
 \subsection{Setup}
 % Hur man kompilerar allt, med soil och allt sånt.
 \subsection{Usage}
+The settings for the initial state can be seen in the table below.
+
+\begin{center}
+        \begin{tabular}{| l | p{9cm} |}
+                \hline
+                \textbf{Flag} & \textbf{Action} \\
+                \hline
+                -h & Display a help message \\
+                -s & Creates a sun \\
+                -p $np$ & Creates $np$ planets \\
+                -r $radius$ & Set the maximum distance from the origin in which planets can be created to $radius$\\
+                -m $mass$ & Set the maximum mass of the planets to $mass$\\
+                -n $mass$ & Set the maximum mass of the sun to $mass + 1E10$ \\
+                -v $vel$ & Set the maximum initial velocity of the planets to $vel$ \\
+                -a $na$ & Create an asteroid belt with $na$ asteroids \\
+                \hline
+        \end{tabular}
+\end{center}
 % Hur man startar programmet, inställningar och hur man styr
+
+In the game the ``wasd'' buttons and the mouse are used for navigation.
+Other keys can be seen in the table below.
+
+\begin{center}
+        \begin{tabular}{|c|l|}
+                \hline
+                \textbf{Key} & \textbf{Action} \\
+                \hline
+                p & Save a screenshot to ``space.bmp'' \\
+                g & Toggle the locking of keyboard and mouse \\
+                left arrow & Decrease simulation step (slower, but more accurate simulation) \\
+                right arrow & Increase simulation step (faster, but less accurate simulation) \\
+                up arrow & Increase ship speed \\
+                down arrow & Decrease ship speed \\
+                \hline
+        \end{tabular}
+\end{center}
+
 
 \section{Implementation}
 \subsection{Overview}
