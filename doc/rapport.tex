@@ -1,0 +1,84 @@
+\documentclass[a4paper,12pt]{article} \usepackage{graphicx}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[english,swedish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\selectlanguage{swedish}
+\title{Interactive Solar System}
+\author{Gustav Svensk, Johan Jönsson, \\
+    Nora Björklund, Christopher Hallberg}
+\date{\today}
+
+\begin{document}
+\maketitle
+\selectlanguage{english}
+\tableofcontents
+\newpage
+\section{Introduction}
+% Lista will do och might do
+
+\section{How To Use}
+\subsection{Setup}
+% Hur man kompilerar allt, med soil och allt sånt.
+\subsection{Usage}
+The settings for the initial state can be seen in the table below.
+
+\begin{center}
+        \begin{tabular}{| l | p{9cm} |}
+                \hline
+                \textbf{Flag} & \textbf{Action} \\
+                \hline
+                -h & Display a help message \\
+                -s & Creates a sun \\
+                -p $np$ & Creates $np$ planets \\
+                -r $radius$ & Set the maximum distance from the origin in which planets can be created to $radius$\\
+                -m $mass$ & Set the maximum mass of the planets to $mass$\\
+                -n $mass$ & Set the maximum mass of the sun to $mass + 1E10$ \\
+                -v $vel$ & Set the maximum initial velocity of the planets to $vel$ \\
+                -a $na$ & Create an asteroid belt with $na$ asteroids \\
+                \hline
+        \end{tabular}
+\end{center}
+% Hur man startar programmet, inställningar och hur man styr
+
+In the game the ``wasd'' buttons and the mouse are used for navigation.
+Other keys can be seen in the table below.
+\begin{center}
+        \begin{tabular}{|c|l|}
+                \hline
+                \textbf{Key} & \textbf{Action} \\
+                \hline
+                p & Save a screenshot to ``space.bmp'' \\
+                g & Toggle the locking of keyboard and mouse \\
+                left arrow & Decrease simulation step (slower, but more accurate simulation) \\
+                right arrow & Increase simulation step (faster, but less accurate simulation) \\
+                up arrow & Increase ship speed \\
+                down arrow & Decrease ship speed \\
+                \hline
+        \end{tabular}
+\end{center}
+
+
+\section{Implementation}
+\subsection{Overview}
+% UML karta
+\subsection{Celestial Bodies}
+% Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
+% Behövs troligtvis inte subsubsections
+\subsection{Spacebox \and Ship (Cat?)}
+\subsection{Physics}
+\subsection{Collision}
+\subsection{Camera \and Frustum}
+
+\section{Problems}
+\subsection{Frustum Culling \and Up-vector}
+\subsection{Multiple Suns}
+
+\section{Conclusions}
+
+\end{document} 
+% Local Variables: %%% mode: latex %%% TeX-master: t %%% End:
