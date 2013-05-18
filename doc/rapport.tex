@@ -6,6 +6,12 @@
 \usepackage[english,swedish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\lstset{language=c++,
+        numberstyle=\footnotesize,
+        basicstyle=\ttfamily\footnotesize,
+        breaklines=true
+    }
+
 
 \selectlanguage{swedish}
 \title{Interactive Solar System}
@@ -50,6 +56,7 @@ initial state of the system.
 \end{itemize}
 
 \section{How To Use}
+This section describes how to install and run the program.
 \subsection{Setup}
 % Hur man kompilerar allt, med soil och allt sånt.
 
@@ -94,10 +101,38 @@ Other keys can be seen in the table below.
 \section{Implementation}
 \subsection{Overview}
 % UML karta
+% Vilket språk?
+% Vilka bibliotek?
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
 \subsection{Spacebox \and Ship (Cat?)}
+The drawing of the spacebox and the ship is handled specially in the shaders.
+This is because the spacebox is always drawn around the camera and is therefore
+only dependent of the rotation part of the camera matrix and the lighting does not
+affect the spacebox. The ship is
+always drawn in front of the camera and is not dependent on the camera matrix.
+To let the shaders know that the object drawn is a spacebox or a ship a uniform
+int is sent to the shaders. Examples can be seen in listings \ref{lst:ship}
+and \ref{lst:vert}.
+\begin{lstlisting}[caption={Draw spaceship}, label={lst:ship}]
+glUniform1i(glGetUniformLocation(program, "spaceship"), 1);
+...
+Draw ship here
+...
+glUniform1i(glGetUniformLocation(program, "spaceship"), 0);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Vertex shader}, label={lst:vert}]
+if(spacebox == 0 && spaceship == 0){
+    gl_Position = proj_matrix * cam_matrix * mdl_matrix * vec4(in_position, 1.0);
+} else if(spaceship == 1 && spacebox == 0)
+    gl_Position = proj_matrix * mdl_matrix * vec4(in_position, 1.0);
+else {
+    gl_Position = proj_matrix * mat4(mat3(cam_matrix)) * mdl_matrix * vec4(in_position, 1.0);
+} 
+\end{lstlisting}
+
 \subsection{Physics}
 \subsection{Collision}
 \subsection{Camera \and Frustum}
