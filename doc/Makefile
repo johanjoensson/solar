@@ -1,7 +1,7 @@
 CC = pdflatex
 
 COMPILE_RUNS = 1 2 3
-TARGET = projectplan.pdf
+TARGET = projectplan.pdf rapport.pdf
 
 .PHONY: all clean cleanalll
 all:  	$(TARGET)

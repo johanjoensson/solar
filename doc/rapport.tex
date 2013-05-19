@@ -1,11 +1,15 @@
 \documentclass[a4paper,12pt]{article} \usepackage{graphicx}
 \usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{pifont}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage[english,swedish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
 \lstset{language=c++,
         numberstyle=\footnotesize,
         basicstyle=\ttfamily\footnotesize,
@@ -31,38 +35,56 @@ the laws of physics. The player can move around in the system and configure
 initial state of the system.
 
 \subsection{Will Do}
-\begin{itemize}
-        \item Bodies with physical properties
-        \item Newtonian physics
-        \item Configurable initial state
-        \item Collision handling
-        \item Movable camera
-        \item Light source(s)
-        \item Spacebox (skybox but in SPACE!)
-        \item Asteroid belt
-        \item Controllable spaceship
-\end{itemize}
+Features that were mandatory are listed in the table below. The check mark
+indicates that the feature is implemented.
+\begin{center}
+        \begin{tabular}{|l|c|}
+                \hline
+                \textbf{Feature} & \cmark/\xmark \\
+                \hline
+                Bodies with physical properties & \cmark \\
+                Newtonian physics & \cmark \\
+                Configurable initial state & \cmark \\
+                Collision handling & \cmark \\
+                Movable camera & \cmark \\
+                Light source(s) & \cmark \\
+                Spacebox (skybox but in SPACE!) & \cmark \\
+                Asteroid belt & \cmark \\
+                Controllable spaceship & \cmark \\
+                \hline
+
+        \end{tabular}
+\end{center}
 
 \subsection{Might Do}
-\begin{itemize}
-        \item Random initial state
-        \item Relativistic physics (special)
-        \item Drawing optimized for frustum
-        \item No sound (because SPACE)
-        \item Landing on selected bodies (sound?)
-        \item Build our solar system
-        \item Trans-neptunian objects (Pluto?, Death star?)
-        \item Aliens
-\end{itemize}
+Feature that were optional are listed in the table below. The check mark
+indicates that the feature is implemented.
+
+\begin{center}
+        \begin{tabular}[h]{|l|c|}
+                \hline
+                \textbf{Feature} & \cmark/\xmark \\
+                \hline
+                Random initial state & \cmark \\
+                Relativistic physics (special) & \xmark \\
+                Drawing optimized for frustum & \cmark \\
+                No sound (because SPACE) & \cmark \\
+                Landing on selected bodies (sound?) & \xmark \\
+                Build our solar system & \cmark \\
+                Trans-neptunian objects (Pluto?, Death star?) & \xmark \\
+                Aliens & \xmark \\
+                \hline
+        \end{tabular}
+\end{center}
 
 \section{How To Use}
 This section describes how to install and run the program.
 \subsection{Setup}
 % Hur man kompilerar allt, med soil och allt sånt.
+In order to properly compile the source code you first need to compile the SOIL library included with the source code. To compile SOIL go to \emph{src/soil/src} and type ``make''. This will compile ``libSOIL.a'' and place it in the \emph{soil/lib} directory. After you have compiled the SOIL library you can compile the program normally, return to the root directory of the program and type make. This will compile all object files needed for the program and place them in \emph{bin/}, then all the object files will be linked together to create the executable ``test''.
 
 \subsection{Usage}
 The settings for the initial state can be seen in the table below.
-
 \begin{center}
         \begin{tabular}{| l | p{9cm} |}
                 \hline
@@ -106,12 +128,18 @@ Other keys can be seen in the table below.
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
+The celestial bodies are the objects that are affected by gravity in
+our system i.e the planets and the sun. They are all subclasses of the
+class object. The planets are of the class body which inherits from
+object. Body's attributes and functions can be seen in figure XX. The sun is very similar to the planets except that it
+also emits sun light. The sun therefore is a subclass that inherits from
+body. 
+
 \subsection{Spacebox \and Ship (Cat?)}
 The drawing of the spacebox and the ship is handled specially in the shaders.
 This is because the spacebox is always drawn around the camera and is therefore
 only dependent of the rotation part of the camera matrix and the lighting does not
-affect the spacebox. The ship is
-always drawn in front of the camera and is not dependent on the camera matrix.
+affect the spacebox. The ship is always drawn in front of the camera and is not dependent on the camera matrix.
 To let the shaders know that the object drawn is a spacebox or a ship a uniform
 int is sent to the shaders. Examples can be seen in listings \ref{lst:ship}
 and \ref{lst:vert}.
@@ -174,7 +202,14 @@ planets. The asteroids and ship are not effected by this functionality.
 \section{Problems}
 \subsection{Frustum Culling \and Up-vector}
 \subsection{Multiple Suns}
-
+It is possble to implement two suns at the moment but the light from
+them will not be correct. This happens because we upload the light
+from the celestial bodies list, and in the fragment shader the light
+will be calculated according to the latest uploaded light source only and not both of them. To
+solve this we need to upload the light as an array and then calculate
+the light combined. For the array solution to work the number of suns
+needs to be limited too since it is not possible to have a array of
+undecided length in the fragment shader.
 \section{Conclusions}
 
 \end{document} 
