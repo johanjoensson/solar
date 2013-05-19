@@ -135,6 +135,40 @@ else {
 
 \subsection{Physics}
 \subsection{Collision}
+The collision functionality of celestial bodies is implemented by two methods in
+the system class, one for collision detection and one for collision handling.
+The method for detection is called check\_collisions and takes two pointers,
+each pointing to a body object, as arguments. When called, a vector between the centres of the two
+bodies is calculated. Then the squared distance of this vector is compared with
+the squared distance of the radii. If the squared distance of the difference
+between the two centres is smaller or equal to the squared distance of the radii
+the bodies collide. The return value of the check method is '1' if the bodies
+collide and '0' if they do not collide. The simplicity of the detection is due
+to the spherical properties of the celestial bodies.
+
+The method for handling collisions is called update\_collisions and it runs
+every time the system uses the update method. Each time the method is called it loops
+through the linked list with the celestial bodies, comparing all bodies with
+each other. For each iteration the check\_collisions is called, if bodies do not
+collide nothing happens and the comparison continues. If, however, two bodies
+collide new properties are calculated based upon perfectly-plastic collisions. 
+The new mass will be the combined masses of the colliding bodies, the new radius
+will be the cube root of the original radii cubes added together and the new
+velocity is calculated from the notion of preservation of momentum. Then the
+original masses are compared and the body with the smallest mass is deleted from
+the linked list while the one with the bigger mass will be updated with the
+newly calculated properties.
+
+This is a brute force approach and could be optimized, but it works well for a
+reasonable amount of bodies. Furthermore, the performance is limited mainly by the
+physics calculations. Possible optimizations could be not to call the collision
+handling at a lower frequency than the rest of the updates since it would not
+make any visible difference for the human eye. Another possible way could be to
+divide the space into different sectors and only compare bodies within the
+sectors. 
+
+The collision handling only affects the bodies in the linked list of suns and
+planets. The asteroids and ship are not effected by this functionality.
 \subsection{Camera \and Frustum}
 
 \section{Problems}
