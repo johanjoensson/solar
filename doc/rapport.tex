@@ -63,7 +63,6 @@ This section describes how to install and run the program.
 \subsection{Usage}
 The settings for the initial state can be seen in the table below.
 
-\begin{center}
         \begin{tabular}{| l | p{9cm} |}
                 \hline
                 \textbf{Flag} & \textbf{Action} \\
@@ -106,12 +105,19 @@ Other keys can be seen in the table below.
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
+The celestial bodies are the objects that are affected by gravity in
+our system i.e the planets and the sun. They are all subclasses of the
+class object. The planets are of the class body which inherits from
+object. Body's attributes and functions can be seen in figure
+\ref{fig:XX}. The sun is very similar to the planets except that it
+also emits sun light. The sun therefore is a subclass that inherits from
+body \ref{fig:YY}. 
+
 \subsection{Spacebox \and Ship (Cat?)}
 The drawing of the spacebox and the ship is handled specially in the shaders.
 This is because the spacebox is always drawn around the camera and is therefore
 only dependent of the rotation part of the camera matrix and the lighting does not
-affect the spacebox. The ship is
-always drawn in front of the camera and is not dependent on the camera matrix.
+affect the spacebox. The ship is always drawn in front of the camera and is not dependent on the camera matrix.
 To let the shaders know that the object drawn is a spacebox or a ship a uniform
 int is sent to the shaders. Examples can be seen in listings \ref{lst:ship}
 and \ref{lst:vert}.
@@ -140,7 +146,14 @@ else {
 \section{Problems}
 \subsection{Frustum Culling \and Up-vector}
 \subsection{Multiple Suns}
-
+It is possble to implement two suns at the moment but the light from
+them will not be correct. This happens because we upload the light
+from the celestial bodies list, and in the fragment shader the light
+will be calculated according to the latest uploaded light source only and not both of them. To
+solve this we need to upload the light as an array and then calculate
+the light combined. For the array solution to work the number of suns
+needs to be limited too since it is not possible to have a array of
+undecided length in the fragment shader.
 \section{Conclusions}
 
 \end{document} 
