@@ -81,6 +81,7 @@ indicates that the feature is implemented.
 This section describes how to install and run the program.
 \subsection{Setup}
 % Hur man kompilerar allt, med soil och allt sånt.
+In order to properly compile the source code you first need to compile the SOIL library included with the source code. To compile SOIL go to \emph{src/soil/src} and type ``make''. This will compile ``libSOIL.a'' and place it in the \emph{soil/lib} directory. After you have compiled the SOIL library you can compile the program normally, return to the root directory of the program and type make. This will compile all object files needed for the program and place them in \emph{bin/}, then all the object files will be linked together to create the executable ``test''.
 
 \subsection{Usage}
 The settings for the initial state can be seen in the table below.
