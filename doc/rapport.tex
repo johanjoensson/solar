@@ -1,11 +1,15 @@
 \documentclass[a4paper,12pt]{article} \usepackage{graphicx}
 \usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{pifont}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage[english,swedish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
 \lstset{language=c++,
         numberstyle=\footnotesize,
         basicstyle=\ttfamily\footnotesize,
@@ -31,29 +35,47 @@ the laws of physics. The player can move around in the system and configure
 initial state of the system.
 
 \subsection{Will Do}
-\begin{itemize}
-        \item Bodies with physical properties
-        \item Newtonian physics
-        \item Configurable initial state
-        \item Collision handling
-        \item Movable camera
-        \item Light source(s)
-        \item Spacebox (skybox but in SPACE!)
-        \item Asteroid belt
-        \item Controllable spaceship
-\end{itemize}
+Features that were mandatory are listed in the table below. The check mark
+indicates that the feature is implemented.
+\begin{center}
+        \begin{tabular}{|l|c|}
+                \hline
+                \textbf{Feature} & \cmark/\xmark \\
+                \hline
+                Bodies with physical properties & \cmark \\
+                Newtonian physics & \cmark \\
+                Configurable initial state & \cmark \\
+                Collision handling & \cmark \\
+                Movable camera & \cmark \\
+                Light source(s) & \cmark \\
+                Spacebox (skybox but in SPACE!) & \cmark \\
+                Asteroid belt & \cmark \\
+                Controllable spaceship & \cmark \\
+                \hline
+
+        \end{tabular}
+\end{center}
 
 \subsection{Might Do}
-\begin{itemize}
-        \item Random initial state
-        \item Relativistic physics (special)
-        \item Drawing optimized for frustum
-        \item No sound (because SPACE)
-        \item Landing on selected bodies (sound?)
-        \item Build our solar system
-        \item Trans-neptunian objects (Pluto?, Death star?)
-        \item Aliens
-\end{itemize}
+Feature that were optional are listed in the table below. The check mark
+indicates that the feature is implemented.
+
+\begin{center}
+        \begin{tabular}[h]{|l|c|}
+                \hline
+                \textbf{Feature} & \cmark/\xmark \\
+                \hline
+                Random initial state & \cmark \\
+                Relativistic physics (special) & \xmark \\
+                Drawing optimized for frustum & \cmark \\
+                No sound (because SPACE) & \cmark \\
+                Landing on selected bodies (sound?) & \xmark \\
+                Build our solar system & \cmark \\
+                Trans-neptunian objects (Pluto?, Death star?) & \xmark \\
+                Aliens & \xmark \\
+                \hline
+        \end{tabular}
+\end{center}
 
 \section{How To Use}
 This section describes how to install and run the program.
