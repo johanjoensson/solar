@@ -171,15 +171,15 @@ In order to properly use these relations we need to add the concept of direction
 \bar{a} = \frac{\bar{F}}{m}
 \]
 \[
-F_{1,2} = G\frac{m_1m_2}{|\bar{r}|^2}\hat{r} \, , \, \hat{r} = \frac{\bar{r_1} - \bar{r_2}}{|\bar{r_1} - \bar{r_2}|}
+\bar{F_{1,2}} = G\frac{m_1m_2}{|\bar{r}|^2}\hat{r} \, , \, \hat{r} = \frac{\bar{r_1} - \bar{r_2}}{|\bar{r_1} - \bar{r_2}|}
 \]
 And now we can calculate the resulting force on body $i$, with $n$ bodies in total
 \[
-F_i = G m_i\sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
+\bar{F_i} = G m_i\sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
 \]
 This then gives us the acceleration on the body $i$
 \[
-a_i = G \sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
+\bar{a_i} = G \sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
 \]
 
 Using these values and the initial positions and velocities of each planet we are now ready to integrate the velocities and positions. For this we use the Runge-Kutta-4 numerical method for solving first order differential equations. Now, acceleration is the first time-derivative of velocity ($a=\ddot{p} = \dot{v}$) which in turn is the first time-derivative of position ($v=\dot{p}$). So we actually have to do two RK4 solutions, one to obtain the velocity and another to obtain the position.
