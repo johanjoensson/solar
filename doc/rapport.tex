@@ -1,11 +1,21 @@
 \documentclass[a4paper,12pt]{article} \usepackage{graphicx}
 \usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{pifont}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage[english,swedish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\lstset{language=c++,
+        numberstyle=\footnotesize,
+        basicstyle=\ttfamily\footnotesize,
+        breaklines=true
+    }
+
 
 \selectlanguage{swedish}
 \title{Interactive Solar System}
@@ -20,13 +30,61 @@
 \newpage
 \section{Introduction}
 % Lista will do och might do
+Our finished program is an interactive solar system that follows a subset of 
+the laws of physics. The player can move around in the system and configure
+initial state of the system.
+
+\subsection{Will Do}
+Features that were mandatory are listed in the table below. The check mark
+indicates that the feature is implemented.
+\begin{center}
+        \begin{tabular}{|l|c|}
+                \hline
+                \textbf{Feature} & \cmark/\xmark \\
+                \hline
+                Bodies with physical properties & \cmark \\
+                Newtonian physics & \cmark \\
+                Configurable initial state & \cmark \\
+                Collision handling & \cmark \\
+                Movable camera & \cmark \\
+                Light source(s) & \cmark \\
+                Spacebox (skybox but in SPACE!) & \cmark \\
+                Asteroid belt & \cmark \\
+                Controllable spaceship & \cmark \\
+                \hline
+
+        \end{tabular}
+\end{center}
+
+\subsection{Might Do}
+Feature that were optional are listed in the table below. The check mark
+indicates that the feature is implemented.
+
+\begin{center}
+        \begin{tabular}[h]{|l|c|}
+                \hline
+                \textbf{Feature} & \cmark/\xmark \\
+                \hline
+                Random initial state & \cmark \\
+                Relativistic physics (special) & \xmark \\
+                Drawing optimized for frustum & \cmark \\
+                No sound (because SPACE) & \cmark \\
+                Landing on selected bodies (sound?) & \xmark \\
+                Build our solar system & \cmark \\
+                Trans-neptunian objects (Pluto?, Death star?) & \xmark \\
+                Aliens & \xmark \\
+                \hline
+        \end{tabular}
+\end{center}
 
 \section{How To Use}
+This section describes how to install and run the program.
 \subsection{Setup}
 % Hur man kompilerar allt, med soil och allt sånt.
+In order to properly compile the source code you first need to compile the SOIL library included with the source code. To compile SOIL go to \emph{src/soil/src} and type ``make''. This will compile ``libSOIL.a'' and place it in the \emph{soil/lib} directory. After you have compiled the SOIL library you can compile the program normally, return to the root directory of the program and type make. This will compile all object files needed for the program and place them in \emph{bin/}, then all the object files will be linked together to create the executable ``test''.
+
 \subsection{Usage}
 The settings for the initial state can be seen in the table below.
-
 \begin{center}
         \begin{tabular}{| l | p{9cm} |}
                 \hline
@@ -62,22 +120,96 @@ Other keys can be seen in the table below.
         \end{tabular}
 \end{center}
 
-
 \section{Implementation}
 \subsection{Overview}
 % UML karta
+% Vilket språk?
+% Vilka bibliotek?
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
+The celestial bodies are the objects that are affected by gravity in
+our system i.e the planets and the sun. They are all subclasses of the
+class object. The planets are of the class body which inherits from
+object. Body's attributes and functions can be seen in figure XX. The sun is very similar to the planets except that it
+also emits sun light. The sun therefore is a subclass that inherits from
+body. 
+
 \subsection{Spacebox \and Ship (Cat?)}
+The drawing of the spacebox and the ship is handled specially in the shaders.
+This is because the spacebox is always drawn around the camera and is therefore
+only dependent of the rotation part of the camera matrix and the lighting does not
+affect the spacebox. The ship is always drawn in front of the camera and is not dependent on the camera matrix.
+To let the shaders know that the object drawn is a spacebox or a ship a uniform
+int is sent to the shaders. Examples can be seen in listings \ref{lst:ship}
+and \ref{lst:vert}.
+\begin{lstlisting}[caption={Draw spaceship}, label={lst:ship}]
+glUniform1i(glGetUniformLocation(program, "spaceship"), 1);
+...
+Draw ship here
+...
+glUniform1i(glGetUniformLocation(program, "spaceship"), 0);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Vertex shader}, label={lst:vert}]
+if(spacebox == 0 && spaceship == 0){
+    gl_Position = proj_matrix * cam_matrix * mdl_matrix * vec4(in_position, 1.0);
+} else if(spaceship == 1 && spacebox == 0)
+    gl_Position = proj_matrix * mdl_matrix * vec4(in_position, 1.0);
+else {
+    gl_Position = proj_matrix * mat4(mat3(cam_matrix)) * mdl_matrix * vec4(in_position, 1.0);
+} 
+\end{lstlisting}
+
 \subsection{Physics}
 \subsection{Collision}
+The collision functionality of celestial bodies is implemented by two methods in
+the system class, one for collision detection and one for collision handling.
+The method for detection is called check\_collisions and takes two pointers,
+each pointing to a body object, as arguments. When called, a vector between the centres of the two
+bodies is calculated. Then the squared distance of this vector is compared with
+the squared distance of the radii. If the squared distance of the difference
+between the two centres is smaller or equal to the squared distance of the radii
+the bodies collide. The return value of the check method is '1' if the bodies
+collide and '0' if they do not collide. The simplicity of the detection is due
+to the spherical properties of the celestial bodies.
+
+The method for handling collisions is called update\_collisions and it runs
+every time the system uses the update method. Each time the method is called it loops
+through the linked list with the celestial bodies, comparing all bodies with
+each other. For each iteration the check\_collisions is called, if bodies do not
+collide nothing happens and the comparison continues. If, however, two bodies
+collide new properties are calculated based upon perfectly-plastic collisions. 
+The new mass will be the combined masses of the colliding bodies, the new radius
+will be the cube root of the original radii cubes added together and the new
+velocity is calculated from the notion of preservation of momentum. Then the
+original masses are compared and the body with the smallest mass is deleted from
+the linked list while the one with the bigger mass will be updated with the
+newly calculated properties.
+
+This is a brute force approach and could be optimized, but it works well for a
+reasonable amount of bodies. Furthermore, the performance is limited mainly by the
+physics calculations. Possible optimizations could be not to call the collision
+handling at a lower frequency than the rest of the updates since it would not
+make any visible difference for the human eye. Another possible way could be to
+divide the space into different sectors and only compare bodies within the
+sectors. 
+
+The collision handling only affects the bodies in the linked list of suns and
+planets. The asteroids and ship are not effected by this functionality.
 \subsection{Camera \and Frustum}
 
 \section{Problems}
 \subsection{Frustum Culling \and Up-vector}
 \subsection{Multiple Suns}
-
+It is possble to implement two suns at the moment but the light from
+them will not be correct. This happens because we upload the light
+from the celestial bodies list, and in the fragment shader the light
+will be calculated according to the latest uploaded light source only and not both of them. To
+solve this we need to upload the light as an array and then calculate
+the light combined. For the array solution to work the number of suns
+needs to be limited too since it is not possible to have a array of
+undecided length in the fragment shader.
 \section{Conclusions}
 
 \end{document} 
