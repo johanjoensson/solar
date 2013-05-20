@@ -182,7 +182,7 @@ This then gives us the acceleration on the body $i$
 a_i = G \sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
 \]
 
-Using these values and the initial positions and velocities of each planet we are now ready to integrate the velocities and positions. For this we use the Runge-Kutta-4 numerical method for solving first order differential equations. Now, acceleration is the first time-derivative of velocity ($a=\ddot{p} = \dot{v}$) which in turn is the first time-derivative of position ($v=\dot{p}$)<++>. So we actually have to do two RK4 solutions, one to obtain the velocity and another to obtain the position.
+Using these values and the initial positions and velocities of each planet we are now ready to integrate the velocities and positions. For this we use the Runge-Kutta-4 numerical method for solving first order differential equations. Now, acceleration is the first time-derivative of velocity ($a=\ddot{p} = \dot{v}$) which in turn is the first time-derivative of position ($v=\dot{p}$). So we actually have to do two RK4 solutions, one to obtain the velocity and another to obtain the position.
 
 Below I give the general RK4-method
 \[
