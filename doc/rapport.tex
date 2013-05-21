@@ -104,7 +104,7 @@ The settings for the initial state can be seen in the table below.
                 planets can be created to $radius$\\
                 -m $mass$ & Set the maximum mass of the planets to $mass$\\
                 -n $mass$ & Set the maximum mass of the sun to $mass + 1E10$ \\
-                -v $vel$ & Set the maximum initial velocity of the planets to $vel$ \\
+-v $vel$ & Set the maximum initial velocity of the planets to $vel$ \\
                 -a $na$ & Create an asteroid belt with $na$ asteroids \\
                 \hline
         \end{tabular}
@@ -131,8 +131,10 @@ Other keys can be seen in the table below.
 \section{Implementation}
 \subsection{Overview}
 % UML karta
-% Vilket språk?
-% Vilka bibliotek?
+This project was written in C++ (C++11) using standard C++ libraries (such as
+math.h), SDL, OpenGL and SOIL (Simple OpenGL Image Library). We also utilized the libraries created
+by Ingemar Ragnemalm for this course (ie. GL\_utilities.h, loadobj.h, LoadTGA.h
+and VectorUtils3.h).
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
