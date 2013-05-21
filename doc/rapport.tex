@@ -129,6 +129,7 @@ Other keys can be seen in the table below.
 \end{center}
 
 \section{Implementation}
+This section describes the implementation of the main parts of the program. 
 \subsection{Overview}
 % UML karta
 This project was written in C++ (C++11) using standard C++ libraries (such as
@@ -145,7 +146,7 @@ functions can be seen in figure XX. The sun is very similar to the planets
 except that it also emits sun light. The sun therefore is a subclass that
 inherits from body. 
 
-\subsection{Spacebox \and Ship (Cat?)}
+\subsection{Spacebox \& Ship (Cat?)}
 The drawing of the spacebox and the ship is handled specially in the shaders.
 This is because the spacebox is always drawn around the camera and is therefore
 only dependent of the rotation part of the camera matrix and the lighting does
@@ -271,10 +272,29 @@ within the sectors.
 
 The collision handling only affects the bodies in the linked list of suns and
 planets. The asteroids and ship are not effected by this functionality.
-\subsection{Camera \and Frustum}
+\subsection{Camera \& Frustum}
 
 \section{Problems}
-\subsection{Frustum Culling \and Up-vector}
+This section discusses the current problems with the program.
+\subsection{Up-vector \& Frustum Culling}
+The problem with the up-vector is that if the ``look-at vector'' is parallel
+with the up-vector, we get a multiplication by zero and  only the background
+color is shown. To fix this it is forbidden to look straight up. This is
+implemented by checking if the mouse position has y-component that is zero, if
+it is so, it is forced to one. With this implementation the up-vector can be
+fixed to (0,1,0). 
+
+
+Another problem which is caused by the fixed up-vector is that the
+frustum culling cannot be performed on the top and bottom planes. This is
+because the frustum culling uses the up-vector to decide if an object is inside
+the frustum or not. The culling assumes an updated up-vector, but since it is
+fixed the culling of those planes is not performed.
+
+
+A more elegant solution to both of these problems is to make the up-vector
+follow the camera, but when this was tried the ship navigation became near
+impossible.
 \subsection{Multiple Suns}
 It is possble to implement two suns at the moment but the light from them will
 not be correct. This happens because we upload the light from the celestial
