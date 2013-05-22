@@ -130,10 +130,9 @@ Other keys can be seen in the table below.
 % Behövs troligtvis inte subsubsections
 The celestial bodies are the objects that are affected by gravity in
 our system i.e the planets and the sun. They are all subclasses of the
-class object. The planets are of the class body which inherits from
-object. Body's attributes and functions can be seen in figure XX. The sun is very similar to the planets except that it
-also emits sun light. The sun therefore is a subclass that inherits from
-body. 
+class object (fig ZZ). The planets are of the class body which inherits from
+object. Body's attributes and functions can be seen in figure XX. The sun is very similar to the planets except that it also ``emits sun light'',and is therefore a subclass that inherits from
+body (see figure YY).  Sunlight is emitted by uploading the current position of the sun to the fragment shader where the light on all other objects are calculated. The sun is highlighted by a constant light, same as the SPACEbox.
 
 \subsection{Spacebox \and Ship (Cat?)}
 The drawing of the spacebox and the ship is handled specially in the shaders.
@@ -209,7 +208,7 @@ will be calculated according to the latest uploaded light source only and not bo
 solve this we need to upload the light as an array and then calculate
 the light combined. For the array solution to work the number of suns
 needs to be limited too since it is not possible to have a array of
-undecided length in the fragment shader.
+undecided length in the fragment shader. Another problem with the sun is that its position for light calculations is now uploaded with its draw function but to get correct sunlight with a movining sun it has to be uploaded in update due to frustum culling and visible.
 \section{Conclusions}
 
 \end{document} 
