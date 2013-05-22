@@ -1,4 +1,5 @@
-\documentclass[a4paper,12pt]{article} \usepackage{graphicx}
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx}
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{pifont}
@@ -81,7 +82,14 @@ indicates that the feature is implemented.
 This section describes how to install and run the program.
 \subsection{Setup}
 % Hur man kompilerar allt, med soil och allt sånt.
-In order to properly compile the source code you first need to compile the SOIL library included with the source code. To compile SOIL go to \emph{src/soil/src} and type ``make''. This will compile ``libSOIL.a'' and place it in the \emph{soil/lib} directory. After you have compiled the SOIL library you can compile the program normally, return to the root directory of the program and type make. This will compile all object files needed for the program and place them in \emph{bin/}, then all the object files will be linked together to create the executable ``test''.
+In order to properly compile the source code you first need to compile the SOIL
+library included with the source code. To compile SOIL go to
+\emph{src/soil/src} and type ``make''. This will compile ``libSOIL.a'' and
+place it in the \emph{soil/lib} directory. After you have compiled the SOIL
+library you can compile the program normally, return to the root directory of
+the program and type make. This will compile all object files needed for the
+program and place them in \emph{bin/}, then all the object files will be linked
+together to create the executable ``test''.
 
 \subsection{Usage}
 The settings for the initial state can be seen in the table below.
@@ -93,10 +101,11 @@ The settings for the initial state can be seen in the table below.
                 -h & Display a help message \\
                 -s & Creates a sun \\
                 -p $np$ & Creates $np$ planets \\
-                -r $radius$ & Set the maximum distance from the origin in which planets can be created to $radius$\\
+                -r $radius$ & Set the maximum distance from the origin in which
+                planets can be created to $radius$\\
                 -m $mass$ & Set the maximum mass of the planets to $mass$\\
                 -n $mass$ & Set the maximum mass of the sun to $mass + 1E10$ \\
-                -v $vel$ & Set the maximum initial velocity of the planets to $vel$ \\
+-v $vel$ & Set the maximum initial velocity of the planets to $vel$ \\
                 -a $na$ & Create an asteroid belt with $na$ asteroids \\
                 \hline
         \end{tabular}
@@ -121,27 +130,56 @@ Other keys can be seen in the table below.
 \end{center}
 
 \section{Implementation}
+This section describes the implementation of the main parts of the program. 
 \subsection{Overview}
 % UML karta
-% Vilket språk?
-% Vilka bibliotek?
+This project was written in C++ (C++11) using standard C++ libraries (such as
+math.h), SDL, OpenGL and SOIL (Simple OpenGL Image Library). We also utilized the libraries created
+by Ingemar Ragnemalm for this course (ie. GL\_utilities.h, loadobj.h, LoadTGA.h
+and VectorUtils3.h).
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
+
 The celestial bodies are the objects that are affected by gravity in
 our system i.e the planets and the sun. They are all subclasses of the
-class object (fig ZZ). The planets are of the class body which inherits from
+class object. The planets are of the class body which inherits from
 object. Body's attributes and functions can be seen in figure XX. The sun is very similar to the planets except that it also ``emits sun light'',and is therefore a subclass that inherits from
 body (see figure YY).  Sunlight is emitted by uploading the current position of the sun to the fragment shader where the light on all other objects are calculated. The sun is highlighted by a constant light, same as the SPACEbox.
 
-\subsection{Spacebox \and Ship (Cat?)}
+There are two kinds of celestial bodies in this solar system, the ones that are
+affected by gravity and the asteroids. The ones that are affected by gravity are
+the planets and the sun.
+\subsubsection{Planets \& Sun}
+The planets and the sun are subclasses of the class object. The
+planets are of the class body which inherits from object. Body's attributes and
+functions can be seen in figure !FIXME NORA! The sun is very similar to the planets
+except that it also emits sunlight. The sun therefore is a subclass that
+inherits from body. 
+
+For optimization reasons there is a method for removing objects further away
+from the origin than 400 length units.
+
+\subsubsection{Asteroids}
+The asteroids are objects that are not gravitationally bound in the system. In 
+order to render lots of asteroids on the screen we could not use the
+gravitational calculations to update the positions of all the asteroids. Instead
+we decided to make the asteroids follow a circular orbit some great distance
+from the origin, this way we still get a somewhat realistic result and we save a
+lot of computational power. This way of treating asteroids differently from
+other celestial objects also, unfortunately, means that we cannot use our
+methods for frustum culling. Thus all asteroids in the system are rendered at
+all times.
+
+\subsection{Spacebox \& Ship (Cat?)}
 The drawing of the spacebox and the ship is handled specially in the shaders.
 This is because the spacebox is always drawn around the camera and is therefore
-only dependent of the rotation part of the camera matrix and the lighting does not
-affect the spacebox. The ship is always drawn in front of the camera and is not dependent on the camera matrix.
-To let the shaders know that the object drawn is a spacebox or a ship a uniform
-int is sent to the shaders. Examples can be seen in listings \ref{lst:ship}
-and \ref{lst:vert}.
+only dependent of the rotation part of the camera matrix and the lighting does
+not affect the spacebox. The ship is always drawn in front of the camera and is
+not dependent on the camera matrix. To let the shaders know that the object
+drawn is a spacebox or a ship a uniform int is sent to the shaders. Examples
+can be seen in listings \ref{lst:ship} and \ref{lst:vert}.
+
 \begin{lstlisting}[caption={Draw spaceship}, label={lst:ship}]
 glUniform1i(glGetUniformLocation(program, "spaceship"), 1);
 ...
@@ -161,55 +199,186 @@ else {
 \end{lstlisting}
 
 \subsection{Physics}
-\subsection{Collision}
-The collision functionality of celestial bodies is implemented by two methods in
-the system class, one for collision detection and one for collision handling.
-The method for detection is called check\_collisions and takes two pointers,
-each pointing to a body object, as arguments. When called, a vector between the centres of the two
-bodies is calculated. Then the squared distance of this vector is compared with
-the squared distance of the radii. If the squared distance of the difference
-between the two centres is smaller or equal to the squared distance of the radii
-the bodies collide. The return value of the check method is '1' if the bodies
-collide and '0' if they do not collide. The simplicity of the detection is due
-to the spherical properties of the celestial bodies.
+The program implements Newtonian gravity in order to obtain the acceleration of
+each body and then integrates this acceleration into velocity and then the
+velocity is integrated into position.
 
-The method for handling collisions is called update\_collisions and it runs
-every time the system uses the update method. Each time the method is called it loops
-through the linked list with the celestial bodies, comparing all bodies with
-each other. For each iteration the check\_collisions is called, if bodies do not
-collide nothing happens and the comparison continues. If, however, two bodies
-collide new properties are calculated based upon perfectly-plastic collisions. 
-The new mass will be the combined masses of the colliding bodies, the new radius
-will be the cube root of the original radii cubes added together and the new
-velocity is calculated from the notion of preservation of momentum. Then the
-original masses are compared and the body with the smallest mass is deleted from
-the linked list while the one with the bigger mass will be updated with the
-newly calculated properties.
+Newton's laws of motion tells us that $F=ma \Leftrightarrow a = \frac{F}{m}$.
+Newton's theory for gravity tells us that $F_{1,2} = G\frac{m_1m_2}{r}$, where
+$F_{1,2}$ is the gravitational force generated by body 1 acting on body 2 and
+$G$ is the gravitational constant. Now we also now that each force has an equal
+and opposite force (Newton's third law), this tells us that $F_{1,2} =
+F_{2,1}$, since they are both scalar values and therefore contains no notion of
+direction.
+
+In order to properly use these relations we need to add the concept of
+direction, this is easy to do and the result is.
+\[
+\bar{a} = \frac{\bar{F}}{m}
+\]
+\[
+\bar{F_{1,2}} = G\frac{m_1m_2}{|\bar{r}|^2}\hat{r} \, , \, \hat{r} = \frac{\bar{r_1} - \bar{r_2}}{|\bar{r_1} - \bar{r_2}|}
+\]
+And now we can calculate the resulting force on body $i$, with $n$ bodies in total
+\[
+\bar{F_i} = G m_i\sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
+\]
+This then gives us the acceleration on the body $i$
+\[
+\bar{a_i} = G \sum_{k=1}^n \frac{m_k}{|\bar{r_i} - \bar{r_k}|^3}\left( \bar{r_i} - \bar{r_k} \right)
+\]
+
+Using these values and the initial positions and velocities of each planet we
+are now ready to integrate the velocities and positions. For this we use the
+Runge-Kutta-4 numerical method for solving first order differential equations.
+Now, acceleration is the first time-derivative of velocity ($a=\ddot{p} =
+\dot{v}$) which in turn is the first time-derivative of position ($v=\dot{p}$).
+So we actually have to do two RK4 solutions, one to obtain the velocity and
+another to obtain the position.
+
+Below I give the general RK4-method
+\[
+\dot{y}=f(t,y),\,y(t_0)=y_0
+\]
+\[
+y_{n+1} = y_n + \frac{1}{6}h\left( k_1 + 2k_2 + 2k_3 + k_4\right)
+\]
+\[
+t_{n+1} = t_n +h
+\]
+\[
+k_1 = f(t_n,y_n)
+\]
+\[
+k_2 = f(t_n + \frac{1}{2}h,y_n + \frac{h}{2}k_1)
+\]
+\[
+k_3 = f(t_n + \frac{1}{2}h,y_n + \frac{h}{2}k_2)
+\]
+\[
+k_4 = f(t_n + h,y_n + hk_3)
+\]
+Where $h$ is our time-step (our program begins with $h = 0.002$), the numerical
+error of this method is of the order $\mathcal{O}(h^5)$
+
+\subsection{Collision}
+The collision functionality of celestial bodies is implemented by two methods
+in the system class, one for collision detection and one for collision
+handling. When the method for detection is called, a vector
+between the centres of the two bodies is calculated. Then the squared distance
+of this vector is compared with the squared distance of the radii. If the
+squared distance of the difference between the two centres is smaller or equal
+to the squared distance of the radii the bodies collide.
+The simplicity of the detection is due to the spherical properties of the
+celestial bodies.
+
+The method for handling collisions is called
+every time the system uses the update method. Each time the method is called it
+loops through the linked list with the celestial bodies, comparing all bodies
+with each other. For each iteration detection method is called, if bodies
+do not collide nothing happens and the comparison continues. If, however, two
+bodies collide new properties are calculated based upon perfectly-plastic
+collisions. The new mass will be the combined masses of the colliding bodies,
+the new radius will be the cube root of the original radii cubes added together
+and the new velocity is calculated from the notion of preservation of momentum.
+Then the original masses are compared and the body with the smallest mass is
+deleted from the linked list while the one with the bigger mass will be updated
+with the newly calculated properties.
 
 This is a brute force approach and could be optimized, but it works well for a
-reasonable amount of bodies. Furthermore, the performance is limited mainly by the
-physics calculations. Possible optimizations could be not to call the collision
-handling at a lower frequency than the rest of the updates since it would not
-make any visible difference for the human eye. Another possible way could be to
-divide the space into different sectors and only compare bodies within the
-sectors. 
+reasonable amount of bodies. Furthermore, the performance is limited mainly by
+the physics calculations. Possible optimizations could be not to call the
+collision handling at a lower frequency than the rest of the updates since it
+would not make any visible difference for the human eye. Another possible way
+could be to divide the space into different sectors and only compare bodies
+within the sectors. 
 
 The collision handling only affects the bodies in the linked list of suns and
 planets. The asteroids and ship are not effected by this functionality.
-\subsection{Camera \and Frustum}
+
+\subsection{Camera \& Frustum}
+The standard frustum is 300 length units, but can be changed in test.cpp if
+needed. Frustum culling is used to avoid drawing objects outside of the
+frustum. Instead of using extraction of planes as suggested in the lectures,
+projection of vectors is used. Frustum culling is not used for the top and
+bottom planes, the reason for this will be described in further detail in
+section \ref{sec:up_prob}.
+
+
+The only special thing with the camera is the function that handles mouse
+movement and position. The difference in the x-coordinate is used so the player
+can spin around freely to the right and left and not be constrained by any
+angle. The y-coordinate is constrained from 1 to the window height - 1.
 
 \section{Problems}
-\subsection{Frustum Culling \and Up-vector}
+This section discusses the current problems with the program.
+\subsection{Up-vector \& Frustum Culling}
+\label{sec:up_prob}
+The problem with the up-vector is that if the ``look-at vector'' is parallel
+with the up-vector, we get a multiplication by zero and  only the background
+color is shown. To fix this it is forbidden to look straight up. This is
+implemented by checking if the mouse position has y-component that is zero, if
+it is so, it is forced to one. With this implementation the up-vector can be
+fixed to (0,1,0). 
+
+
+Another problem which is caused by the fixed up-vector is that the
+frustum culling cannot be performed on the top and bottom planes. This is
+because the frustum culling uses the up-vector to decide if an object is inside
+the frustum or not. The culling assumes an updated up-vector, but since it is
+fixed the culling of those planes is not performed.
+
+
+A more elegant solution to both of these problems is to make the up-vector
+follow the camera, but when this was tried the ship navigation became near
+impossible.
 \subsection{Multiple Suns}
+
 It is possble to implement two suns at the moment but the light from
 them will not be correct. This happens because we upload the light
-from the celestial bodies list, and in the fragment shader the light
-will be calculated according to the latest uploaded light source only and not both of them. To
-solve this we need to upload the light as an array and then calculate
+from the celestial bodies list, and in the fragment shader the light will be calculated according to the latest uploaded light source only and not both of them. To solve this we need to upload the light as an array and then calculate
 the light combined. For the array solution to work the number of suns
 needs to be limited too since it is not possible to have a array of
 undecided length in the fragment shader. Another problem with the sun is that its position for light calculations is now uploaded with its draw function but to get correct sunlight with a movining sun it has to be uploaded in update due to frustum culling and visible.
-\section{Conclusions}
 
+\section{Conclusions}
+Our program renders a solar system with a single sun acting as a light source.
+All larger objects in the system affect each other through gravity. With proper
+initial positions and velocities this will make the planets orbit the sun in
+elliptical orbits. Our system looks rather realistic, and behaves in a realistic
+way. However the calculations necessary for the gravitational accelerations are
+extremely heavy and requires a lot of processing power. One big improvement
+would be to parallelize these calculations. Another problem we had was with the
+asteroids, since they are slightly different from the planets and suns we cannot
+use our frustum culling methods on them, this means that we often render a lot
+of small asteroids that we cannot see. To solve this we would have to rewrite
+the frustum culling methods and the different object classes.
+
+\section{Screenshots}
+Here be screenshots.
+\begin{figure}[hp]
+        \centering
+        \centerline{\includegraphics[width=1.2\textwidth]{bild/our.png}}
+        \caption{Our solar system}
+        \label{fig:our}
+\end{figure}
+\begin{figure}[hp]
+        \centering
+        \centerline{\includegraphics[width=1.2\textwidth]{bild/cat.png}}
+        \caption{Catship}
+        \label{fig:cat}
+\end{figure}
+\begin{figure}[hp]
+        \centering
+        \centerline{\includegraphics[width=1.2\textwidth]{bild/planets.png}}
+        \caption{Planets}
+        \label{fig:planets}
+\end{figure}
+\begin{figure}[hp]
+        \centering
+        \centerline{\includegraphics[width=1.2\textwidth]{bild/asteroid.png}}
+        \caption{Asteroids}
+        \label{fig:asteroids}
+\end{figure}
 \end{document} 
 % Local Variables: %%% mode: latex %%% TeX-master: t %%% End:
