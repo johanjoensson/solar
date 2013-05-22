@@ -295,6 +295,11 @@ bottom planes, the reason for this will be described in further detail in
 section \ref{sec:up_prob}.
 
 
+The only special thing with the camera is the function that handles mouse
+movement and position. The difference in the x-coordinate is used so the player
+can spin around freely to the right and left and not be constrained by any
+angle. The y-coordinate is constrained from 1 to the window height - 1.
+
 \section{Problems}
 This section discusses the current problems with the program.
 \subsection{Up-vector \& Frustum Culling}
@@ -340,25 +345,25 @@ the frustum culling methods and the different object classes.
 
 \section{Screenshots}
 Here be screenshots.
-\begin{figure}[h!]
+\begin{figure}[hp]
         \centering
         \centerline{\includegraphics[width=1.2\textwidth]{bild/our.png}}
         \caption{Our solar system}
         \label{fig:our}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[hp]
         \centering
         \centerline{\includegraphics[width=1.2\textwidth]{bild/cat.png}}
         \caption{Catship}
         \label{fig:cat}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[hp]
         \centering
         \centerline{\includegraphics[width=1.2\textwidth]{bild/planets.png}}
         \caption{Planets}
         \label{fig:planets}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[hp]
         \centering
         \centerline{\includegraphics[width=1.2\textwidth]{bild/asteroid.png}}
         \caption{Asteroids}
