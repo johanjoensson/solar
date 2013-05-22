@@ -140,22 +140,21 @@ and VectorUtils3.h).
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
-
-The celestial bodies are the objects that are affected by gravity in
-our system i.e the planets and the sun. They are all subclasses of the
-class object. The planets are of the class body which inherits from
-object. Body's attributes and functions can be seen in figure XX. The sun is very similar to the planets except that it also ``emits sun light'',and is therefore a subclass that inherits from
-body (see figure YY).  Sunlight is emitted by uploading the current position of the sun to the fragment shader where the light on all other objects are calculated. The sun is highlighted by a constant light, same as the SPACEbox.
-
 There are two kinds of celestial bodies in this solar system, the ones that are
 affected by gravity and the asteroids. The ones that are affected by gravity are
 the planets and the sun.
 \subsubsection{Planets \& Sun}
 The planets and the sun are subclasses of the class object. The
 planets are of the class body which inherits from object. Body's attributes and
-functions can be seen in figure !FIXME NORA! The sun is very similar to the planets
-except that it also emits sunlight. The sun therefore is a subclass that
+functions can be seen in figure \ref{fig:body}. The sun is very similar to the planets except that it also emits sunlight. The sun therefore is a subclass that
 inherits from body. 
+
+\begin{figure}[hp]
+        \centering
+        \centerline{\includegraphics[width=0.3\textwidth]{bild/body.png}}
+        \caption{Body's attributes}
+        \label{fig:body}
+\end{figure}
 
 For optimization reasons there is a method for removing objects further away
 from the origin than 400 length units.
