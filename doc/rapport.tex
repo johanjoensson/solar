@@ -140,11 +140,14 @@ and VectorUtils3.h).
 \subsection{Celestial Bodies}
 % Kanske mer i ordets rätta bemärkelse snarare än structen Cel_bodies?. dvs asteroider.
 % Behövs troligtvis inte subsubsections
-The celestial bodies are the objects that are affected by gravity in our system
-i.e the planets and the sun. They are all subclasses of the class object. The
+There are two kinds of celestial bodies in this solar system, the ones that are
+affected by gravity and the asteroids. The ones that are affected by gravity are
+the planets and the sun.
+\section{Planets \& Sun}
+The planets and the sun are subclasses of the class object. The
 planets are of the class body which inherits from object. Body's attributes and
-functions can be seen in figure XX. The sun is very similar to the planets
-except that it also emits sun light. The sun therefore is a subclass that
+functions can be seen in figure !FIXME NORA! The sun is very similar to the planets
+except that it also emits sunlight. The sun therefore is a subclass that
 inherits from body. 
 
 For optimization reasons there is a method for removing objects further away
