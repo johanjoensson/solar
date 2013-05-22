@@ -326,6 +326,17 @@ need to upload the light as an array and then calculate the light combined. For
 the array solution to work the number of suns needs to be limited too since it
 is not possible to have a array of undecided length in the fragment shader.
 \section{Conclusions}
+Our program renders a solar system with a single sun acting as a light source.
+All larger objects in the system affect each other through gravity. With proper
+initial positions and velocities this will make the planets orbit the sun in
+elliptical orbits. Our system looks rather realistic, and behaves in a realistic
+way. However the calculations necessary for the gravitational accelerations are
+extremely heavy and requires a lot of processing power. One big improvement
+would be to parallelize these calculations. Another problem we had was with the
+asteroids, since they are slightly different from the planets and suns we cannot
+use our frustum culling methods on them, this means that we often render a lot
+of small asteroids that we cannot see. To solve this we would have to rewrite
+the frustum culling methods and the different object classes.
 
 \section{Screenshots}
 Here be screenshots.
