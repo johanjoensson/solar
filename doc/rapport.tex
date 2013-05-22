@@ -146,6 +146,18 @@ functions can be seen in figure XX. The sun is very similar to the planets
 except that it also emits sun light. The sun therefore is a subclass that
 inherits from body. 
 
+\subsubsection{Asteroids}
+The asteroids are objects that are not gravitationally bound in the system. In 
+order to render lots of asteroids on the screen we could not use the
+gravitational calculations to update the positions of all the asteroids. Instead
+we decided to make the asteroids follow a circular orbit some great distance
+from the origin, this way we still get a somewhat realistic result and we save a
+lot of computational power. This way of treating asteroids differently from
+other celestial objects also, unfortunately, means that we cannot use our
+methods for frustum culling. Thus all asteroids in the system are rendered at
+all times.
+means that we cannot use 
+
 \subsection{Spacebox \& Ship (Cat?)}
 The drawing of the spacebox and the ship is handled specially in the shaders.
 This is because the spacebox is always drawn around the camera and is therefore
