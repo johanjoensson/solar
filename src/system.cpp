@@ -277,7 +277,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 
         bodies.add_planet(s);
     }
-    asteroids = Planetoids(n_asteroids, 90, "res/planet.obj", "res/asteroid.tga", "src/solar.vert", "src/solar.frag");
+    asteroids = Planetoids(n_asteroids, 90, "res/asteroid.obj", "res/asteroid.tga", "src/solar.vert", "src/solar.frag");
 }
 
 void System::draw(int program)
