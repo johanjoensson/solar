@@ -20,9 +20,6 @@ void set_sdl_display_func(void (*display_func)(void))
 void set_event_handler(void (*event_func)(SDL_Event event))
 {
     handle_event = event_func;
-	if(ptdisplay == NULL){
-		fprintf(stderr, "Error setting event handler\n");
-	}
 }
 
 void exit_prog(int value)
