@@ -38,7 +38,7 @@ void main(void)
                 out_Color = texture(texUnit, out_tex_coord);
         } else if(spacebox == 0){
                 tmp_colors = vec3(texture(texUnit, out_tex_coord));
-                colors = vec3(0.3,0.3,0.00)*tmp_colors;
+                colors = vec3(0.1,0.1,0.1)*tmp_colors;
                 s = normalize(light_cam_matrix * sun_position - out_position);
                 n = normalize(out_normal);
 
