@@ -22,9 +22,34 @@ Object::Object(const char *model)
     trans_mat = IdentityMatrix();
 }
 
+Object::Object(Model *model, const char *tex)
+{
+    m = model; 
+
+    texture = SOIL_load_OGL_texture(
+            tex,
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_INVERT_Y
+            );
+
+    // Typical Texture Generation Using Data From The Bitmap
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+    //LoadTGATextureSimple(tex, &texture);
+    reflectivity = 1;
+    scale = 1;
+    matrix = IdentityMatrix();
+    scale_mat = S(scale, scale, scale);
+    rot_mat = IdentityMatrix();
+    trans_mat = IdentityMatrix();
+}
+
 Object::Object(const char *model, const char *tex)
 {
-    m = LoadModelPlus((char*)model);
+    m = LoadModelPlus((char*)model); 
 
     texture = SOIL_load_OGL_texture(
             tex,
@@ -58,7 +83,8 @@ float Object::get_scale()
     return scale;
 }
 
-void Object::draw(int program){
+void Object::draw(int program)
+{
     glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
     DrawModel(m, program, "in_position", "in_normal", NULL);
 }

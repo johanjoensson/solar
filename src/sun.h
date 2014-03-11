@@ -12,8 +12,7 @@ class Sun : public Body
   //FIXME
   float specularExponent;
   void draw(int);
-  Sun(const char*, const char*, const float);
-  Sun(const char*, const char*);
+  Sun(Model*, const char*);
 
 };
 

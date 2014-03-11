@@ -5,7 +5,8 @@
 #include <GL/gl.h>
 #include "VectorUtils3.h"
 
-class Ship: public Object {
+class Ship: public Object
+{
     private:
         mat4 static_rotation;
         void set_rotation(vec3 rotation);

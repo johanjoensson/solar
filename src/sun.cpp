@@ -2,9 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Sun::Sun(const char* model, const char* texture) : Body(model, texture)
+Sun::Sun(Model* model, const char* texture) : Body(model, texture)
 {
-
     mass = 1;
     spin_x = 0;
     spin_y = 0;
@@ -24,7 +23,6 @@ Sun::Sun(const char* model, const char* texture) : Body(model, texture)
     kr4 = zero;
     specularExponent = 2;
 #endif //GRAV_OPT
-
 }
 
 void Sun::draw(int program)

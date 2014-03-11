@@ -153,7 +153,7 @@ void Planetoids::update(float dt)
 
 void Planetoids::draw()
 {
-        glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
     for(int i = 0; i < nb; i++){
         glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix[i].m);
         DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");

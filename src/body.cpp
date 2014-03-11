@@ -1,6 +1,6 @@
 #include "body.h"
 
-Body::Body(const char* model, const char *texture) : Object(model, texture)
+Body::Body(Model* model, const char *texture) : Object(model, texture)
 {
     mass = 1;
     spin_x = 0;
@@ -22,7 +22,6 @@ Body::Body(const char* model, const char *texture) : Object(model, texture)
     kr3 = zero;
     kr4 = zero;
 #endif //GRAV_OPT
-
 }
 
 Body::Body(const char* model) : Object(model)

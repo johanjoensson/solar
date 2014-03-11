@@ -12,6 +12,7 @@
 #include "VectorUtils3.h"
 #include <time.h>
 #include "cel_bodies.h"
+#include "loadobj.h"
 
 using namespace std;
 
@@ -95,15 +96,17 @@ void System::update_collisions()
     }
 }
 
-System::System(int program){
+System::System(int program)
+{
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     ship = Ship("res/cat.obj", "res/cat_diff.tga");
     //ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
     bodies = Cel_bodies();
+    Model *model = LoadModelPlus((char*)"res/planet.obj");
 
-    Body *a = new Body("res/planet.obj", "res/mercurymap.png");
-    Sun *s = new Sun("res/planet.obj", "res/sunmap.png");
+    Body *a = new Body(model, "res/mercurymap.png");
+    Sun *s = new Sun(model, "res/sunmap.png");
 
     s->specularExponent = 14;
     s->set_scale(10);
@@ -120,7 +123,7 @@ System::System(int program){
     a->mass = 2E2;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/venus.png");
+    a = new Body(model, "res/venus.png");
     a->spin_y = 0.5;
     a->position = vec3(50.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, 0.7);
@@ -128,7 +131,7 @@ System::System(int program){
     a->mass = 1E3;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/earth.png");
+    a = new Body(model, "res/earth.png");
     a->spin_y = -0.2;
     a->position = vec3(65.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.7);
@@ -136,7 +139,7 @@ System::System(int program){
     a->mass = 4E3;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/mars.png");
+    a = new Body(model, "res/mars.png");
     a->spin_y = 0.1;
     a->position = vec3(75.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, 0.7);
@@ -144,7 +147,7 @@ System::System(int program){
     a->mass = 2E3;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/jupiter.png");
+    a = new Body(model, "res/jupiter.png");
     a->spin_y = -0.1;
     a->position = vec3(-105.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.6);
@@ -152,7 +155,7 @@ System::System(int program){
     a->mass = 3E5;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/saturnmap.png");
+    a = new Body(model, "res/saturnmap.png");
     a->spin_y = 0.3;
     a->position = vec3(125.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.57);
@@ -160,7 +163,7 @@ System::System(int program){
     a->mass = 3E4;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/uranusmap.png");
+    a = new Body(model, "res/uranusmap.png");
     a->spin_y = 0.1;
     a->position = vec3(-140.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, 0.55);
@@ -168,7 +171,7 @@ System::System(int program){
     a->mass = 1E4;
     bodies.add_planet(a);
     
-    a = new Body("res/planet.obj", "res/neptunemap.png");
+    a = new Body(model, "res/neptunemap.png");
     a->spin_y = 0.23;
     a->position = vec3(155.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.53);
@@ -201,30 +204,31 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
     c = Camera(program);
     bodies = Cel_bodies();
     Body *p;
+    Model *model = LoadModelPlus((char*)"res/planet.obj");
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
         if(rand_value < 0.09) {
-            p = new Body("res/planet.obj", "res/earth.png");
+            p = new Body(model, "res/earth.png");
         } else if(rand_value < 0.18) {
-            p = new Body("res/planet.obj", "res/mars.png");
+            p = new Body(model, "res/mars.png");
         } else if(rand_value < 0.27) {
-            p = new Body("res/planet.obj", "res/moon.png");
+            p = new Body(model, "res/moon.png");
         } else if(rand_value < 0.36) {
-            p = new Body("res/planet.obj", "res/venus.png");
+            p = new Body(model, "res/venus.png");
         } else if (rand_value < 0.45) {
-            p = new Body("res/planet.obj", "res/mars_elevation.png");
+            p = new Body(model, "res/mars_elevation.png");
         } else if (rand_value < 0.55) {
-            p = new Body("res/planet.obj", "res/saturnmap.png");
+            p = new Body(model, "res/saturnmap.png");
         } else if (rand_value < 0.64) {
-            p = new Body("res/planet.obj", "res/uranusmap.png");
+            p = new Body(model, "res/uranusmap.png");
         } else if (rand_value < 0.73) {
-            p = new Body("res/planet.obj", "res/neptunemap.png");
+            p = new Body(model, "res/neptunemap.png");
         } else if (rand_value < 0.82) {
-            p = new Body("res/planet.obj", "res/plutomap1k.png");
+            p = new Body(model, "res/plutomap1k.png");
         } else if (rand_value < 0.91) {
-            p = new Body("res/planet.obj", "res/mercurymap.png");
+            p = new Body(model, "res/mercurymap.png");
         } else {
-            p = new Body("res/planet.obj", "res/jupiter.png");
+            p = new Body(model, "res/jupiter.png");
         }
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
@@ -250,7 +254,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
     // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
     Sun *s;
     for(int i=0; i<n_suns; i++){
-        s = new Sun("res/planet.obj", "res/sunmap.png");
+        s = new Sun(model, "res/sunmap.png");
         s->emit_color = vec3(1,1,1);
         s->specularExponent = 5;
 

@@ -35,6 +35,7 @@ class Object {
 
         Object();
         Object(const char*);
+        Object(Model*, const char*);
         Object(const char*, const char*);
 };
 

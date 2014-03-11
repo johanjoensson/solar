@@ -24,7 +24,7 @@ class Body: public Object {
         void update(float);
         virtual void draw(int);
         Body(const char*);
-        Body(const char*, const char*);
+        Body(Model*, const char*);
         Body();
 
 #ifdef GRAV_OPT
