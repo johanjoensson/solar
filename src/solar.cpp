@@ -75,7 +75,7 @@ void init(int argc, char *argv[])
 	//glEnable(GL_LIGHT1);
 
 	// Load and compile shader
-	program = loadShaders("src/test.vert", "src/test.frag");
+	program = loadShaders("src/solar.vert", "src/solar.frag");
 	printError("error loading shaders");
 
     int nsun = 0;

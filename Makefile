@@ -46,7 +46,7 @@ OBJ = $(CXOBJ) $(COBJ)
 .PHONY: all clean src bin
 
 # Samtliga exekverbara filer vi vill skapa, bör bara finnas en!
-EXE = test\
+EXE = solar\
 
 # Om inget annat nämns så bygger vi alla exekverbara filer
 all: bin src $(EXE)
@@ -59,9 +59,8 @@ $(BIN)/%.o: $(SRC)/%.c
 $(BIN)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $? -o $@
 
-# TODO: Att byta ut mot lämpligt namn på programmet!
 # Kompilera vår exekverbara fil med lämpliga flaggor samt bibliotek
-test: $(OBJ) $(SOILDIR)/$(LIBSOIL)
+solar: $(OBJ) $(SOILDIR)/$(LIBSOIL)
 
 	$(CXX) $^ -o $@ $(LDXFLAGS)
 
