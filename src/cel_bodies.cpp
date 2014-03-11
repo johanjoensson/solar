@@ -20,7 +20,6 @@ void Cel_bodies::add_planet(Body *p)
     tmp->next = this->next;
 
     this->next = tmp;
-
 }
 
 /******************************************************************************
