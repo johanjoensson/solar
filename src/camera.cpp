@@ -9,7 +9,7 @@ Camera::Camera(int program)
     matrix = IdentityMatrix();
     this->program = program;
     up = vec3(0,1,0);
-    position = vec3(0,0,0);
+    position = vec3(0,0,-10);
     look_at_pos = vec3(0,0,-1);
     x = 0;
     upload();

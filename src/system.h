@@ -68,7 +68,7 @@ class System {
         Cel_bodies bodies, visible;
         Planetoids asteroids;
 
-        System();
+        System() = default;
         System(int);
         // Konstruktor för slumpat starttillstånd
         System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);

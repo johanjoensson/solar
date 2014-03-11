@@ -16,9 +16,6 @@
 
 using namespace std;
 
-System::System(){
-}
-
 void System::update(float dt)
 {
     bodies.update(dt/1000);
@@ -267,7 +264,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
         //s->set_radius(1 + (float)rand()/((float)RAND_MAX/s_radius_range));
         s->set_radius((1 + pow(3.0*p->mass/(4*M_PI), 1.0/3)/30)/2);
 
-        s->position = vec3(0,0,-10);
+        s->position = vec3(0,0,0);
         /*s->position = vec3(
           (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
           (float)rand() / ((float)RAND_MAX/s_pos_range) - s_pos_range/2.0,
