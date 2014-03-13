@@ -7,7 +7,7 @@
 Cel_bodies::Cel_bodies()
 {
     this->next = NULL;
-    this->planet == NULL;
+    this->planet = NULL;
 }
 
 /******************************************************************************
@@ -367,13 +367,12 @@ void Cel_bodies::update(float dt)
         current = current->next;
     }
 #endif
-    
+
     current = this->next;
     while(current != NULL){
         current->planet->update(dt);
 
         current = current->next;
     }
-    
-}
 
+}
