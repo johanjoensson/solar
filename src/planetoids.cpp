@@ -142,7 +142,6 @@ void Planetoids::translate(vec3 d, int index)
 
 void Planetoids::update(float dt)
 {
-    float a;
     vec3 v,ds;
     for(int i = 0; i < nb; i++){
         v = velocity[i]*Normalize(CrossProduct(rot_axis[i], position[i]));

@@ -958,29 +958,29 @@ Model* LoadModelPlus(char* name/*,
 }
 
 // Loader for inline data to Model (almost same as LoadModelPlus)
-Model* LoadDataToModel(
-                GLfloat *vertices,
-                GLfloat *normals,
-                GLfloat *texCoords,
-                GLfloat *colors,
-                GLuint *indices,
-                int numVert,
-                int numInd)
-{
-        Model* m = malloc(sizeof(Model));
-        memset(m, 0, sizeof(Model));
+/* Model* LoadDataToModel( */
+/*                 GLfloat *vertices, */
+/*                 GLfloat *normals, */
+/*                 GLfloat *texCoords, */
+/*                 GLfloat *colors, */
+/*                 GLuint *indices, */
+/*                 int numVert, */
+/*                 int numInd) */
+/* { */
+/*         Model* m = malloc(sizeof(Model)); */
+/*         memset(m, 0, sizeof(Model)); */
 
-        m->vertexArray = vertices;
-        m->texCoordArray = texCoords;
-        m->normalArray = normals;
-        m->indexArray = indices;
-        m->numVertices = numVert;
-        m->numIndices = numInd;
+/*         m->vertexArray = vertices; */
+/*         m->texCoordArray = texCoords; */
+/*         m->normalArray = normals; */
+/*         m->indexArray = indices; */
+/*         m->numVertices = numVert; */
+/*         m->numIndices = numInd; */
 
-        BuildModelVAO2(m);
+/*         BuildModelVAO2(m); */
 
-        return m;
-}
+/*         return m; */
+/* } */
 
 
 

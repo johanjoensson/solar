@@ -190,7 +190,7 @@ Uint32 update_timer(Uint32 interval, void* param)
 	
 	event.type = SDL_USEREVENT;
 	event.user.code = (int)System::UPDATE_TIMER;
-	event.user.data1 = (void*) interval;
+	event.user.data1 = (void*) (intptr_t) interval;
 	event.user.data2 = 0;
 
 	SDL_PushEvent(&event);
@@ -337,7 +337,7 @@ void handle_userevent(SDL_Event event)
             display();
             break;
         case (int)System::UPDATE_TIMER:
-            update(simulation_speed * *((Uint32*)(&event.user.data1)));
+            update(simulation_speed * *((Uint32*)(intptr_t)(&event.user.data1)));
             break;
         case (int)System::CLEAN_TIMER:
             sys.clean(MAX_DISTANCE);
@@ -357,5 +357,8 @@ void take_screenshot()
             SOIL_SAVE_TYPE_BMP,
             0, 0, width, height
             );
+    if(save_result == 0){
+        printf("Error saving screenshot\n");
+    }
     screenshot_nr++;
 }
