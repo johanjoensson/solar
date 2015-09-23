@@ -2,6 +2,7 @@
 #define CEL_BODIES_H
 
 #include "body.h"
+#include <glm/glm.hpp>
 
 /******************************************************************************
  * Struct som innehåller en länkad lista till alla gravitationellt bundna
@@ -18,15 +19,15 @@ struct Cel_bodies{
          * Dessa funktioner används för den enklare, men något långsammare
          * implementationen av rk4-integratorn
          *****************************************************************************/
-        vec3 rk4_accel(float h, vec3 k, Cel_bodies *universe);
-        vec3 rk4_velocity(float h, vec3 acc);
+        glm::vec3 rk4_accel(float h, glm::vec3 k, Cel_bodies *universe);
+        glm::vec3 rk4_velocity(float h, glm::vec3 acc);
         void rk4_gravity(float dt, Cel_bodies *universe);
 #else // GRAV_OPT
         /******************************************************************************
          * Dessa funktioner används för den mer komplicerade, men något snabbare
          * implementationen av rk4-integratorn.
          *****************************************************************************/
-        vec3 force(Cel_bodies *second, float h, vec3 first_k, vec3 second_k);
+        glm::vec3 force(Cel_bodies *second, float h, glm::vec3 first_k, glm::vec3 second_k);
         void calculate_k1();
         void calculate_k2(float h);
         void calculate_k3(float h);

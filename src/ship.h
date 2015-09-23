@@ -1,9 +1,10 @@
-#ifndef SHIP_H
-#define SHIP_H
+#pragma once
 
 #include "object.h"
 #include <GL/gl.h>
-#include "VectorUtils3.h"
+#include <glm/glm.hpp>
+
+using namespace glm;
 
 class Ship: public Object
 {
@@ -16,4 +17,3 @@ class Ship: public Object
         Ship(const char* model, const char *texture);
         void handle_movement(int xrel, int yrel, int width, int height);
 };
-#endif

@@ -3,8 +3,7 @@
  * Den styr gravitationen, och räknar ut hur objekt rör sig.
  *****************************************************************************/
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#pragma once
 
 
 #include "SDL_util.h"
@@ -74,4 +73,3 @@ class System {
         System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
 
 };
-#endif //SYSTEM_H

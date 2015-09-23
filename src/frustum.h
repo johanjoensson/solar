@@ -1,8 +1,6 @@
-#ifndef FRUSTUM_H
-#define FRUSTUM_H
+#pragma once
 
 #include "camera.h"
-#include "VectorUtils3.h"
 #include "cel_bodies.h"
 
 class Frustum {
@@ -22,4 +20,3 @@ public:
     Frustum();
     Frustum(float near_p, float far_p, float bottom_p, float top_p, float left_p, float right_p);
 };
-#endif //FRUSTUM_H

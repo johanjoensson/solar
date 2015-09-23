@@ -1,20 +1,21 @@
-#include <math.h>
-#include <SDL.h>
+#include <cmath>
+#include <SDL/SDL.h>
 #include "GL_utilities.h"
 #include "SDL_util.h"
 #include "body.h"
 #include "loadobj.h"
 #include "camera.h"
-#include "VectorUtils3.h"
 #include "system.h"
 #include "LoadTGA.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
 #include "planetoids.h"
-#include<stdio.h>
 #include <stdio.h>
 #include <unistd.h>
 #include "soil/src/SOIL.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define near 1
 #define far 300
@@ -134,8 +135,8 @@ void init(int argc, char *argv[])
     SDL_WM_GrabInput( SDL_GRAB_ON );
 
     // Create and upload projection matrix
-    projection_matrix = frustum(left, right, bottom, top, near, far);
-    glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_TRUE, projection_matrix.m);
+    projection_matrix = glm::frustum(left, right, bottom, top, near, far);
+    glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_FALSE, glm::value_ptr(projection_matrix));
 	printError("error loading projection");
 
     //glUniform1i(glGetUniformLocation(program, "spacebox"), 0);

@@ -9,12 +9,14 @@
 #include "camera.h"
 #include "ship.h"
 #include "spacebox.h"
-#include "VectorUtils3.h"
 #include <time.h>
 #include "cel_bodies.h"
 #include "loadobj.h"
 
+#include <glm/glm.hpp>
+
 using namespace std;
+using namespace glm;
 
 void System::update(float dt)
 {
@@ -31,7 +33,7 @@ int System::check_collision(Body *p, Body *q)
 {
     int collide = 0;     
           
-    vec3 diff = VectorSub(q->position, p->position);
+    vec3 diff = q->position - p->position;
     float dsquare = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
     float rsquare = (q->get_radius() + p->get_radius())*(q->get_radius() + p->get_radius());
 

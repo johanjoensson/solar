@@ -1,8 +1,6 @@
-#ifndef SPACEBOX_H
-#define SPACEBOX_H
+#pragma once
 
 #include "object.h"
-#include "LoadTGA.h"
 
 class Spacebox : public Object {
     public:
@@ -10,4 +8,3 @@ class Spacebox : public Object {
         Spacebox();
         Spacebox(const char*, const char*);
 };
-#endif

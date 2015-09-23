@@ -1,7 +1,7 @@
 #include "cel_bodies.h"
 #include "body.h"
-#include "VectorUtils3.h"
 
+#include <glm/gtx/norm.hpp>
 
 
 Cel_bodies::Cel_bodies()
@@ -80,18 +80,18 @@ void Cel_bodies::clear_list()
  * Räkna ut ett objekts acceleration utifrån gravitationskrafterna som verkar
  * på objektet. f(tn, yn) i rk4.
  *****************************************************************************/
-vec3 Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)
+glm::vec3 Cel_bodies::rk4_accel(float h, glm::vec3 k, Cel_bodies *universe)
 {
     // No gravity in empty space
     // We ignore Casimir forces etc.
     if(universe->next == NULL){
-        return vec3(0.0f, 0.0f, 0.0f);
+        return glm::vec3(0.0f, 0.0f, 0.0f);
     }
     Cel_bodies *tmp = this;
-    vec3 rn = this->planet->position;
-    vec3 rp_i, a;
+    glm::vec3 rn = this->planet->position;
+    glm::vec3 rp_i, a;
     float rp_icu;
-    a = vec3(0.0, 0.0, 0.0);
+    a = glm::vec3(0.0, 0.0, 0.0);
     float Mi;
 
     double G = 6.6738480E-7 ;//E-11f;
@@ -115,9 +115,9 @@ vec3 Cel_bodies::rk4_accel(float h, vec3 k, Cel_bodies *universe)
  * Räkna ut hastigheten på ett objekt utifrån dess acceleration.
  * f(tn, yn) i rk4 (vi gör 2 separata rk4-integrationer)
  *****************************************************************************/
-vec3 Cel_bodies::rk4_velocity(float h, vec3 acc)
+glm::vec3 Cel_bodies::rk4_velocity(float h, glm::vec3 acc)
 {
-    vec3 v0 = this->planet->velocity;
+    glm::vec3 v0 = this->planet->velocity;
     return v0 + acc*h;
 ;
 }
@@ -129,18 +129,18 @@ vec3 Cel_bodies::rk4_velocity(float h, vec3 acc)
  *****************************************************************************/
 void Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
 {
-    vec3 res_r, res_v;
-    vec3 rn = this->planet->position;
-    vec3 vn = this->planet->velocity;
+    glm::vec3 res_r, res_v;
+    glm::vec3 rn = this->planet->position;
+    glm::vec3 vn = this->planet->velocity;
     // Intermediary slopes for position
-    vec3 kr1, kr2, kr3, kr4;
+    glm::vec3 kr1, kr2, kr3, kr4;
     // Intermediary slopes for velocity
-    vec3 kv1, kv2, kv3, kv4;
+    glm::vec3 kv1, kv2, kv3, kv4;
 
     /**************************************************************************
      * Hjälptlutningarna för hastighetsberäkningen
      *************************************************************************/
-    kv1 = rk4_accel(0.0f, vec3(), universe);
+    kv1 = rk4_accel(0.0f, glm::vec3(), universe);
     kv2 = rk4_accel(dt/2.0f, kv1, universe);
     kv3 = rk4_accel(dt/2.0f, kv2, universe);
     kv4 = rk4_accel(dt, kv3, universe);
@@ -149,7 +149,7 @@ void Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
      * Hjälptlutningarna för positionsberäkningen.
      * Beror på accelerationsuppskattningarna ovan.
      *************************************************************************/
-    kr1 = rk4_velocity(0.0f, vec3(0.0, 0.0, 0.0));
+    kr1 = rk4_velocity(0.0f, glm::vec3(0.0, 0.0, 0.0));
     kr2 = rk4_velocity(dt/2.0f, kv1);
     kr3 = rk4_velocity(dt/2.0f, kv2);
     kr4 = rk4_velocity(dt/2.0f, kv3);
@@ -176,23 +176,23 @@ void Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
  * Beräkna kraften på objekt first från objekt second
  * f(tn,yn) i rk4
  *****************************************************************************/
-vec3 Cel_bodies::force(Cel_bodies *second, float h, vec3 first_k, vec3 second_k)
+glm::vec3 Cel_bodies::force(Cel_bodies *second, float h, glm::vec3 first_k, glm::vec3 second_k)
 {
     if(second == NULL){
-        return vec3(0.0,0.0,0.0);
+        return glm::vec3(0.0,0.0,0.0);
     }
     Cel_bodies *first = this;
-    vec3 rn = first->planet->position + h*first_k;
-    vec3 rp_i, F;
+    glm::vec3 rn = first->planet->position + h*first_k;
+    glm::vec3 rp_i, F;
     float rp_icu, rp_i_val;
     
-    F = vec3(0.0, 0.0, 0.0);
+    F = glm::vec3(0.0, 0.0, 0.0);
     float Mi,m;
 
-    double G = 6.6738480E-10 ;//E-11f;
+    float G = 6.6738480E-10 ;//E-11f;
 
     rp_i = second->planet->position + h*second_k - rn;
-    rp_i_val = Norm(rp_i);
+    rp_i_val = glm::l2Norm(rp_i);
     Mi = second->planet->mass;
     m = first->planet->mass;
     rp_icu = rp_i_val*rp_i_val*rp_i_val;
@@ -212,8 +212,8 @@ void Cel_bodies::calculate_k1()
 {
     Cel_bodies *current = this->next;
     
-    vec3 F, zero;
-    zero = vec3(0.0, 0.0, 0.0);
+    glm::vec3 F, zero;
+    zero = glm::vec3(0.0, 0.0, 0.0);
     while(current != NULL){
         F = force(current, 0.0, zero, zero);
         this->planet->kv1 = this->planet->kv1 + F/this->planet->mass;
@@ -234,7 +234,7 @@ void Cel_bodies::calculate_k2(float h)
 {
     Cel_bodies *current = this->next;
     
-    vec3 F;
+    glm::vec3 F;
     while(current != NULL){
         F = this->force(current, h, this->planet->kv1, current->planet->kv1);
         this->planet->kv2 = this->planet->kv2 + F/this->planet->mass;
@@ -255,7 +255,7 @@ void Cel_bodies::calculate_k3(float h)
 {
     Cel_bodies *current = this->next;
     
-    vec3 F;
+    glm::vec3 F;
     while(current != NULL){
         F = this->force(current, h, this->planet->kv2, current->planet->kv2);
         this->planet->kv3 = this->planet->kv3 + F/this->planet->mass;
@@ -275,7 +275,7 @@ void Cel_bodies::calculate_k4(float h)
 {
     Cel_bodies *current = this->next;
     
-    vec3 F;
+    glm::vec3 F;
     while(current != NULL){
         F = this->force(current, h, this->planet->kv3, current->planet->kv3);
         this->planet->kv4 = this->planet->kv4 + F/this->planet->mass;
@@ -293,7 +293,7 @@ void Cel_bodies::calculate_k4(float h)
  *****************************************************************************/
 void Cel_bodies::reset_k()
 {
-    vec3 zero = vec3(0.0, 0.0, 0.0);
+    glm::vec3 zero = glm::vec3(0.0, 0.0, 0.0);
     this->planet->kv1 = zero;
     this->planet->kv2 = zero;
     this->planet->kv3 = zero;
@@ -314,13 +314,13 @@ void Cel_bodies::reset_k()
 void Cel_bodies::update_gravity(float h)
 {
     Cel_bodies *current = this;
-    vec3 new_pos, new_vel;
+    glm::vec3 new_pos, new_vel;
     while(current != NULL){
 
-        new_vel = current->planet->velocity + h/6*(current->planet->kv1 + 2*current->planet->kv2 + 2*current->planet->kv3 + current->planet->kv4);
+        new_vel = current->planet->velocity + h/6*(current->planet->kv1 + float(2)*current->planet->kv2 + float(2)*current->planet->kv3 + current->planet->kv4);
 
         current->planet->velocity = new_vel;
-        new_pos = current->planet->position + h/6*(current->planet->kr1 + 2*current->planet->kr2 + 2*current->planet->kr3 + current->planet->kr4);
+        new_pos = current->planet->position + h/6*(current->planet->kr1 + float(2)*current->planet->kr2 + float(2)*current->planet->kr3 + current->planet->kr4);
         current->planet->position = new_pos;
 
         current->reset_k();

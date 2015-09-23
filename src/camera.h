@@ -1,7 +1,7 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
-#include"VectorUtils3.h"
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 
 class Camera {
     private:
@@ -11,20 +11,20 @@ class Camera {
         // fönstret
         int x;
     public:
-        vec3 position;
-        vec3 look_at_pos;
+        glm::vec3 position;
+        glm::vec3 look_at_pos;
 
-        vec3 up;
-        mat4 matrix;
+        glm::vec3 up;
+        glm::mat4 matrix;
 
         void rotate(char direction, float angle);
-        void translate(float dx, float dy, float dz);
+        void translate(glm::vec3 d_pos);
         void forward(float d);
         void strafe(float d);
         void update();
         float radius;
-	float cam_position[3];
-        void point_to(vec3 pos);
+        float cam_position[3];
+        void point_to(glm::vec3 pos);
 
         /*************************************************************
          * change_look_at_pos:
@@ -38,5 +38,3 @@ class Camera {
         Camera();
         void print_matrix();
 };
-
-#endif

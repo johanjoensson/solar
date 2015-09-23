@@ -3,7 +3,7 @@
 
 # Kompilera med kompilatorn för C++
 CC = gcc
-CXX = g++
+CXX = g++ 
 
 SRC = src
 BIN = bin
@@ -21,7 +21,7 @@ CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c99
 
 # De ytterligagre bibliotek vi behöver
 # GL är OpnGL och m är matematik
-LIB = GL m
+LIB = GL
 
 # Nora har problem med sökvägar och linande
 NORA = /usr/include/GL
@@ -72,8 +72,8 @@ bin :
 
 # Rensa bort alla temporära filer som skapats
 clean:
-	rm  $(OBJ)
+	rm -f $(OBJ)
 
 # Ta bort allt som kompilerats!
 cleanall:
-	rm  $(EXE) $(OBJ)
+	rm -f $(EXE) $(OBJ)

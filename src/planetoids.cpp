@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 Planetoids::Planetoids()
 {
     nb = 0;
@@ -20,12 +23,12 @@ Planetoids::Planetoids(int num, const char* model) : Body()
     for(int i = 0; i < num; i++){
         reflectivity[i] = 1;
         scale[i] = 1;
-        matrix[i] = IdentityMatrix();
-        scale_mat[i] = S(scale[i],scale[i],scale[i]);
-        rot_mat[i] = IdentityMatrix();
-        trans_mat[i] = IdentityMatrix();
+        matrix[i] = glm::mat4();
+        scale_mat[i] = glm::mat4(scale[i]);
+        rot_mat[i] = glm::mat4();
+        trans_mat[i] = glm::mat4();
 
-        position[i] = vec3(0,0,0);
+        position[i] = glm::vec3(0,0,0);
         velocity[i] = 0;
     }
 }
@@ -50,12 +53,12 @@ Planetoids::Planetoids(int num, const char *model, const char *tex) : Body()
     for(int i = 0; i < num; i++){
         reflectivity[i] = 1;
         scale[i]  = 1;
-        matrix[i]  = IdentityMatrix();
-        scale_mat[i]  = S(scale[i], scale[i], scale[i]);
-        rot_mat[i]  = IdentityMatrix();
-        trans_mat[i]  = IdentityMatrix();
+        matrix[i]  = glm::mat4();
+        scale_mat[i]  = glm::mat4(scale[i]);
+        rot_mat[i]  = glm::mat4();
+        trans_mat[i]  = glm::mat4();
 
-        position[i] = vec3(0,0,0);
+        position[i] = glm::vec3(0,0,0);
         velocity[i] = 0;
 
     }
@@ -67,14 +70,14 @@ Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, 
     reflectivity = new float[num];
     scale = new float[num];
 
-    matrix = new mat4[num];
-    scale_mat = new mat4[num];
-    rot_mat = new mat4[num];
-    trans_mat = new mat4[num];
+    matrix = new glm::mat4[num];
+    scale_mat = new glm::mat4[num];
+    rot_mat = new glm::mat4[num];
+    trans_mat = new glm::mat4[num];
 
-    position = new vec3[num];
+    position = new glm::vec3[num];
     velocity = new float[num];
-    rot_axis = new vec3[num];
+    rot_axis = new glm::vec3[num];
     
     // Frö för slumpvärden
     srand(time(NULL));
@@ -96,18 +99,18 @@ Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, 
 
     //LoadTGATextureSimple(tex, &texture);
 
-    vec3 tmp;
-    tmp = vec3(((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2);
+    glm::vec3 tmp;
+    tmp = glm::vec3(((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2);
     for(int i = 0; i < num; i++){
         reflectivity[i] = 1;
         scale[i]  = (float) rand()/RAND_MAX * 0.8;
-        matrix[i]  = IdentityMatrix();
-        scale_mat[i]  = S(scale[i], scale[i], scale[i]);
-        rot_mat[i]  = IdentityMatrix();
-        trans_mat[i]  = IdentityMatrix();
+        matrix[i]  = glm::mat4();
+        scale_mat[i]  = glm::mat4(scale[i]);
+        rot_mat[i]  = glm::mat4();
+        trans_mat[i]  = glm::mat4();
 
-        rot_mat[i] = ArbRotate(tmp, (float) rand()/RAND_MAX * 2*M_PI);
-        position[i] = rot_mat[i]*(vec3(dist,dist,dist)+dist*vec3(((float) rand()/RAND_MAX * 2 -1)/5,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2));
+        rot_mat[i] = glm::rotate(float(rand()/RAND_MAX * 2*M_PI), tmp);
+        position[i] = glm::vec3(rot_mat[i]*glm::vec4((glm::vec3(dist,dist,dist)+dist*glm::vec3(((float) rand()/RAND_MAX * 2 -1)/5,((float) rand()/RAND_MAX * 2 -1)/2,((float) rand()/RAND_MAX * 2 -1)/2)), 1.0));
         velocity[i] = (float) rand()/RAND_MAX * 5;
 
         rot_axis[i] = tmp;
@@ -122,29 +125,29 @@ void Planetoids::matrix_update(int index)
     matrix[index] = trans_mat[index]*rot_mat[index]*scale_mat[index];
 }
 
-void Planetoids::rotate(vec3 direction, float angle, int index)
+void Planetoids::rotate(glm::vec3 direction, float angle, int index)
 {
-    rot_mat[index] = ArbRotate(direction, angle) * rot_mat[index];
+    rot_mat[index] = glm::rotate(rot_mat[index], angle, direction);
     matrix_update(index);
 }
 
-void Planetoids::place(vec3 pos, int index)
+void Planetoids::place(glm::vec3 pos, int index)
 {
-    trans_mat[index] = T(pos.x, pos.y, pos.z);
+    trans_mat[index] = glm::translate(pos);
     matrix_update(index);
 }
 
-void Planetoids::translate(vec3 d, int index)
+void Planetoids::translate(glm::vec3 d, int index)
 {
-    trans_mat[index] = T(d.x, d.y, d.z)* trans_mat[index];
+    trans_mat[index] = glm::translate(trans_mat[index], d);
     matrix_update(index);
 }
 
 void Planetoids::update(float dt)
 {
-    vec3 v,ds;
+    glm::vec3 v,ds;
     for(int i = 0; i < nb; i++){
-        v = velocity[i]*Normalize(CrossProduct(rot_axis[i], position[i]));
+        v = velocity[i]*normalize(cross(rot_axis[i], position[i]));
         position[i] = position[i] + dt*v;
         place(position[i], i);
     }
@@ -154,7 +157,7 @@ void Planetoids::draw()
 {
     glBindTexture(GL_TEXTURE_2D, texture);
     for(int i = 0; i < nb; i++){
-        glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix[i].m);
+        glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix[i]));
         DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
     }        
 }

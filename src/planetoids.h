@@ -1,8 +1,7 @@
-#ifndef PLANETOIDS_H
-#define PLANETOIDS_H
+#pragma once
 
-#include "VectorUtils3.h"
 #include "body.h"
+#include <glm/glm.hpp>
 
 class Planetoids: public Body {
     private:
@@ -10,11 +9,11 @@ class Planetoids: public Body {
 
         void matrix_update(int);
 
-        mat4* rot_mat;
-        mat4* trans_mat;
-        mat4* scale_mat;
+        glm::mat4* rot_mat;
+        glm::mat4* trans_mat;
+        glm::mat4* scale_mat;
 
-        vec3* rot_axis;
+        glm::vec3* rot_axis;
 
         // För att skala objekt
         float* scale;
@@ -22,8 +21,8 @@ class Planetoids: public Body {
     public:
 
         int nb;
-        mat4* matrix;
-        vec3* position;
+        glm::mat4* matrix;
+        glm::vec3* position;
         float* velocity;
         float* mass;
         float* spin_x;
@@ -37,13 +36,12 @@ class Planetoids: public Body {
         Planetoids(int, float, const char*, const char*,  const char*, const char*);
 
 
-        void rotate(vec3 direction, float angle, int index);
-        void translate(vec3, int index);
-        void place(vec3 pos, int index);
+        void rotate(glm::vec3 direction, float angle, int index);
+        void translate(glm::vec3, int index);
+        void place(glm::vec3 pos, int index);
 
 
         void update(float);
         void draw();
 
 };
-#endif //PLANETOIDS_H

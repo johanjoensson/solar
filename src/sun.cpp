@@ -2,6 +2,8 @@
 #include <iostream>
 using namespace std;
 
+#include <glm/gtc/type_ptr.hpp>
+
 Sun::Sun(Model* model, const char* texture) : Body(model, texture)
 {
     mass = 1;
@@ -28,7 +30,7 @@ Sun::Sun(Model* model, const char* texture) : Body(model, texture)
 void Sun::draw(int program)
 {
     glUniform1i(glGetUniformLocation(program, "sun"), 1);
-    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
+    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     glBindTexture(GL_TEXTURE_2D, texture);
     DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
     sun_position = this->position;

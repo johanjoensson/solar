@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 /******************************************************************************
  * Koder för egna event, såsom timers och liknande.
  * Används för att indentifiera ett specifikt event.

@@ -1,8 +1,11 @@
-#ifndef SUN_H
-#define SUN_H
+#pragma once
 
 #include "body.h"
-#include "VectorUtils3.h"
+
+#include <glm/glm.hpp>
+
+using namespace glm;
+
 class Sun : public Body 
 {
  private:
@@ -15,5 +18,3 @@ class Sun : public Body
   Sun(Model*, const char*);
 
 };
-
-#endif

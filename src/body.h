@@ -1,8 +1,7 @@
-#ifndef BODY_H
-#define BODY_H
+#pragma once
 
 #include "object.h"
-#include "VectorUtils3.h"
+#include <glm/vec3.hpp>
 
 /******************************************************************************
  * Styr vilken implementation av rk4-integration vi kör.
@@ -19,7 +18,7 @@ class Body: public Object {
         float mass;
         void set_radius(float);
         float get_radius();
-        vec3 velocity;
+        glm::vec3 velocity;
 
         void update(float);
         virtual void draw(int);
@@ -31,15 +30,14 @@ class Body: public Object {
 /******************************************************************************
  * Hjälplutningar till den "optimerade" implementationen av rk4-integration
  *****************************************************************************/
-        vec3 kv1;
-        vec3 kv2;
-        vec3 kv3;
-        vec3 kv4;
+        glm::vec3 kv1;
+        glm::vec3 kv2;
+        glm::vec3 kv3;
+        glm::vec3 kv4;
 
-        vec3 kr1;
-        vec3 kr2;
-        vec3 kr3;
-        vec3 kr4;
+        glm::vec3 kr1;
+        glm::vec3 kr2;
+        glm::vec3 kr3;
+        glm::vec3 kr4;
 #endif //GRAV_OPT
 };
-#endif

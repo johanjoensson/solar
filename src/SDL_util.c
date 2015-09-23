@@ -1,5 +1,4 @@
 #include <GL/gl.h>
-#include <GL/glu.h>
 #include "SDL_util.h"
 
 SDL_Surface* screen;

@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cmath>
 
+#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+
 Frustum::Frustum()
 {
     near = 1.0;
@@ -24,18 +27,18 @@ Frustum::Frustum(float near_p, float far_p, float bottom_p, float top_p, float l
 
 bool Frustum::inside_frustum(Body p, Camera cam)
 {
-    vec3 L = Normalize(cam.look_at_pos - cam.position);
-    vec3 r = p.position - cam.position;
-    vec3 up = Normalize(cam.up);
-    vec3 right_vec = CrossProduct(L,up);
+    glm::vec3 L = normalize(cam.look_at_pos - cam.position);
+    glm::vec3 r = p.position - cam.position;
+    glm::vec3 up = normalize(cam.up);
+    glm::vec3 right_vec = cross(L,up);
 
     float radius = p.get_radius();
 
-    vec3 r_L;
+    glm::vec3 r_L;
 
-    r_L.z = -DotProduct(r, L);
-    r_L.y = DotProduct(r,up);
-    r_L.x = DotProduct(r,right_vec);
+    r_L.z = -dot(r, L);
+    r_L.y = dot(r,up);
+    r_L.x = dot(r,right_vec);
 
     float h = -r_L.z*top/near;
     float w = h*right/top;

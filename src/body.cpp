@@ -1,5 +1,7 @@
 #include "body.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 Body::Body(Model* model, const char *texture) : Object(model, texture)
 {
     mass = 1;
@@ -7,10 +9,10 @@ Body::Body(Model* model, const char *texture) : Object(model, texture)
     spin_y = 0;
     spin_z = 0;
     set_radius(1);
-    position = vec3(0.0, 0.0, 0.0);
-    velocity = vec3(0.0, 0.0, 0.0);
+    position = glm::vec3(0.0, 0.0, 0.0);
+    velocity = glm::vec3(0.0, 0.0, 0.0);
 
-    vec3 zero = vec3(0.0, 0.0, 0.0);
+    glm::vec3 zero = glm::vec3(0.0, 0.0, 0.0);
 #ifdef GRAV_OPT
     kv1 = zero;
     kv2 = zero;
@@ -31,8 +33,8 @@ Body::Body(const char* model) : Object(model)
     spin_y = 0;
     spin_z = 0;
     set_radius(1);
-    position = vec3(0.0, 0.0, 0.0);
-    velocity = vec3(0.0, 0.0, 0.0);
+    position = glm::vec3(0.0, 0.0, 0.0);
+    velocity = glm::vec3(0.0, 0.0, 0.0);
 
 }
 
@@ -43,13 +45,13 @@ Body::Body()
     spin_y = 0;
     spin_z= 0;
     set_radius(1);
-    position = vec3(0.0, 0.0, 0.0);
-    velocity = vec3(0.0, 0.0, 0.0);
+    position = glm::vec3(0.0, 0.0, 0.0);
+    velocity = glm::vec3(0.0, 0.0, 0.0);
 }
 
 void Body::draw(int program)
 {
-    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_TRUE, matrix.m);
+    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     glBindTexture(GL_TEXTURE_2D, texture);
     DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
 }
