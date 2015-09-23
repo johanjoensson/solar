@@ -9,7 +9,7 @@ We will write a solar system where the bodies follows a subset of the laws of
 physics. The player can move around in the system and configure the initial
 state of the system.
 
-Will Do
+Features
 -------
   * Bodies with physical properties
   * Newtonian physics
@@ -21,13 +21,7 @@ Will Do
   * Asteroid belt
   * Controllable spaceship 
 
-Might Do
---------
-  * Random initial state
-  * Relativistic physics (special)
-  * Drawing optimized for frustum
-  * No sound (because **SPACE!**)
-  * Landing on selected bodies (sound?)
-  * Build our solar system
-  * Trans-Neptunian objects (Pluto?, Deathstar?)
-  * Aliens
+Requirements
+------------
+  * SDL
+  * glm
