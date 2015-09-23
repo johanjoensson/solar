@@ -1,10 +1,11 @@
 #include "planetoids.h"
-#include "GL_utilities.h"
 #include "loadobj.h"
 #include "soil/src/SOIL.h"
 #include <time.h>
 #include <cstdlib>
 #include <iostream>
+
+#include "helper/GLShader.hpp"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -83,7 +84,7 @@ Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, 
     srand(time(NULL));
 
     m = LoadModelPlus((char*)model);
-	program = loadShaders(vertex_shader, fragment_shader);
+	program = LoadShader(vertex_shader, fragment_shader);
 
     texture = SOIL_load_OGL_texture(
             tex,

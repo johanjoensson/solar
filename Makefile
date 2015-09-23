@@ -16,25 +16,22 @@ WARNINGS = -Wall -Wextra -W -pedantic
 # Kompilera med lite olika flaggor, utöver varningarna.
 # -g för debugmode, bör tas bort inför slutreleasen (inget måste dock).
 # sdl-config för att sätta flaggor för SDL korrekt.
-CXXFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c++0x
-CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl-config --cflags` -std=c99
+CXXFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c++0x
+CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c99
 
 # De ytterligagre bibliotek vi behöver
 # GL är OpnGL och m är matematik
 LIB = GL
 
-# Nora har problem med sökvägar och linande
-NORA = /usr/include/GL
-
 # Länka de bibliotek vi behöver
 # sdl-config för att enkelt länka rätt bibliotek
-LDXFLAGS = $(addprefix -L,$(NORA)) $(addprefix -l,$(LIB)) `sdl-config --libs`
+LDXFLAGS = $(addprefix -L,$(NORA)) $(addprefix -l,$(LIB)) `sdl2-config --libs`
 LIBSOIL = libSOIL.a
 SOILDIR = src/soil/lib
 
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
-CXSOURCES = $(wildcard $(SRC)/*.cpp)
+CXSOURCES = $(wildcard $(SRC)/*.cpp) $(wildcard $(SRC)/helper/*.cpp)
 CSOURCES = $(wildcard $(SRC)/*.c)
 
 # Vi vill ha objekt av alla våra .c/.cpp-filer

@@ -6,7 +6,6 @@
 #pragma once
 
 
-#include "SDL_util.h"
 #include "body.h"
 #include "camera.h"
 #include "frustum.h"

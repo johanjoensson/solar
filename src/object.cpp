@@ -1,5 +1,4 @@
 #include "object.h"
-#include "GL_utilities.h"
 #include "soil/src/SOIL.h"
 
 #include <glm/gtc/type_ptr.hpp>

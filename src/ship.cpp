@@ -21,7 +21,7 @@ Ship::Ship(const char* model, const char *texture) : Object(model, texture)
     static_rotation = glm::rotate(static_rotation, float(M_PI), glm::vec3(0,1,0));
     static_rotation = glm::rotate(static_rotation, float(0), glm::vec3(0,0,1));
     rotate('y', 3.14/2);
-    translate(0,-0.5,-1.2);
+    translate(0,-0.8,-1.2);
     //set_scale(1/30.0);
     set_scale(1/2.0);
 
