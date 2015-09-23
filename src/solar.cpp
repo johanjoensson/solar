@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <unistd.h>
 
 #include "body.h"
 #include "loadobj.h"
@@ -62,7 +63,7 @@ void display_help()
     std::cerr << "\nThank you for reading this, now go and play god/alien invader!\n";
 }
 
-void init()
+void init(int argc, char** argv)
 {
 	dumpInfo();
     // GL inits
@@ -75,51 +76,49 @@ void init()
 	program = LoadShader("src/solar.vert", "src/solar.frag");
 	printError("error loading shaders");
 
-    /* int nsun = 0; */
-    /* int nplanet = 0; */
-    /* long p_mass_range = 2E6; */
-    /* long s_mass_range = 6E10; */
-    /* float p_vel_range = 2; */
-    /* int p_pos_range = 0; */
-    /* int nasteroid = 0; */
-    /* int c; */
-    /* while ((c = getopt(argc, argv, "p:sm:n:v:r:ha:")) != -1) { */
-    /*     switch(c) { */
-    /*         case 'p': */
-    /*             nplanet = atoi(optarg); */
-    /*             break; */
-    /*         case 's': */
-    /*             nsun = 1; */
-    /*             break; */
-    /*         case 'm': */
-    /*             p_mass_range = atol(optarg); */
-    /*             break; */
-    /*         case 'n': */
-    /*             s_mass_range = atol(optarg); */
-    /*             break; */
-    /*         case 'v': */
-    /*             p_vel_range = atof(optarg); */
-    /*             break; */
-    /*         case 'r': */
-    /*             p_pos_range = atoi(optarg); */
-    /*             break; */
-    /*         case 'a': */
-    /*             nasteroid = atoi(optarg); */
-    /*             break; */
-    /*         case 'h': */
-    /*             display_help(); */
-    /*             exit(0); */
+    int nsun = 0;
+    int nplanet = 0;
+    long p_mass_range = 2E6;
+    long s_mass_range = 6E10;
+    float p_vel_range = 2;
+    int p_pos_range = 0;
+    int nasteroid = 0;
+    int c;
+    while ((c = getopt(argc, argv, "p:sm:n:v:r:ha:")) != -1) {
+        switch(c) {
+            case 'p':
+                nplanet = atoi(optarg);
+                break;
+            case 's':
+                nsun = 1;
+                break;
+            case 'm':
+                p_mass_range = atol(optarg);
+                break;
+            case 'n':
+                s_mass_range = atol(optarg);
+                break;
+            case 'v':
+                p_vel_range = atof(optarg);
+                break;
+            case 'r':
+                p_pos_range = atoi(optarg);
+                break;
+            case 'a':
+                nasteroid = atoi(optarg);
+                break;
+            case 'h':
+                display_help();
+                exit(0);
 
-    /*     } */
-    /* } */
+        }
+    }
 
-    /* if (nsun == 0 && nplanet == 0) { */
-    /*     sys = System(program); */
-    /* } else { */
-    /*     sys = System(program, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range); */
-    /* } */
-
-    sys = System(program);
+    if (nsun == 0 && nplanet == 0) {
+        sys = System(program);
+    } else {
+        sys = System(program, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
+    }
 
     sys.f = Frustum(near, far, bottom, top, left, right);
 
@@ -206,13 +205,13 @@ Uint32 clean_timer(Uint32 interval, void* param)
 	return interval;
 }
 
-int main()
+int main(int argc, char** argv)
 {
     SDL sdl(SDL_INIT_EVERYTHING);
     // TODO(gustav) byta till inte hårdkodade värden
     Window window("Solar", 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     GL_context glContext(window);
-	init();
+	init(argc, argv);
 
     Timer disp_timer(30, display_timer, &window);
     Timer upd_timer(5, update_timer, NULL);
