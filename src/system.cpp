@@ -286,7 +286,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 void System::draw(int program)
 {
     s.draw(program);
-    ship.draw(program);
+    /* ship.draw(program); */
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
    
