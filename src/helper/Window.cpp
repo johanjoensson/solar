@@ -1,5 +1,7 @@
 #include "Window.hpp"
 #include "SDL_exception.hpp"
+#include <GL/gl.h>
+#include <iostream>
 
 Window::Window(const std::string &title, int width, int height, Uint32 flags)
 {
@@ -40,6 +42,14 @@ Window& Window::Minimize()
 Window& Window::Resize(int w, int h)
 {
     SDL_SetWindowSize(window_, w, h);
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glOrtho(0, w, 0, h, -1, 1);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
     return *this;
 }
 
@@ -66,4 +76,13 @@ int Window::getHeight() const
     int h;
     SDL_GetWindowSize(window_,  nullptr, &h);
     return h;
+}
+
+void Window::handleEvent(SDL_Event e)
+{
+    switch (e.window.event){
+        case SDL_WINDOWEVENT_RESIZED:
+            this->Resize(e.window.data1, e.window.data2);
+            break;
+    }
 }

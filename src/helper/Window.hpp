@@ -14,7 +14,7 @@ class Window
         ~Window();
 
         // No copy constructor
-        Window(const Window& other) = delete;
+        Window(const Window& other) = default;
 
         // No copy assignment
         Window& operator=(const Window& other) = delete;
@@ -51,4 +51,7 @@ class Window
 
         // Get the height of the window
         int getHeight() const;
+
+        // Handle a SDL window event
+        void handleEvent(SDL_Event e);
 };
