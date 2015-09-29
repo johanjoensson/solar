@@ -205,26 +205,6 @@ Uint32 clean_timer(Uint32 interval, void* param)
 	return interval;
 }
 
-int main(int argc, char** argv)
-{
-    // Ta bort SDL_INIT_HAPTIC för det fungerade tydligen inte på gentoo
-    SDL sdl(SDL_INIT_EVERYTHING ^ SDL_INIT_HAPTIC);
-    // TODO(gustav) byta till inte hårdkodade värden
-    Window window("Solar", 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    GL_context glContext(window);
-	init(argc, argv);
-
-    Timer disp_timer(30, display_timer, &window);
-    Timer upd_timer(5, update_timer, NULL);
-    Timer cln_timer(1000, clean_timer, NULL);
-
-    GameLoop game(handle_userevent, handle_keypress, handle_mouse);
-
-    game.run();
-
-    sys.bodies.clear_list();
-}
-
 void handle_keypress(SDL_Event event)
 {
 	switch(event.key.keysym.sym){
@@ -312,3 +292,24 @@ void handle_userevent(SDL_Event event)
             break;
     }
 }
+
+int main(int argc, char** argv)
+{
+    // Ta bort Haptic support, som verkar saknas på gentoo
+    SDL sdl(SDL_INIT_EVERYTHING ^ SDL_INIT_HAPTIC);
+    // TODO(gustav) byta till inte hårdkodade värden
+    Window window("Solar", 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    GL_context glContext(window);
+	init(argc, argv);
+
+    Timer disp_timer(30, display_timer, &window);
+    Timer upd_timer(5, update_timer, NULL);
+    Timer cln_timer(1000, clean_timer, NULL);
+
+    GameLoop game(window, handle_userevent, handle_keypress, handle_mouse);
+
+    game.run();
+
+    sys.bodies.clear_list();
+}
+
