@@ -151,7 +151,6 @@ void display(void *window_void_ptr)
 }
 
 
-
 /******************************************************************************
  * Anropa INGA som helst funktioner i denna!
  * Det blir bara fel utan någon som helst anledning!
@@ -250,11 +249,10 @@ void handle_keypress(SDL_Event event)
 	}
 }
 
-void handle_mouse(SDL_Event event)
+void handle_mouse(SDL_Event event, Window &window)
 {
-    // TODO(gustav) Inte hårdkoda dessa
-    int width = 1024; 
-    int height = 768; 
+    int width = window.getWidth();
+    int height = window.getHeight();
 
     sys.c.change_look_at_pos(event.motion.xrel,event.motion.y,width,height);
     sys.ship.handle_movement(event.motion.xrel,event.motion.yrel,width,height);
@@ -296,7 +294,6 @@ int main(int argc, char** argv)
 {
     // Ta bort Haptic support, som verkar saknas på gentoo
     SDL sdl(SDL_INIT_EVERYTHING ^ SDL_INIT_HAPTIC);
-    // TODO(gustav) byta till inte hårdkodade värden
     Window window("Solar", 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     GL_context glContext(window);
 	init(argc, argv);
