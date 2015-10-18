@@ -143,7 +143,7 @@ void display(void *window_void_ptr)
 {
     Window *window = static_cast<Window *>(window_void_ptr);
 	printError("pre display");
-    sys.draw(program); 
+    sys.draw(program);
 	// clear the screen
 	printError("draw error");
 
@@ -159,7 +159,7 @@ void display(void *window_void_ptr)
 Uint32 display_timer(Uint32 interval, void* param)
 {
 	SDL_Event event;
-	
+
 	event.type = SDL_USEREVENT;
 	event.user.code = (int)System::DISPLAY_TIMER;
 	event.user.data1 = param;
@@ -176,7 +176,7 @@ Uint32 update_timer(Uint32 interval, void* param)
     param = param;
 
 	SDL_Event event;
-	
+
 	event.type = SDL_USEREVENT;
 	event.user.code = (int)System::UPDATE_TIMER;
 	event.user.data1 = (void*) (intptr_t) interval;
@@ -193,7 +193,7 @@ Uint32 clean_timer(Uint32 interval, void* param)
     param = param;
 
 	SDL_Event event;
-	
+
 	event.type = SDL_USEREVENT;
 	event.user.code = (int)System::CLEAN_TIMER;
 	event.user.data1 = 0;
@@ -203,7 +203,7 @@ Uint32 clean_timer(Uint32 interval, void* param)
 	return interval;
 }
 
-void handle_keypress(SDL_Event event)
+void handle_keypress(SDL_Event event, Window& window)
 {
 	switch(event.key.keysym.sym){
 		case SDLK_ESCAPE:
@@ -234,14 +234,19 @@ void handle_keypress(SDL_Event event)
                  simulation_speed = MAX_SIMULATION_SPEED;
             }
             break;
-        case SDLK_g: 
+        case SDLK_g:
             {
                 SDL_SetRelativeMouseMode(SDL_TRUE);
             }
             break;
-        case SDLK_h: 
+        case SDLK_h:
             {
                 SDL_SetRelativeMouseMode(SDL_FALSE);
+            }
+            break;
+        case SDLK_f:
+            {
+                window.toggleFullscreen();
             }
             break;
 		default:

@@ -7,6 +7,7 @@ class Window
 {
     private:
         SDL_Window* window_;
+        bool fullscreen = false;
 
     public:
         Window(const std::string &title, int width, int height, Uint32 flags);
@@ -33,6 +34,9 @@ class Window
 
         // Get the title of the window
         std::string GetTitle() const;
+
+        // Toggles the window to fullscreen, windowed. Return reference to the window
+        Window& toggleFullscreen();
 
         // Maximize the window. Return reference to the window
         Window& Maximize();

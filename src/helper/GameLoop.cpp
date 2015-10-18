@@ -1,6 +1,6 @@
 #include "GameLoop.hpp"
 
-GameLoop::GameLoop(Window &window, EventFunc user_handler, EventFunc
+GameLoop::GameLoop(Window &window, EventFunc user_handler, EventWinFunc
                    keypress_handler, EventWinFunc mouse_handler):
     user_handler_(user_handler),
     keypress_handler_(keypress_handler),
@@ -29,7 +29,7 @@ void GameLoop::handle_event(SDL_Event event)
             window_.handleEvent(event);
             break;
         case SDL_KEYDOWN:
-            keypress_handler_(event);
+            keypress_handler_(event, window_);
             break;
         case SDL_MOUSEMOTION:
             mouse_handler_(event, window_);

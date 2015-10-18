@@ -27,6 +27,13 @@ std::string Window::GetTitle() const
     return SDL_GetWindowTitle(window_);
 }
 
+Window& Window::toggleFullscreen()
+{
+    bool isFullscreen = SDL_GetWindowFlags(window_) & SDL_WINDOW_FULLSCREEN_DESKTOP;
+    SDL_SetWindowFullscreen(window_, isFullscreen ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
+    return *this;
+}
+
 Window& Window::Maximize()
 {
     SDL_MaximizeWindow(window_);
