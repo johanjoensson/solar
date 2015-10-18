@@ -1,6 +1,6 @@
 #include "object.h"
-#include "soil/src/SOIL.h"
 
+#include <SDL2/SDL_image.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -28,15 +28,12 @@ Object::Object(Model *model, const char *tex)
 {
     m = model; 
 
-    texture = SOIL_load_OGL_texture(
-            tex,
-            SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_INVERT_Y
-            );
+    surface = IMG_Load(tex);
 
     // Typical Texture Generation Using Data From The Bitmap
+    glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
@@ -53,15 +50,12 @@ Object::Object(const char *model, const char *tex)
 {
     m = LoadModelPlus((char*)model); 
 
-    texture = SOIL_load_OGL_texture(
-            tex,
-            SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_INVERT_Y
-            );
+    surface = IMG_Load(tex);
 
     // Typical Texture Generation Using Data From The Bitmap
+    glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 

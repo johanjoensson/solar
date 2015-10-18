@@ -20,14 +20,12 @@ CXXFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c++0
 CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c99
 
 # De ytterligagre bibliotek vi behöver
-# GL är OpnGL och m är matematik
-LIB = GL
+# GL är OpenGL och m är matematik
+LIB = GL SDL2_image
 
 # Länka de bibliotek vi behöver
 # sdl-config för att enkelt länka rätt bibliotek
 LDXFLAGS = $(addprefix -L,$(NORA)) $(addprefix -l,$(LIB)) `sdl2-config --libs`
-LIBSOIL = libSOIL.a
-SOILDIR = src/soil/lib
 
 # Alla .cpp-filer skall kompileras!
 # Filer som inte skall kompileras får inte ha filändelsen .cpp!
@@ -57,7 +55,7 @@ $(BIN)/%.o: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $? -o $@
 
 # Kompilera vår exekverbara fil med lämpliga flaggor samt bibliotek
-solar: $(OBJ) $(SOILDIR)/$(LIBSOIL)
+solar: $(OBJ)
 
 	$(CXX) $^ -o $@ $(LDXFLAGS)
 
@@ -65,7 +63,7 @@ src :
 	mkdir -p src
 
 bin :
-	mkdir -p bin
+	mkdir -p bin/helper
 
 # Rensa bort alla temporära filer som skapats
 clean:

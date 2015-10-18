@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/gl.h>
+#include <SDL2/SDL.h>
 #include "loadobj.h"
 
 #include <glm/vec3.hpp>
@@ -14,6 +15,8 @@ class Object {
 
         // För att skala objekt
         float scale;
+
+        SDL_Surface* surface;
     public:
         Model *m;
 

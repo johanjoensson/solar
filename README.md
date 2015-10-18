@@ -24,4 +24,5 @@ Features
 Requirements
 ------------
   * SDL2
+  * SDL2\_image
   * glm

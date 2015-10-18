@@ -9,7 +9,6 @@
 #include "spacebox.h"
 #include "cel_bodies.h"
 #include "planetoids.h"
-#include "soil/src/SOIL.h"
 
 #include "helper/SDL_util.hpp"
 #include "helper/Window.hpp"

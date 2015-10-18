@@ -1,9 +1,9 @@
 #include "planetoids.h"
 #include "loadobj.h"
-#include "soil/src/SOIL.h"
 #include <time.h>
 #include <cstdlib>
 #include <iostream>
+#include <SDL2/SDL_image.h>
 
 #include "helper/GLShader.hpp"
 
@@ -38,15 +38,11 @@ Planetoids::Planetoids(int num, const char *model, const char *tex) : Body()
 {
     m = LoadModelPlus((char*)model);
 
-    texture = SOIL_load_OGL_texture(
-            tex,
-            SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_INVERT_Y
-            );
+    surface = IMG_Load(tex);
 
     // Typical Texture Generation Using Data From The Bitmap
     glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
@@ -86,15 +82,11 @@ Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, 
     m = LoadModelPlus((char*)model);
 	program = LoadShader(vertex_shader, fragment_shader);
 
-    texture = SOIL_load_OGL_texture(
-            tex,
-            SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_INVERT_Y
-            );
+    surface = IMG_Load(tex);
 
     // Typical Texture Generation Using Data From The Bitmap
     glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
