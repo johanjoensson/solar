@@ -19,3 +19,12 @@
 
 # Compiled object files, must be recompiled for different architectures anyway
 *.o
+
+# vim files, such as sessions etc.
+*.vim
+
+# The solar binary
+solar
+
+# Tag file
+tags
