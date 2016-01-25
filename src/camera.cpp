@@ -9,14 +9,14 @@
 
 using namespace std;
 
-Camera::Camera(int program)
+Camera::Camera(int program) : 
+    program(program),
+    x(0),
+    position(glm::vec3(0,0,-10)),
+    look_at_pos(glm::vec3(0,0,-1)),
+    up(glm::vec3(0,1,0))
 {
-    matrix = glm::mat4();
-    this->program = program;
-    up = glm::vec3(0,1,0);
-    position = glm::vec3(0,0,-10);
-    look_at_pos = glm::vec3(0,0,-1);
-    x = 0;
+    matrix = glm::lookAt(position, look_at_pos, up);
     upload();
 }
 
@@ -92,6 +92,8 @@ void Camera::strafe(float d)
 
 void Camera::change_look_at_pos(int xrel, int y, int width, int height)
 {
+    y = y + height / 2;
+
     // FIXME ful lösning är detta
     if(y==0){
         y = 1;
