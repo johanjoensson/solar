@@ -10,6 +10,7 @@ class Camera {
         // x används för att musen inte ska fastna i kanterna på 
         // fönstret
         int x;
+        int y;
     public:
         glm::vec3 position;
         glm::vec3 look_at_pos;

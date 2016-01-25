@@ -31,6 +31,9 @@
 #define MAX_SIMULATION_SPEED 15
 #define MAX_DISTANCE 400
 
+#define HEIGHT 768
+#define WIDTH 1024
+
 
 // Reference to shader program
 GLuint program;
@@ -257,7 +260,7 @@ void handle_mouse(SDL_Event event, Window &window)
     int width = window.getWidth();
     int height = window.getHeight();
 
-    sys.c.change_look_at_pos(event.motion.xrel,event.motion.y,width,height);
+    sys.c.change_look_at_pos(event.motion.xrel,event.motion.yrel,width,height);
     sys.ship.handle_movement(event.motion.xrel,event.motion.yrel,width,height);
 }
 
@@ -297,9 +300,12 @@ int main(int argc, char** argv)
 {
     // Ta bort Haptic support, som verkar saknas på gentoo
     SDL sdl(SDL_INIT_EVERYTHING ^ SDL_INIT_HAPTIC);
-    Window window("Solar", 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    Window window("Solar", WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     GL_context glContext(window);
     init(argc, argv);
+
+    // ugly hack to center mouse
+    sys.c.change_look_at_pos(0, HEIGHT/2, WIDTH, HEIGHT);
 
     Timer disp_timer(30, display_timer, &window);
     Timer upd_timer(5, update_timer, NULL);

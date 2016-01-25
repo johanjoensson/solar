@@ -11,10 +11,11 @@ using namespace std;
 
 Camera::Camera(int program)
 {
-    x = (0);
-    position = (glm::vec3(0,0,-10));
-    look_at_pos = (glm::vec3(0,0,-1));
-    up = (glm::vec3(0,1,0));
+    x = 0;
+    y = 0;
+    position = glm::vec3(0,0,-10);
+    look_at_pos = glm::vec3(0,0,-1);
+    up = glm::vec3(0,1,0);
     this->program = program;
     matrix = glm::lookAt(position, look_at_pos, up);
     upload();
@@ -90,13 +91,14 @@ void Camera::strafe(float d)
     translate(strafe_vec);
 }
 
-void Camera::change_look_at_pos(int xrel, int y, int width, int height)
+void Camera::change_look_at_pos(int xrel, int yrel, int width, int height)
 {
-    y = y + height / 2;
-
     // FIXME ful lösning är detta
-    if(y==0){
+    y += yrel;
+    if(y <= 0){
         y = 1;
+    } else if (y >= height) {
+        y = height - 1;
     }
     x += xrel;
     float fi = ((float)x)/width*2*M_PI;
