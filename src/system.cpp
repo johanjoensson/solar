@@ -95,13 +95,16 @@ void System::update_collisions()
     }
 }
 
-System::System(int program)
-{
+System::System(){
     s = Spacebox("res/spacedome.obj", "res/spacedome.png");
     ship = Ship("res/cat.obj", "res/cat_diff.tga");
-    //ship = Ship("res/spaceship.obj", "res/spaceship.png");
-    c = Camera(program);
+    f = Frustum(1, 300, 1, -1, -1, 1);
     bodies = Cel_bodies();
+}
+
+System::System(int program) : System()
+{
+    c = Camera(program);
     Model *model = LoadModelPlus((char*)"res/planet.obj");
 
     Body *a = new Body(model, "res/mercurymap.png");
@@ -179,7 +182,8 @@ System::System(int program)
     bodies.add_planet(a);
 }
 
-System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in)
+System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in) :
+    System()
 {
     // Sätt fröet för slumpade värden
     srand(time(NULL));
@@ -197,11 +201,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 
     float rand_value;
 
-    s = Spacebox("res/spacedome.obj", "res/spacedome.png");
-    ship = Ship("res/cat.obj", "res/cat_diff.tga");
-    //ship = Ship("res/spaceship.obj", "res/spaceship.png");
     c = Camera(program);
-    bodies = Cel_bodies();
     Body *p;
     Model *model = LoadModelPlus((char*)"res/planet.obj");
     for(int i=0; i<n_planets; i++){

@@ -64,16 +64,16 @@ void display_help()
 
 void init(int argc, char** argv)
 {
-	dumpInfo();
+    dumpInfo();
     // GL inits
-	glClearColor(0.5,0.2,0.2,1.0);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+    glClearColor(0.5,0.2,0.2,1.0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
-	// Load and compile shader
-	program = LoadShader("src/solar.vert", "src/solar.frag");
-	printError("error loading shaders");
+    // Load and compile shader
+    program = LoadShader("src/solar.vert", "src/solar.frag");
+    printError("error loading shaders");
 
     int nsun = 0;
     int nplanet = 0;
@@ -119,8 +119,6 @@ void init(int argc, char** argv)
         sys = System(program, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
 
-    sys.f = Frustum(near, far, bottom, top, left, right);
-
     // Set Texture units
     glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
 
@@ -142,10 +140,10 @@ void update(int interval)
 void display(void *window_void_ptr)
 {
     Window *window = static_cast<Window *>(window_void_ptr);
-	printError("pre display");
+    printError("pre display");
     sys.draw(program);
-	// clear the screen
-	printError("draw error");
+    // clear the screen
+    printError("draw error");
 
     window->Swap();
 }
@@ -301,7 +299,7 @@ int main(int argc, char** argv)
     SDL sdl(SDL_INIT_EVERYTHING ^ SDL_INIT_HAPTIC);
     Window window("Solar", 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     GL_context glContext(window);
-	init(argc, argv);
+    init(argc, argv);
 
     Timer disp_timer(30, display_timer, &window);
     Timer upd_timer(5, update_timer, NULL);
