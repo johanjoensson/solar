@@ -95,12 +95,11 @@ void System::update_collisions()
     }
 }
 
-System::System(){
-    s = Spacebox("res/spacedome.obj", "res/spacedome.png");
-    ship = Ship("res/cat.obj", "res/cat_diff.tga");
-    f = Frustum(1, 300, 1, -1, -1, 1);
-    bodies = Cel_bodies();
-}
+System::System() :
+    ship(Ship("res/cat.obj", "res/cat_diff.tga")),
+    s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
+    f(Frustum(1, 300, 1, -1, -1, 1)),
+    bodies(Cel_bodies()) {}
 
 System::System(int program) : System()
 {
