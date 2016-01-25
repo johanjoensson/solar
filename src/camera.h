@@ -14,7 +14,7 @@ class Camera {
         glm::vec3 position;
         glm::vec3 look_at_pos;
 
-        const glm::vec3 up;
+        glm::vec3 up;
         glm::mat4 matrix;
 
         void rotate(char direction, float angle);

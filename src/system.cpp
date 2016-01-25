@@ -185,6 +185,8 @@ System::System(int program) : System()
 System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in) :
     System()
 {
+    c = Camera(program);
+
     // Sätt fröet för slumpade värden
     srand(time(NULL));
     int p_pos_range = 4*sqrt(n_planets*(n_suns + 1));
@@ -201,7 +203,6 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 
     float rand_value;
 
-    c = Camera(program);
     Body *p;
     Model *model = LoadModelPlus((char*)"res/planet.obj");
     for(int i=0; i<n_planets; i++){

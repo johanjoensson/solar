@@ -9,13 +9,13 @@
 
 using namespace std;
 
-Camera::Camera(int program) : 
-    program(program),
-    x(0),
-    position(glm::vec3(0,0,-10)),
-    look_at_pos(glm::vec3(0,0,-1)),
-    up(glm::vec3(0,1,0))
+Camera::Camera(int program)
 {
+    x = (0);
+    position = (glm::vec3(0,0,-10));
+    look_at_pos = (glm::vec3(0,0,-1));
+    up = (glm::vec3(0,1,0));
+    this->program = program;
     matrix = glm::lookAt(position, look_at_pos, up);
     upload();
 }
