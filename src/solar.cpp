@@ -128,7 +128,7 @@ void init(int argc, char** argv)
     // Create and upload projection matrix
     projection_matrix = glm::frustum(left, right, bottom, top, near, far);
     glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_FALSE, glm::value_ptr(projection_matrix));
-	printError("error loading projection");
+    printError("error loading projection");
 }
 
 void update(int interval)
@@ -156,15 +156,15 @@ void display(void *window_void_ptr)
  *****************************************************************************/
 Uint32 display_timer(Uint32 interval, void* param)
 {
-	SDL_Event event;
+    SDL_Event event;
 
-	event.type = SDL_USEREVENT;
-	event.user.code = (int)System::DISPLAY_TIMER;
-	event.user.data1 = param;
-	event.user.data2 = 0;
+    event.type = SDL_USEREVENT;
+    event.user.code = (int)System::DISPLAY_TIMER;
+    event.user.data1 = param;
+    event.user.data2 = 0;
 
-	SDL_PushEvent(&event);
-	return interval;
+    SDL_PushEvent(&event);
+    return interval;
 }
 
 Uint32 update_timer(Uint32 interval, void* param)
@@ -173,15 +173,15 @@ Uint32 update_timer(Uint32 interval, void* param)
     param = NULL;
     param = param;
 
-	SDL_Event event;
+    SDL_Event event;
 
-	event.type = SDL_USEREVENT;
-	event.user.code = (int)System::UPDATE_TIMER;
-	event.user.data1 = (void*) (intptr_t) interval;
-	event.user.data2 = 0;
+    event.type = SDL_USEREVENT;
+    event.user.code = (int)System::UPDATE_TIMER;
+    event.user.data1 = (void*) (intptr_t) interval;
+    event.user.data2 = 0;
 
-	SDL_PushEvent(&event);
-	return interval;
+    SDL_PushEvent(&event);
+    return interval;
 }
 
 Uint32 clean_timer(Uint32 interval, void* param)
@@ -190,24 +190,24 @@ Uint32 clean_timer(Uint32 interval, void* param)
     param = NULL;
     param = param;
 
-	SDL_Event event;
+    SDL_Event event;
 
-	event.type = SDL_USEREVENT;
-	event.user.code = (int)System::CLEAN_TIMER;
-	event.user.data1 = 0;
-	event.user.data2 = 0;
+    event.type = SDL_USEREVENT;
+    event.user.code = (int)System::CLEAN_TIMER;
+    event.user.data1 = 0;
+    event.user.data2 = 0;
 
-	SDL_PushEvent(&event);
-	return interval;
+    SDL_PushEvent(&event);
+    return interval;
 }
 
 void handle_keypress(SDL_Event event, Window& window)
 {
-	switch(event.key.keysym.sym){
-		case SDLK_ESCAPE:
-		case SDLK_q:
-			exit(0);
-			break;
+    switch(event.key.keysym.sym){
+        case SDLK_ESCAPE:
+        case SDLK_q:
+            exit(0);
+            break;
         case SDLK_UP:
             speed++;
             if(speed > MAX_SPEED){
@@ -223,13 +223,13 @@ void handle_keypress(SDL_Event event, Window& window)
         case SDLK_LEFT:
             simulation_speed--;
             if(simulation_speed < 1){
-                 simulation_speed = 1;
+                simulation_speed = 1;
             }
             break;
         case SDLK_RIGHT:
             simulation_speed++;
             if(simulation_speed > MAX_SIMULATION_SPEED){
-                 simulation_speed = MAX_SIMULATION_SPEED;
+                simulation_speed = MAX_SIMULATION_SPEED;
             }
             break;
         case SDLK_g:
@@ -247,9 +247,9 @@ void handle_keypress(SDL_Event event, Window& window)
                 window.toggleFullscreen();
             }
             break;
-		default:
-			break;
-	}
+        default:
+            break;
+    }
 }
 
 void handle_mouse(SDL_Event event, Window &window)
