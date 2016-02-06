@@ -16,7 +16,7 @@ WARNINGS = -Wall -Wextra -W -pedantic
 # Kompilera med lite olika flaggor, utöver varningarna.
 # -g för debugmode, bör tas bort inför slutreleasen (inget måste dock).
 # sdl-config för att sätta flaggor för SDL korrekt.
-CXXFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c++0x
+CXXFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c++11
 CFLAGS = -g -DGL_GLEXT_PROTOTYPES $(WARNINGS) `sdl2-config --cflags` -std=c99
 
 # De ytterligagre bibliotek vi behöver
