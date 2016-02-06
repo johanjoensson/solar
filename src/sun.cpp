@@ -12,19 +12,8 @@ Sun::Sun(Model* model, const char* texture) : Body(model, texture)
     spin_z = 0;
     set_radius(1);
     velocity = vec3(0.0, 0.0, 0.0);
-    vec3 zero = vec3(0.0, 0.0, 0.0);
-#ifdef GRAV_OPT
-    kv1 = zero;
-    kv2 = zero;
-    kv3 = zero;
-    kv4 = zero;
-    
-    kr1 = zero;
-    kr2 = zero;
-    kr3 = zero;
-    kr4 = zero;
+
     specularExponent = 2;
-#endif //GRAV_OPT
 }
 
 void Sun::draw(int program)

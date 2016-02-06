@@ -69,108 +69,6 @@ void Cel_bodies::clear_list()
  * Att sätta sig in i koden kan ge huvudvärk och akuta magsmärtor.
  * Du har blivit varnad, forsätt på egen risk.
  *****************************************************************************/
-#ifndef GRAV_OPT
-/******************************************************************************
- * 2 olika implementationer av integratorn finns, den första är inte särskilt
- * optimerad, men ganska rättfram och begriplig. Gör n^2-n beräkningar för att
- * räkna ut ny position och hastighet på n objekt.
- *****************************************************************************/
-
-/******************************************************************************
- * Räkna ut ett objekts acceleration utifrån gravitationskrafterna som verkar
- * på objektet. f(tn, yn) i rk4.
- *****************************************************************************/
-glm::vec3 Cel_bodies::rk4_accel(float h, glm::vec3 k, Cel_bodies *universe)
-{
-    // No gravity in empty space
-    // We ignore Casimir forces etc.
-    if(universe->next == NULL){
-        return glm::vec3(0.0f, 0.0f, 0.0f);
-    }
-    Cel_bodies *tmp = this;
-    glm::vec3 rn = this->planet->position;
-    glm::vec3 rp_i, a;
-    float rp_icu;
-    a = glm::vec3(0.0, 0.0, 0.0);
-    float Mi;
-
-    double G = 6.6738480E-7 ;//E-11f;
-
-    while(tmp != NULL){
-        if(tmp->planet != this->planet){
-            rp_i = tmp->planet->position - (rn + h*k);
-            Mi = tmp->planet->mass;
-            rp_icu = Norm(rp_i)*Norm(rp_i)*Norm(rp_i);
-            a = a + G*Mi*rp_i/rp_icu;
-        }
-        tmp = tmp->next;
-    }
-
-
-    return a;
-}
-
-
-/******************************************************************************
- * Räkna ut hastigheten på ett objekt utifrån dess acceleration.
- * f(tn, yn) i rk4 (vi gör 2 separata rk4-integrationer)
- *****************************************************************************/
-glm::vec3 Cel_bodies::rk4_velocity(float h, glm::vec3 acc)
-{
-    glm::vec3 v0 = this->planet->velocity;
-    return v0 + acc*h;
-;
-}
-
-/******************************************************************************
- * Genomför 2 separata rk4-integrationer.
- * Den första ger hastigheten utifrån accelerationen.
- * Den andra ger positionen utifrån hastigheten.
- *****************************************************************************/
-void Cel_bodies::rk4_gravity(float dt, Cel_bodies *universe)
-{
-    glm::vec3 res_r, res_v;
-    glm::vec3 rn = this->planet->position;
-    glm::vec3 vn = this->planet->velocity;
-    // Intermediary slopes for position
-    glm::vec3 kr1, kr2, kr3, kr4;
-    // Intermediary slopes for velocity
-    glm::vec3 kv1, kv2, kv3, kv4;
-
-    /**************************************************************************
-     * Hjälptlutningarna för hastighetsberäkningen
-     *************************************************************************/
-    kv1 = rk4_accel(0.0f, glm::vec3(), universe);
-    kv2 = rk4_accel(dt/2.0f, kv1, universe);
-    kv3 = rk4_accel(dt/2.0f, kv2, universe);
-    kv4 = rk4_accel(dt, kv3, universe);
-
-    /**************************************************************************
-     * Hjälptlutningarna för positionsberäkningen.
-     * Beror på accelerationsuppskattningarna ovan.
-     *************************************************************************/
-    kr1 = rk4_velocity(0.0f, glm::vec3(0.0, 0.0, 0.0));
-    kr2 = rk4_velocity(dt/2.0f, kv1);
-    kr3 = rk4_velocity(dt/2.0f, kv2);
-    kr4 = rk4_velocity(dt/2.0f, kv3);
-
-    /**************************************************************************
-     * Beräkna resultaten som viktade medelvärden.
-     *************************************************************************/
-    res_r = rn + dt/6.0f*(kr1+2*kr2+2*kr3 + kr4);
-    res_v = vn + dt/6.0f*(kv1 + 2*kv2 + 2*kv3 + kv4);
-
-    /**************************************************************************
-     * Uppdatera planetens hastighets- och positions-fält
-     *************************************************************************/
-    this->planet->position = res_r;
-    this->planet->velocity = res_v;
-}
-#else //GRAV_OPT
-/******************************************************************************
- * Den andra rk4-integratorn börjar här. Den här är en hel del grötigare.
- * Gör (n(n-3) + 2)/2 beräkningar för n objekt.
- *****************************************************************************/
 
 /******************************************************************************
  * Beräkna kraften på objekt first från objekt second
@@ -346,7 +244,6 @@ void Cel_bodies::calculate_slopes(float dt)
         current = current->next;
     }
 }
-#endif //GRAV_OPT
 
 /******************************************************************************
  * Uppdatera samtliga objekt i världen med nya hastigheter och positioner.
@@ -357,16 +254,8 @@ void Cel_bodies::update(float dt)
         return;
     }
     Cel_bodies *current = this->next;
-#ifdef GRAV_OPT 
     current->calculate_slopes(dt);
     current->update_gravity(dt);
-#else // ! GRAV_OPT
-    while(current != NULL){
-        current->rk4_gravity(dt, this);
-        current->planet->place(current->planet->position);
-        current = current->next;
-    }
-#endif
 
     current = this->next;
     while(current != NULL){
@@ -374,5 +263,4 @@ void Cel_bodies::update(float dt)
 
         current = current->next;
     }
-
 }

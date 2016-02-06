@@ -12,21 +12,6 @@
 
 struct Cel_bodies{
     private:
-#ifndef GRAV_OPT 
-        /* GRAV_OPT sätts i body.h och styr vilken form av rk4-integrator vi kompilerar
-         * och kör */
-        /******************************************************************************
-         * Dessa funktioner används för den enklare, men något långsammare
-         * implementationen av rk4-integratorn
-         *****************************************************************************/
-        glm::vec3 rk4_accel(float h, glm::vec3 k, Cel_bodies *universe);
-        glm::vec3 rk4_velocity(float h, glm::vec3 acc);
-        void rk4_gravity(float dt, Cel_bodies *universe);
-#else // GRAV_OPT
-        /******************************************************************************
-         * Dessa funktioner används för den mer komplicerade, men något snabbare
-         * implementationen av rk4-integratorn.
-         *****************************************************************************/
         glm::vec3 force(Cel_bodies *second, float h, glm::vec3 first_k, glm::vec3 second_k);
         void calculate_k1();
         void calculate_k2(float h);
@@ -36,8 +21,6 @@ struct Cel_bodies{
         void reset_k();
         void calculate_slopes(float dt);
 
-
-#endif // GRAV_OPT
     public:
         Body *planet;
         Cel_bodies *next;

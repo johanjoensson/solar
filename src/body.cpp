@@ -11,19 +11,6 @@ Body::Body(Model* model, const char *texture) : Object(model, texture)
     set_radius(1);
     position = glm::vec3(0.0, 0.0, 0.0);
     velocity = glm::vec3(0.0, 0.0, 0.0);
-
-    glm::vec3 zero = glm::vec3(0.0, 0.0, 0.0);
-#ifdef GRAV_OPT
-    kv1 = zero;
-    kv2 = zero;
-    kv3 = zero;
-    kv4 = zero;
-    
-    kr1 = zero;
-    kr2 = zero;
-    kr3 = zero;
-    kr4 = zero;
-#endif //GRAV_OPT
 }
 
 Body::Body(const char* model) : Object(model)

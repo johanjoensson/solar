@@ -3,12 +3,6 @@
 #include "object.h"
 #include <glm/vec3.hpp>
 
-/******************************************************************************
- * Styr vilken implementation av rk4-integration vi kör.
- *****************************************************************************/
-#define GRAV_OPT
-//#undef GRAV_OPT
-
 class Body: public Object {
     private:
     public:
@@ -26,18 +20,16 @@ class Body: public Object {
         Body(Model*, const char*);
         Body();
 
-#ifdef GRAV_OPT
 /******************************************************************************
  * Hjälplutningar till den "optimerade" implementationen av rk4-integration
  *****************************************************************************/
-        glm::vec3 kv1;
-        glm::vec3 kv2;
-        glm::vec3 kv3;
-        glm::vec3 kv4;
+        glm::vec3 kv1 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 kv2 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 kv3 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 kv4 = glm::vec3(0.0, 0.0, 0.0);
 
-        glm::vec3 kr1;
-        glm::vec3 kr2;
-        glm::vec3 kr3;
-        glm::vec3 kr4;
-#endif //GRAV_OPT
+        glm::vec3 kr1 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 kr2 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 kr3 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 kr4 = glm::vec3(0.0, 0.0, 0.0);
 };
