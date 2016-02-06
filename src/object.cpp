@@ -4,74 +4,25 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-Object::Object(){
-    reflectivity = 1;
-    scale = 1;
-    matrix = glm::mat4();
-    scale_mat = glm::mat4(scale);
-    rot_mat = glm::mat4();
-    trans_mat = glm::mat4();
-}
+Object::Object(const char *model) : m(LoadModelPlus((char*)model)) {}
 
-Object::Object(const char *model)
+Object::Object(Model *model, const char *tex) : surface(IMG_Load(tex)), m(model)
 {
-    m = LoadModelPlus((char*)model);
-    reflectivity = 1;
-    scale = 1;
-    matrix = glm::mat4();
-    scale_mat = glm::mat4(scale);
-    rot_mat = glm::mat4();
-    trans_mat = glm::mat4();
-}
-
-Object::Object(Model *model, const char *tex)
-{
-    m = model; 
-
-    surface = IMG_Load(tex);
-
     // Typical Texture Generation Using Data From The Bitmap
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-
-    //LoadTGATextureSimple(tex, &texture);
-    reflectivity = 1;
-    scale = 1;
-    matrix = glm::mat4();
-    scale_mat = glm::mat4(scale);
-    rot_mat = glm::mat4();
-    trans_mat = glm::mat4();
 }
 
-Object::Object(const char *model, const char *tex)
-{
-    m = LoadModelPlus((char*)model); 
-
-    surface = IMG_Load(tex);
-
-    // Typical Texture Generation Using Data From The Bitmap
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-
-    //LoadTGATextureSimple(tex, &texture);
-    reflectivity = 1;
-    scale = 1;
-    matrix = glm::mat4();
-    scale_mat = glm::mat4(scale);
-    rot_mat = glm::mat4();
-    trans_mat = glm::mat4();
-}
+Object::Object(const char *model, const char *tex) : Object(LoadModelPlus((char*)model), tex) {}
 
 void Object::set_scale(float s)
 {
     scale = s;
     scale_mat = glm::mat4(scale);
+    update();
 }
 
 float Object::get_scale()
