@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 Object::Object(const char *model) : m(LoadModelPlus((char*)model)) {}
 
@@ -21,7 +22,7 @@ Object::Object(const char *model, const char *tex) : Object(LoadModelPlus((char*
 void Object::set_scale(float s)
 {
     scale = s;
-    scale_mat = glm::mat4(scale);
+    scale_mat = glm::scale(glm::mat4(), glm::vec3(scale, scale, scale));
     update();
 }
 

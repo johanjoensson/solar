@@ -188,7 +188,8 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 
     // Sätt fröet för slumpade värden
     srand(time(NULL));
-    int p_pos_range = 4*sqrt(n_planets*(n_suns + 1));
+
+    int p_pos_range = 20*sqrt(n_planets*(n_suns + 1));
     if(p_pos_range_in) {
         p_pos_range = p_pos_range_in;
     } 
