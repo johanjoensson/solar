@@ -1,18 +1,10 @@
 #include "sun.h"
 #include <iostream>
-using namespace std;
 
 #include <glm/gtc/type_ptr.hpp>
 
 Sun::Sun(Model* model, const char* texture) : Body(model, texture)
 {
-    mass = 1;
-    spin_x = 0;
-    spin_y = 0;
-    spin_z = 0;
-    set_radius(1);
-    velocity = vec3(0.0, 0.0, 0.0);
-
     specularExponent = 2;
 }
 

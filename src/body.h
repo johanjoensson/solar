@@ -6,10 +6,10 @@
 class Body: public Object {
     private:
     public:
-        float spin_x;
-        float spin_y;
-        float spin_z;
-        float mass;
+        float spin_x = 0;
+        float spin_y = 0;
+        float spin_z = 0;
+        float mass = 1;
         void set_radius(float);
         float get_radius();
         glm::vec3 velocity;

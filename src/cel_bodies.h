@@ -1,5 +1,4 @@
-#ifndef CEL_BODIES_H
-#define CEL_BODIES_H
+#pragma once
 
 #include "body.h"
 #include <glm/glm.hpp>
@@ -32,5 +31,3 @@ struct Cel_bodies{
 
         Cel_bodies();
 };
-
-#endif // CEL_BODIES_H

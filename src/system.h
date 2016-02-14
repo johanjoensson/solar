@@ -50,7 +50,6 @@ class System {
          **************************************************************/
         int check_distance(Body* b, int max_distance);
 
-        Body b;
         Ship ship;
         Spacebox s;
         Camera c;

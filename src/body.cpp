@@ -4,22 +4,12 @@
 
 Body::Body(Model* model, const char *texture) : Object(model, texture)
 {
-    mass = 1;
-    spin_x = 0;
-    spin_y = 0;
-    spin_z = 0;
-    set_radius(1);
     position = glm::vec3(0.0, 0.0, 0.0);
     velocity = glm::vec3(0.0, 0.0, 0.0);
 }
 
 Body::Body(const char* model) : Object(model)
 {
-    mass = 1;
-    spin_x = 0;
-    spin_y = 0;
-    spin_z = 0;
-    set_radius(1);
     position = glm::vec3(0.0, 0.0, 0.0);
     velocity = glm::vec3(0.0, 0.0, 0.0);
 
@@ -27,11 +17,6 @@ Body::Body(const char* model) : Object(model)
 
 Body::Body()
 {
-    mass = 1;
-    spin_x = 0;
-    spin_y = 0;
-    spin_z= 0;
-    set_radius(1);
     position = glm::vec3(0.0, 0.0, 0.0);
     velocity = glm::vec3(0.0, 0.0, 0.0);
 }

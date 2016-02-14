@@ -33,8 +33,8 @@ void Camera::upload()
     cam_position[2] = position.z;
         
     glUniform3fv(glGetUniformLocation(program, "camera_pos"), 1, (const GLfloat*) (cam_position));
-    
 }
+
 void Camera::update()
 {
     matrix = glm::lookAt(position, look_at_pos, up);
@@ -65,15 +65,6 @@ void Camera::translate(glm::vec3 d_pos)
     matrix = glm::lookAt(position, look_at_pos, up);
     upload();
 }
-
-/* void Camera::print_matrix() */
-/* { */
-/*     cout << matrix.m[0] << " " << matrix.m[1] << " " << matrix.m[2] << " " << matrix.m[3] << endl; */
-/*     cout << matrix.m[4] << " " << matrix.m[5] << " " << matrix.m[6] << " " << matrix.m[7] << endl; */
-/*     cout << matrix.m[8] << " " << matrix.m[9] << " " << matrix.m[10] << " " << matrix.m[11] << endl; */
-/*     cout << matrix.m[12] << " " << matrix.m[13] << " " << matrix.m[14] << " " << matrix.m[15] << endl; */
-/*     cout << endl; */
-/* } */
 
 void Camera::forward(float d)
 {

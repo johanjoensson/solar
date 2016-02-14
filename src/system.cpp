@@ -192,10 +192,9 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
     if(p_pos_range_in) {
         p_pos_range = p_pos_range_in;
     } 
-    //int p_vel_range = 2;
+
     float p_spin_range = 0.1;
 
-    //int s_pos_range = 25*sqrt(n_suns);
     float s_vel_range = 0.1;
     long int s_mass_min = 1E10;
     int s_spin_range = 1;
@@ -279,8 +278,8 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 
 void System::draw(int program)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     s.draw(program);
-    /* ship.draw(program); */
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
    
