@@ -30,7 +30,7 @@ class System {
         Camera cam;
         
         void update(float);
-        void draw(int);
+        void draw();
         
         //Kollar om två kroppar kolliderar
         int check_collision(Body*, Body*); 
@@ -70,4 +70,15 @@ class System {
         // Konstruktor för slumpat starttillstånd
         System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
 
+    private:
+        GLuint shader;
+
+        void init();
+
+        float near = 1;
+        float far = 300;
+        float right = 1;
+        float left = -1;
+        float bottom = -1;
+        float top = 1;
 };

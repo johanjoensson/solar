@@ -12,8 +12,11 @@
 #include <time.h>
 #include "cel_bodies.h"
 #include "loadobj.h"
+#include "helper/GLShader.hpp"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
 using namespace glm;
@@ -96,14 +99,26 @@ void System::update_collisions()
 }
 
 System::System() :
-    ship(Ship("res/cat.obj", "res/cat_diff.tga")),
+    //ship(Ship("res/cat.obj", "res/cat_diff.tga")),
     s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
     f(Frustum(1, 300, 1, -1, -1, 1)),
     bodies(Cel_bodies()) {}
 
+void System::init()
+{
+    shader = LoadShader("src/solar.vert", "src/solar.frag");
+    printError("error loading shaders");
+    // Set Texture units
+    glUniform1i(glGetUniformLocation(shader, "texUnit"), 0); // Texture unit 0
+    glUniformMatrix4fv(glGetUniformLocation(shader, "proj_matrix"),
+            1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
+    printError("error loading projection");
+}
+
 System::System(int program) : System()
 {
-    c = Camera(program);
+    init();
+    c = Camera(shader);
     Model *model = LoadModelPlus((char*)"res/planet.obj");
 
     Body *a = new Body(model, "res/mercurymap.png");
@@ -184,7 +199,8 @@ System::System(int program) : System()
 System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in) :
     System()
 {
-    c = Camera(program);
+    init();
+    c = Camera(shader);
 
     // Sätt fröet för slumpade värden
     srand(time(NULL));
@@ -274,19 +290,19 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 
         bodies.add_planet(s);
     }
-    asteroids = Planetoids(n_asteroids, 90, "res/asteroid.obj", "res/asteroid.tga", "src/solar.vert", "src/solar.frag");
+    //asteroids = Planetoids(n_asteroids, 90, "res/asteroid.obj", "res/asteroid.tga", "src/solar.vert", "src/solar.frag");
 }
 
-void System::draw(int program)
+void System::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    s.draw(program);
+    s.draw(shader);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
    
     while(current != NULL){
         next = current->next;
-        current->planet->draw(program);
+        current->planet->draw(shader);
         this->visible.remove_planet(current->planet);
 
         current = next;

@@ -80,7 +80,7 @@ Planetoids::Planetoids(int num, float dist, const char *model, const char *tex, 
     srand(time(NULL));
 
     m = LoadModelPlus((char*)model);
-	program = LoadShader(vertex_shader, fragment_shader);
+    program = LoadShader(vertex_shader, fragment_shader);
 
     surface = IMG_Load(tex);
 

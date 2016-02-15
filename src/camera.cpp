@@ -13,7 +13,7 @@ Camera::Camera(int program)
 {
     x = 0;
     y = 0;
-    position = glm::vec3(0,0,-10);
+    position = glm::vec3(0,0,-50);
     look_at_pos = glm::vec3(0,0,-1);
     up = glm::vec3(0,1,0);
     this->program = program;

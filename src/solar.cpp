@@ -6,7 +6,6 @@
 #include "loadobj.h"
 #include "camera.h"
 #include "system.h"
-#include "spacebox.h"
 #include "cel_bodies.h"
 #include "planetoids.h"
 
@@ -20,12 +19,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#define near 1
-#define far 300
-#define right 1
-#define left -1
-#define bottom -1
-#define top 1
 
 #define MAX_SPEED 20
 #define MAX_SIMULATION_SPEED 15
@@ -35,8 +28,6 @@
 #define WIDTH 1024
 
 
-// Reference to shader program
-GLuint program;
 System sys;
 int speed = 2;
 int simulation_speed = 1;
@@ -75,7 +66,6 @@ void init(int argc, char** argv)
     glEnable(GL_LIGHT0);
 
     // Load and compile shader
-    program = LoadShader("src/solar.vert", "src/solar.frag");
     printError("error loading shaders");
 
     int nsun = 0;
@@ -117,21 +107,13 @@ void init(int argc, char** argv)
     }
 
     if (nsun == 0 && nplanet == 0) {
-        sys = System(program);
+        sys = System(0);
     } else {
-        sys = System(program, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
+        sys = System(0, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
-
-    // Set Texture units
-    glUniform1i(glGetUniformLocation(program, "texUnit"), 0); // Texture unit 0
 
     // Lock cursor to this program
     SDL_SetRelativeMouseMode(SDL_TRUE);
-
-    // Create and upload projection matrix
-    projection_matrix = glm::frustum(left, right, bottom, top, near, far);
-    glUniformMatrix4fv(glGetUniformLocation(program, "proj_matrix"), 1, GL_FALSE, glm::value_ptr(projection_matrix));
-    printError("error loading projection");
 }
 
 void update(int interval)
@@ -144,7 +126,7 @@ void display(void *window_void_ptr)
 {
     Window *window = static_cast<Window *>(window_void_ptr);
     printError("pre display");
-    sys.draw(program);
+    sys.draw();
     // clear the screen
     printError("draw error");
 
