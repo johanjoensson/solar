@@ -5,7 +5,8 @@
 
 class Camera {
     private:
-        int program;
+        int shader;
+        int spacebox_shader;
 
         // x används för att musen inte ska fastna i kanterna på 
         // fönstret
@@ -35,7 +36,7 @@ class Camera {
          * **********************************************************/
         void change_look_at_pos(int xrel, int y, int width, int height);
         void upload();
-        Camera(int program);
+        Camera(int shader, int spacebox_shader);
         Camera();
         void print_matrix();
 };

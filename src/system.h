@@ -12,7 +12,6 @@
 #include "spacebox.h"
 #include "cel_bodies.h"
 #include "planetoids.h"
-#include "ship.h"
 
 
 /******************************************************************************
@@ -50,7 +49,6 @@ class System {
          **************************************************************/
         int check_distance(Body* b, int max_distance);
 
-        Ship ship;
         Spacebox s;
         Camera c;
         Frustum f;
@@ -72,6 +70,7 @@ class System {
 
     private:
         GLuint shader;
+        GLuint spacebox_shader; 
 
         void init();
 

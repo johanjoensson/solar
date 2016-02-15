@@ -9,14 +9,15 @@
 
 using namespace std;
 
-Camera::Camera(int program)
+Camera::Camera(int shader, int spacebox_shader)
 {
     x = 0;
     y = 0;
     position = glm::vec3(0,0,-50);
     look_at_pos = glm::vec3(0,0,-1);
     up = glm::vec3(0,1,0);
-    this->program = program;
+    this->shader = shader;
+    this->spacebox_shader = spacebox_shader;
     matrix = glm::lookAt(position, look_at_pos, up);
     upload();
 }
@@ -25,14 +26,19 @@ Camera::Camera(){}
 
 void Camera::upload()
 {
-    // Upload camera matrix here
-    glUniformMatrix4fv(glGetUniformLocation(program, "cam_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
-    
     cam_position[0] = position.x;
     cam_position[1] = position.y;
     cam_position[2] = position.z;
         
-    glUniform3fv(glGetUniformLocation(program, "camera_pos"), 1, (const GLfloat*) (cam_position));
+    // Upload camera matrix here
+    glUseProgram(shader);
+    glUniformMatrix4fv(glGetUniformLocation(shader, "cam_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniform3fv(glGetUniformLocation(shader, "camera_pos"),
+            1, (const GLfloat*) (cam_position));
+
+    glUseProgram(spacebox_shader);
+    glUniformMatrix4fv(glGetUniformLocation(spacebox_shader, "cam_matrix"),
+            1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Camera::update()

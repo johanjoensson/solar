@@ -33,8 +33,6 @@ int speed = 2;
 int simulation_speed = 1;
 int screenshot_nr = 0;
 
-mat4 projection_matrix;
-
 void handle_keypress(SDL_Event event);
 void handle_mouse(SDL_Event event);
 void check_keys();
@@ -243,7 +241,6 @@ void handle_mouse(SDL_Event event, Window &window)
     int height = window.getHeight();
 
     sys.c.change_look_at_pos(event.motion.xrel,event.motion.yrel,width,height);
-    sys.ship.handle_movement(event.motion.xrel,event.motion.yrel,width,height);
 }
 
 void check_keys()

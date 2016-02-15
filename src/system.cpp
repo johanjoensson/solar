@@ -7,7 +7,6 @@
 #include "body.h"
 #include "sun.h"
 #include "camera.h"
-#include "ship.h"
 #include "spacebox.h"
 #include <time.h>
 #include "cel_bodies.h"
@@ -99,18 +98,22 @@ void System::update_collisions()
 }
 
 System::System() :
-    //ship(Ship("res/cat.obj", "res/cat_diff.tga")),
     s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
     f(Frustum(1, 300, 1, -1, -1, 1)),
     bodies(Cel_bodies()) {}
 
 void System::init()
 {
+    spacebox_shader = LoadShader("src/spacebox.vert", "src/spacebox.frag");
     shader = LoadShader("src/solar.vert", "src/solar.frag");
     printError("error loading shaders");
     // Set Texture units
     glUniform1i(glGetUniformLocation(shader, "texUnit"), 0); // Texture unit 0
     glUniformMatrix4fv(glGetUniformLocation(shader, "proj_matrix"),
+            1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
+    glUseProgram(spacebox_shader);
+    glUniform1i(glGetUniformLocation(spacebox_shader, "texUnit"), 0); // Texture unit 0
+    glUniformMatrix4fv(glGetUniformLocation(spacebox_shader, "proj_matrix"),
             1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
     printError("error loading projection");
 }
@@ -118,7 +121,7 @@ void System::init()
 System::System(int program) : System()
 {
     init();
-    c = Camera(shader);
+    c = Camera(shader, spacebox_shader);
     Model *model = LoadModelPlus((char*)"res/planet.obj");
 
     Body *a = new Body(model, "res/mercurymap.png");
@@ -200,7 +203,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
     System()
 {
     init();
-    c = Camera(shader);
+    c = Camera(shader, spacebox_shader);
 
     // Sätt fröet för slumpade värden
     srand(time(NULL));
@@ -296,7 +299,7 @@ System::System(int program, int n_planets, int n_suns, int n_asteroids, long p_m
 void System::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    s.draw(shader);
+    s.draw(spacebox_shader);
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
    
@@ -307,7 +310,7 @@ void System::draw()
 
         current = next;
     }
-    asteroids.draw();
+    //asteroids.draw();
 }
 
 int System::check_distance(Body *b, int max_distance)

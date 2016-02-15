@@ -30,13 +30,12 @@ vec3 specular;
 vec3 reflection;
 
 float cos_angle;
-uniform int spaceship;
 
 void main(void)
 {
-        if(sun == 1 || spacebox == 1 || spaceship == 1) {
+        if(sun == 1) {
                 out_Color = texture(texUnit, out_tex_coord);
-        } else if(spacebox == 0){
+        } else {
                 tmp_colors = vec3(texture(texUnit, out_tex_coord));
                 colors = vec3(0.1,0.1,0.1)*tmp_colors;
                 s = normalize(light_cam_matrix * sun_position - out_position);
@@ -58,7 +57,5 @@ void main(void)
                         colors += specular;
                 }
                 out_Color = vec4(colors, 1);
-        } else {
-                out_Color = texture(texUnit, out_tex_coord);
         }
 }

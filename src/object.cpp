@@ -33,6 +33,7 @@ float Object::get_scale()
 
 void Object::draw(int program)
 {
+    glUseProgram(program);
     glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     DrawModel(m, program, "in_position", "in_normal", NULL);
 }

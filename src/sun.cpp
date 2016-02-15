@@ -10,6 +10,7 @@ Sun::Sun(Model* model, const char* texture) : Body(model, texture)
 
 void Sun::draw(int program)
 {
+    glUseProgram(program);
     glUniform1i(glGetUniformLocation(program, "sun"), 1);
     glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     glBindTexture(GL_TEXTURE_2D, texture);
