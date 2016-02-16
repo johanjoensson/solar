@@ -2,11 +2,12 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
+#include <GL/gl.h>
+#include <vector>
 
 class Camera {
     private:
-        int shader;
-        int spacebox_shader;
+        std::vector<GLuint> shaders;
 
         // x används för att musen inte ska fastna i kanterna på 
         // fönstret
@@ -36,7 +37,7 @@ class Camera {
          * **********************************************************/
         void change_look_at_pos(int xrel, int y, int width, int height);
         void upload();
-        Camera(int shader, int spacebox_shader);
-        Camera();
+        Camera(std::vector<GLuint> shaders);
+        Camera() = default;
         void print_matrix();
 };

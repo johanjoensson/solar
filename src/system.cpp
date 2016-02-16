@@ -13,7 +13,10 @@
 #include "loadobj.h"
 #include "helper/GLShader.hpp"
 
+#include <iostream>
 #include <string>
+#include <vector>
+#include <time.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -120,7 +123,7 @@ System::System() :
 {
     init();
     s = Spacebox("res/spacedome.obj", "res/spacedome.png", spacebox_shader);
-    c = Camera(shader, spacebox_shader);
+    c = Camera(std::vector<GLuint>{shader, spacebox_shader});
     Model *model = LoadModelPlus((char*)"res/planet.obj");
 
     Body *a = new Body(model, "res/mercurymap.png", shader);
@@ -204,7 +207,7 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
 {
     init();
     s = Spacebox("res/spacedome.obj", "res/spacedome.png", spacebox_shader);
-    c = Camera(shader, spacebox_shader);
+    c = Camera(std::vector<GLuint>{shader, spacebox_shader});
 
     // Sätt fröet för slumpade värden
     srand(time(NULL));
