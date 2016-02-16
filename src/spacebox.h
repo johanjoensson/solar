@@ -4,7 +4,7 @@
 
 class Spacebox : public Object {
     public:
-        void draw(int);
-        Spacebox();
-        Spacebox(const char*, const char*);
+        void draw();
+        Spacebox() = default;
+        Spacebox(const char* model, const char* tex, GLuint shader);
 };

@@ -15,9 +15,8 @@ class Body: public Object {
         glm::vec3 velocity;
 
         void update(float);
-        Body(const char*);
-        Body(Model*, const char*);
-        Body();
+        Body(Model*, const char* tex, GLuint shader);
+        Body() = default;
 
 /******************************************************************************
  * Hjälplutningar till den "optimerade" implementationen av rk4-integration

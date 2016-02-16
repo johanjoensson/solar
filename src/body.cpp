@@ -2,20 +2,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-Body::Body(Model* model, const char *texture) : Object(model, texture)
-{
-    position = glm::vec3(0.0, 0.0, 0.0);
-    velocity = glm::vec3(0.0, 0.0, 0.0);
-}
-
-Body::Body(const char* model) : Object(model)
-{
-    position = glm::vec3(0.0, 0.0, 0.0);
-    velocity = glm::vec3(0.0, 0.0, 0.0);
-
-}
-
-Body::Body()
+Body::Body(Model* model, const char *texture, GLuint shader) : Object(model, texture, shader)
 {
     position = glm::vec3(0.0, 0.0, 0.0);
     velocity = glm::vec3(0.0, 0.0, 0.0);
@@ -36,7 +23,4 @@ void Body::update(float dt)
     this->rotate('x', dt*spin_x);
     this->rotate('y', dt*spin_y);
     this->rotate('z', dt*spin_z);
-
-    //TODO RK4 för resten här
-    // Position och hastighet, och så att matrix uppdateras
 }

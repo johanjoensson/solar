@@ -16,7 +16,6 @@ private:
 public:
     Cel_bodies* cull_frustum(Cel_bodies *world, Camera cam);
 
-
     Frustum();
     Frustum(float near_p, float far_p, float bottom_p, float top_p, float left_p, float right_p);
 };

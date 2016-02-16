@@ -17,10 +17,15 @@ class Object {
         float scale = 1;
 
         SDL_Surface* surface;
-    public:
         Model *m;
 
         glm::mat4 matrix = glm::mat4();
+
+        float reflectivity = 1;
+
+        GLuint texture;
+        GLuint shader;
+    public:
         glm::vec3 position;
 
         // För att sätta skalan
@@ -28,17 +33,13 @@ class Object {
         // För att returnera skala
         float get_scale(); 
 
-        float reflectivity = 1;
-        GLuint texture;
-
         void rotate(char direction, float angle);
         void translate(float dx, float dy, float dz);
         void place(glm::vec3 pos);
         void update();
-        virtual void draw(int);
+        virtual void draw();
 
         Object() = default;
-        Object(const char*);
-        Object(Model*, const char*);
-        Object(const char*, const char*);
+        Object(Model*, const char* tex, GLuint shader);
+        Object(const char* model, const char* tex, int shader);
 };

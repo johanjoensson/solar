@@ -3,23 +3,21 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-Sun::Sun(Model* model, const char* texture) : Body(model, texture)
+Sun::Sun(Model* model, const char* texture, GLuint shader) : Body(model, texture, shader)
 {
     specularExponent = 2;
 }
 
-void Sun::draw(int program)
+void Sun::draw()
 {
-    glUseProgram(program);
-    glUniform1i(glGetUniformLocation(program, "sun"), 1);
-    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUseProgram(shader);
+    glUniform1i(glGetUniformLocation(shader, "sun"), 1);
+    glUniformMatrix4fv(glGetUniformLocation(shader, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     glBindTexture(GL_TEXTURE_2D, texture);
-    DrawModel(m, program, "in_position", "in_normal", "in_tex_coord");
+    DrawModel(m, shader, "in_position", "in_normal", "in_tex_coord");
     sun_position = this->position;
-    glUniform3f(glGetUniformLocation(program, "sun_position"), sun_position.x, sun_position.y, sun_position.z);
-    glUniform3f(glGetUniformLocation(program, "emit_color"), emit_color.x, emit_color.y, emit_color.z);
-    //FIXME ändra så att det är specularExponent som skickar upp och ej 10.0
-    //direkt
-    glUniform1f(glGetUniformLocation(program, "specularExponent"), (const GLfloat) specularExponent);
-    glUniform1i(glGetUniformLocation(program, "sun"), 0);
+    glUniform3f(glGetUniformLocation(shader, "sun_position"), sun_position.x, sun_position.y, sun_position.z);
+    glUniform3f(glGetUniformLocation(shader, "emit_color"), emit_color.x, emit_color.y, emit_color.z);
+    glUniform1f(glGetUniformLocation(shader, "specularExponent"), (const GLfloat) specularExponent);
+    glUniform1i(glGetUniformLocation(shader, "sun"), 0);
 }

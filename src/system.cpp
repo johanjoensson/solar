@@ -13,6 +13,8 @@
 #include "loadobj.h"
 #include "helper/GLShader.hpp"
 
+#include <string>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -113,16 +115,16 @@ void System::init()
 }
 
 System::System() : 
-    s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
     f(Frustum(1, 300, 1, -1, -1, 1)),
     bodies(Cel_bodies())
 {
     init();
+    s = Spacebox("res/spacedome.obj", "res/spacedome.png", spacebox_shader);
     c = Camera(shader, spacebox_shader);
     Model *model = LoadModelPlus((char*)"res/planet.obj");
 
-    Body *a = new Body(model, "res/mercurymap.png");
-    Sun *s = new Sun(model, "res/sunmap.png");
+    Body *a = new Body(model, "res/mercurymap.png", shader);
+    Sun *s = new Sun(model, "res/sunmap.png", shader);
 
     s->specularExponent = 14;
     s->set_scale(10);
@@ -139,7 +141,7 @@ System::System() :
     a->mass = 2E2;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/venus.png");
+    a = new Body(model, "res/venus.png", shader);
     a->spin_y = 0.5;
     a->position = vec3(50.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, 0.7);
@@ -147,7 +149,7 @@ System::System() :
     a->mass = 1E3;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/earth.png");
+    a = new Body(model, "res/earth.png", shader);
     a->spin_y = -0.2;
     a->position = vec3(65.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.7);
@@ -155,7 +157,7 @@ System::System() :
     a->mass = 4E3;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/mars.png");
+    a = new Body(model, "res/mars.png", shader);
     a->spin_y = 0.1;
     a->position = vec3(75.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, 0.7);
@@ -163,7 +165,7 @@ System::System() :
     a->mass = 2E3;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/jupiter.png");
+    a = new Body(model, "res/jupiter.png", shader);
     a->spin_y = -0.1;
     a->position = vec3(-105.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.6);
@@ -171,7 +173,7 @@ System::System() :
     a->mass = 3E5;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/saturnmap.png");
+    a = new Body(model, "res/saturnmap.png", shader);
     a->spin_y = 0.3;
     a->position = vec3(125.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.57);
@@ -179,7 +181,7 @@ System::System() :
     a->mass = 3E4;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/uranusmap.png");
+    a = new Body(model, "res/uranusmap.png", shader);
     a->spin_y = 0.1;
     a->position = vec3(-140.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, 0.55);
@@ -187,7 +189,7 @@ System::System() :
     a->mass = 1E4;
     bodies.add_planet(a);
     
-    a = new Body(model, "res/neptunemap.png");
+    a = new Body(model, "res/neptunemap.png", shader);
     a->spin_y = 0.23;
     a->position = vec3(155.0, 0.0, -2.0);
     a->velocity = vec3(0, 0.0, -0.53);
@@ -197,11 +199,11 @@ System::System() :
 }
 
 System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in) :
-    s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
     f(Frustum(1, 300, 1, -1, -1, 1)),
     bodies(Cel_bodies())
 {
     init();
+    s = Spacebox("res/spacedome.obj", "res/spacedome.png", spacebox_shader);
     c = Camera(shader, spacebox_shader);
 
     // Sätt fröet för slumpade värden
@@ -222,31 +224,33 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
 
     Body *p;
     Model *model = LoadModelPlus((char*)"res/planet.obj");
+    string planet_tex;
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
         if(rand_value < 0.09) {
-            p = new Body(model, "res/earth.png");
+            planet_tex = "res/earth.png";
         } else if(rand_value < 0.18) {
-            p = new Body(model, "res/mars.png");
+            planet_tex = "res/mars.png";
         } else if(rand_value < 0.27) {
-            p = new Body(model, "res/moon.png");
+            planet_tex = "res/moon.png";
         } else if(rand_value < 0.36) {
-            p = new Body(model, "res/venus.png");
+            planet_tex = "res/venus.png";
         } else if (rand_value < 0.45) {
-            p = new Body(model, "res/mars_elevation.png");
+            planet_tex = "res/mars_elevation.png";
         } else if (rand_value < 0.55) {
-            p = new Body(model, "res/saturnmap.png");
+            planet_tex = "res/saturnmap.png";
         } else if (rand_value < 0.64) {
-            p = new Body(model, "res/uranusmap.png");
+            planet_tex = "res/uranusmap.png";
         } else if (rand_value < 0.73) {
-            p = new Body(model, "res/neptunemap.png");
+            planet_tex = "res/neptunemap.png";
         } else if (rand_value < 0.82) {
-            p = new Body(model, "res/plutomap1k.png");
+            planet_tex = "res/plutomap1k.png";
         } else if (rand_value < 0.91) {
-            p = new Body(model, "res/mercurymap.png");
+            planet_tex = "res/mercurymap.png";
         } else {
-            p = new Body(model, "res/jupiter.png");
+            planet_tex = "res/jupiter.png";
         }
+        p = new Body(model, planet_tex.c_str(), shader);
 
         p->spin_x = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
         p->spin_y = (float)rand()/((float)RAND_MAX/p_spin_range) - p_spin_range/2.0;
@@ -271,7 +275,7 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
     // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
     Sun *s;
     for(int i=0; i<n_suns; i++){
-        s = new Sun(model, "res/sunmap.png");
+        s = new Sun(model, "res/sunmap.png", shader);
         s->emit_color = vec3(1,1,1);
         s->specularExponent = 5;
 
@@ -297,13 +301,13 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
 void System::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    s.draw(spacebox_shader);
+    s.draw();
     Cel_bodies *current = this->visible.next;
     Cel_bodies *next;
    
     while(current != NULL){
         next = current->next;
-        current->planet->draw(shader);
+        current->planet->draw();
         this->visible.remove_planet(current->planet);
 
         current = next;

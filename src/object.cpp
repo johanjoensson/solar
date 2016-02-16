@@ -5,10 +5,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-Object::Object(const char *model) : m(LoadModelPlus((char*)model)) {}
-
-Object::Object(Model *model, const char *tex) : surface(IMG_Load(tex)), m(model)
+Object::Object(Model *model, const char *tex, GLuint shader) :
+    surface(IMG_Load(tex)),
+    m(model),
+    shader(shader)
 {
+    glUseProgram(shader);
+    glUniform1i(glGetUniformLocation(shader, "texUnit"), 0); // Texture unit 0
+
     // Typical Texture Generation Using Data From The Bitmap
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -17,7 +21,8 @@ Object::Object(Model *model, const char *tex) : surface(IMG_Load(tex)), m(model)
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 }
 
-Object::Object(const char *model, const char *tex) : Object(LoadModelPlus((char*)model), tex) {}
+Object::Object(const char *model, const char *tex, int shader) :
+    Object(LoadModelPlus((char*)model), tex, shader) {}
 
 void Object::set_scale(float s)
 {
@@ -31,12 +36,12 @@ float Object::get_scale()
     return scale;
 }
 
-void Object::draw(int program)
+void Object::draw()
 {
-    glUseProgram(program);
-    glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUseProgram(shader);
+    glUniformMatrix4fv(glGetUniformLocation(shader, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     glBindTexture(GL_TEXTURE_2D, texture);
-    DrawModel(m, program, "in_position", "in_normal", NULL);
+    DrawModel(m, shader, "in_position", "in_normal", NULL);
 }
 
 void Object::rotate(char direction, float angle)
