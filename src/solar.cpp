@@ -7,7 +7,6 @@
 #include "camera.h"
 #include "system.h"
 #include "cel_bodies.h"
-#include "planetoids.h"
 
 #include "helper/SDL_util.hpp"
 #include "helper/Window.hpp"
@@ -47,7 +46,6 @@ void display_help()
     std::cerr << "-m nb\tsets the maximum mass of planets\n";
     std::cerr << "-n nb\tsets the maximum mass of the sun\n";
     std::cerr << "-v nb\tsets the maximum initial velocity of the planets\n";
-    std::cerr << "-a nb\tcreates an asteroid belt with nb asteroids\n";
     std::cerr << "\nUseful things:\n";
     std::cerr << "Pressing 'g' while running the program will release the keyboard and mouse, allowing you to use them for other things.\n";
     std::cerr << "Pressing 'p' while running the program will take a snapshot of the program running.\n";
@@ -72,9 +70,8 @@ void init(int argc, char** argv)
     long s_mass_range = 6E10;
     float p_vel_range = 2;
     int p_pos_range = 0;
-    int nasteroid = 0;
     int c;
-    while ((c = getopt(argc, argv, "p:sm:n:v:r:ha:")) != -1) {
+    while ((c = getopt(argc, argv, "p:sm:n:v:r:h")) != -1) {
         switch(c) {
             case 'p':
                 nplanet = atoi(optarg);
@@ -94,9 +91,6 @@ void init(int argc, char** argv)
             case 'r':
                 p_pos_range = atoi(optarg);
                 break;
-            case 'a':
-                nasteroid = atoi(optarg);
-                break;
             case 'h':
                 display_help();
                 exit(0);
@@ -107,7 +101,7 @@ void init(int argc, char** argv)
     if (nsun == 0 && nplanet == 0) {
         sys = System(0);
     } else {
-        sys = System(0, nplanet, nsun, nasteroid, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
+        sys = System(0, nplanet, nsun, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
 
     // Lock cursor to this program

@@ -11,7 +11,6 @@
 #include "frustum.h"
 #include "spacebox.h"
 #include "cel_bodies.h"
-#include "planetoids.h"
 
 
 /******************************************************************************
@@ -61,12 +60,11 @@ class System {
          * bodies.next är första objektet i listan!
          *********************************************************************/
         Cel_bodies bodies, visible;
-        Planetoids asteroids;
 
         System();
         System(int);
         // Konstruktor för slumpat starttillstånd
-        System(int program, int n_planets, int n_suns, int n_asteroids, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
+        System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
 
     private:
         GLuint shader;
