@@ -41,7 +41,7 @@ void Object::draw()
     glUseProgram(shader);
     glUniformMatrix4fv(glGetUniformLocation(shader, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
     glBindTexture(GL_TEXTURE_2D, texture);
-    DrawModel(m, shader, "in_position", "in_normal", NULL);
+    DrawModel(m, shader, "in_position", "in_normal", "in_tex_coord");
 }
 
 void Object::rotate(char direction, float angle)

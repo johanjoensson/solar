@@ -67,7 +67,8 @@ class System {
 
     private:
         GLuint shader;
-        GLuint spacebox_shader; 
+        GLuint spacebox_shader;
+        GLuint sun_shader;
 
         void init();
 

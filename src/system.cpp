@@ -2,13 +2,11 @@
  * Implementationen av samtliga klasser och funktioner definierade i system.h
  *****************************************************************************/
 
-#include <iostream>
 #include "system.h"
 #include "body.h"
 #include "sun.h"
 #include "camera.h"
 #include "spacebox.h"
-#include <time.h>
 #include "cel_bodies.h"
 #include "loadobj.h"
 #include "helper/GLShader.hpp"
@@ -104,17 +102,16 @@ void System::update_collisions()
 void System::init()
 {
     spacebox_shader = LoadShader("src/spacebox.vert", "src/spacebox.frag");
-    shader = LoadShader("src/solar.vert", "src/solar.frag");
-    printError("error loading shaders");
-    // Set Texture units
-    glUniform1i(glGetUniformLocation(shader, "texUnit"), 0); // Texture unit 0
-    glUniformMatrix4fv(glGetUniformLocation(shader, "proj_matrix"),
-            1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
-    glUseProgram(spacebox_shader);
-    glUniform1i(glGetUniformLocation(spacebox_shader, "texUnit"), 0); // Texture unit 0
     glUniformMatrix4fv(glGetUniformLocation(spacebox_shader, "proj_matrix"),
             1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
-    printError("error loading projection");
+
+    sun_shader = LoadShader("src/sun.vert", "src/spacebox.frag");
+    glUniformMatrix4fv(glGetUniformLocation(sun_shader, "proj_matrix"),
+            1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
+
+    shader = LoadShader("src/solar.vert", "src/solar.frag");
+    glUniformMatrix4fv(glGetUniformLocation(shader, "proj_matrix"),
+            1, GL_FALSE, glm::value_ptr(glm::frustum(left, right, bottom, top, near, far)));
 }
 
 System::System() : 
@@ -123,11 +120,11 @@ System::System() :
 {
     init();
     s = Spacebox("res/spacedome.obj", "res/spacedome.png", spacebox_shader);
-    c = Camera(std::vector<GLuint>{shader, spacebox_shader});
+    c = Camera(std::vector<GLuint>{shader, spacebox_shader, sun_shader});
     Model *model = LoadModelPlus((char*)"res/planet.obj");
 
     Body *a = new Body(model, "res/mercurymap.png", shader);
-    Sun *s = new Sun(model, "res/sunmap.png", shader);
+    Sun *s = new Sun(model, "res/sunmap.png", sun_shader, shader);
 
     s->specularExponent = 14;
     s->set_scale(10);
@@ -207,7 +204,7 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
 {
     init();
     s = Spacebox("res/spacedome.obj", "res/spacedome.png", spacebox_shader);
-    c = Camera(std::vector<GLuint>{shader, spacebox_shader});
+    c = Camera(std::vector<GLuint>{shader, spacebox_shader, sun_shader});
 
     // Sätt fröet för slumpade värden
     srand(time(NULL));
@@ -230,25 +227,21 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
     string planet_tex;
     for(int i=0; i<n_planets; i++){
         rand_value = (float)rand() / (float)RAND_MAX;
-        if(rand_value < 0.09) {
+        if(rand_value < 0.11) {
             planet_tex = "res/earth.png";
-        } else if(rand_value < 0.18) {
+        } else if(rand_value < 0.22) {
             planet_tex = "res/mars.png";
-        } else if(rand_value < 0.27) {
-            planet_tex = "res/moon.png";
-        } else if(rand_value < 0.36) {
+        } else if(rand_value < 0.33) {
             planet_tex = "res/venus.png";
-        } else if (rand_value < 0.45) {
-            planet_tex = "res/mars_elevation.png";
-        } else if (rand_value < 0.55) {
+        } else if (rand_value < 0.44) {
             planet_tex = "res/saturnmap.png";
-        } else if (rand_value < 0.64) {
+        } else if (rand_value < 0.56) {
             planet_tex = "res/uranusmap.png";
-        } else if (rand_value < 0.73) {
+        } else if (rand_value < 0.67) {
             planet_tex = "res/neptunemap.png";
-        } else if (rand_value < 0.82) {
+        } else if (rand_value < 0.78) {
             planet_tex = "res/plutomap1k.png";
-        } else if (rand_value < 0.91) {
+        } else if (rand_value < 0.89) {
             planet_tex = "res/mercurymap.png";
         } else {
             planet_tex = "res/jupiter.png";
@@ -278,7 +271,7 @@ System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, 
     // lämnar kvar det här för en tid när vi kan ha flera strålande solar :)
     Sun *s;
     for(int i=0; i<n_suns; i++){
-        s = new Sun(model, "res/sunmap.png", shader);
+        s = new Sun(model, "res/sunmap.png", sun_shader, shader);
         s->emit_color = vec3(1,1,1);
         s->specularExponent = 5;
 
