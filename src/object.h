@@ -35,7 +35,7 @@ class Object {
         void translate(float dx, float dy, float dz);
         void place(glm::vec3 pos);
         void update();
-        void draw(int);
+        virtual void draw(int);
 
         Object() = default;
         Object(const char*);

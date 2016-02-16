@@ -15,7 +15,6 @@ class Body: public Object {
         glm::vec3 velocity;
 
         void update(float);
-        virtual void draw(int);
         Body(const char*);
         Body(Model*, const char*);
         Body();

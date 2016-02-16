@@ -35,6 +35,7 @@ void Object::draw(int program)
 {
     glUseProgram(program);
     glUniformMatrix4fv(glGetUniformLocation(program, "mdl_matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+    glBindTexture(GL_TEXTURE_2D, texture);
     DrawModel(m, program, "in_position", "in_normal", NULL);
 }
 

@@ -12,9 +12,7 @@ class Sun : public Body
  public:
   vec3 emit_color;
   vec3 sun_position;
-  //FIXME
   float specularExponent;
-  void draw(int);
+  virtual void draw(int);
   Sun(Model*, const char*);
-
 };
