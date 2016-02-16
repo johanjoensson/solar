@@ -9,7 +9,7 @@ GameLoop::GameLoop(Window &window, EventFunc user_handler, EventWinFunc
 
 void GameLoop::run()
 {
-    while(true){
+    while(running){
         while(SDL_PollEvent(&event_)){
             handle_event(event_);
         }
@@ -23,7 +23,7 @@ void GameLoop::handle_event(SDL_Event event)
             user_handler_(event);
             break;
         case SDL_QUIT:
-            exit(0);
+            running = 0;
             break;
         case SDL_WINDOWEVENT:
             window_.handleEvent(event);

@@ -96,11 +96,6 @@ void System::update_collisions()
     }
 }
 
-System::System() :
-    s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
-    f(Frustum(1, 300, 1, -1, -1, 1)),
-    bodies(Cel_bodies()) {}
-
 void System::init()
 {
     spacebox_shader = LoadShader("src/spacebox.vert", "src/spacebox.frag");
@@ -117,7 +112,10 @@ void System::init()
     printError("error loading projection");
 }
 
-System::System(int program) : System()
+System::System() : 
+    s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
+    f(Frustum(1, 300, 1, -1, -1, 1)),
+    bodies(Cel_bodies())
 {
     init();
     c = Camera(shader, spacebox_shader);
@@ -198,8 +196,10 @@ System::System(int program) : System()
     bodies.add_planet(a);
 }
 
-System::System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in) :
-    System()
+System::System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range_in) :
+    s(Spacebox("res/spacedome.obj", "res/spacedome.png")),
+    f(Frustum(1, 300, 1, -1, -1, 1)),
+    bodies(Cel_bodies())
 {
     init();
     c = Camera(shader, spacebox_shader);
@@ -216,7 +216,7 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
 
     float s_vel_range = 0.1;
     long int s_mass_min = 1E10;
-    int s_spin_range = 1;
+    float s_spin_range = 0.1;
 
     float rand_value;
 
@@ -275,9 +275,9 @@ System::System(int program, int n_planets, int n_suns, long p_mass_range, long s
         s->emit_color = vec3(1,1,1);
         s->specularExponent = 5;
 
-        s->spin_x = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        s->spin_y = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
-        s->spin_z = (float)rand()/(float)RAND_MAX/s_spin_range - s_spin_range/2.0;
+        s->spin_x = (float)rand() / ((float)RAND_MAX/s_spin_range) - s_spin_range/2.0;
+        s->spin_y = (float)rand() / ((float)RAND_MAX/s_spin_range) - s_spin_range/2.0;
+        s->spin_z = (float)rand() / ((float)RAND_MAX/s_spin_range) - s_spin_range/2.0;
 
         s->mass = rand() % s_mass_range + s_mass_min;
 

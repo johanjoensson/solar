@@ -62,9 +62,8 @@ class System {
         Cel_bodies bodies, visible;
 
         System();
-        System(int);
         // Konstruktor för slumpat starttillstånd
-        System(int program, int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
+        System(int n_planets, int n_suns, long p_mass_range, long s_mass_range, float p_vel_range, int p_pos_range);
 
     private:
         GLuint shader;

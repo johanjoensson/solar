@@ -12,6 +12,7 @@ class GameLoop
         GameLoop(Window &window, EventFunc user_handler, EventWinFunc keypress_handler, EventWinFunc mouse_handler);
         void run();
     private:
+        int running = 1;
         SDL_Event event_;
         EventFunc user_handler_;
         EventWinFunc keypress_handler_;

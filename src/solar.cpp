@@ -27,7 +27,7 @@
 #define WIDTH 1024
 
 
-System sys;
+System *sys;
 int speed = 2;
 int simulation_speed = 1;
 int screenshot_nr = 0;
@@ -99,9 +99,9 @@ void init(int argc, char** argv)
     }
 
     if (nsun == 0 && nplanet == 0) {
-        sys = System(0);
+        sys = new System();
     } else {
-        sys = System(0, nplanet, nsun, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
+        sys = new System(nplanet, nsun, p_mass_range, s_mass_range, p_vel_range, p_pos_range);
     }
 
     // Lock cursor to this program
@@ -111,14 +111,14 @@ void init(int argc, char** argv)
 void update(int interval)
 {
     check_keys();
-    sys.update(interval);
+    sys->update(interval);
 }
 
 void display(void *window_void_ptr)
 {
     Window *window = static_cast<Window *>(window_void_ptr);
     printError("pre display");
-    sys.draw();
+    sys->draw();
     // clear the screen
     printError("draw error");
 
@@ -183,7 +183,9 @@ void handle_keypress(SDL_Event event, Window& window)
     switch(event.key.keysym.sym){
         case SDLK_ESCAPE:
         case SDLK_q:
-            exit(0);
+            SDL_Event event;
+            event.type = SDL_QUIT;
+            SDL_PushEvent(&event);
             break;
         case SDLK_UP:
             speed++;
@@ -234,21 +236,21 @@ void handle_mouse(SDL_Event event, Window &window)
     int width = window.getWidth();
     int height = window.getHeight();
 
-    sys.c.change_look_at_pos(event.motion.xrel,event.motion.yrel,width,height);
+    sys->c.change_look_at_pos(event.motion.xrel,event.motion.yrel,width,height);
 }
 
 void check_keys()
 {
     const Uint8 *keystate = SDL_GetKeyboardState(NULL);
     if(keystate[SDL_SCANCODE_W]) {
-        sys.c.forward(0.1*speed);
+        sys->c.forward(0.1*speed);
     } else if(keystate[SDL_SCANCODE_S]) {
-        sys.c.forward(-0.1*speed);
+        sys->c.forward(-0.1*speed);
     }
     if(keystate[SDL_SCANCODE_A]) {
-        sys.c.strafe(0.1*speed);
+        sys->c.strafe(0.1*speed);
     } else if(keystate[SDL_SCANCODE_D]) {
-        sys.c.strafe(-0.1*speed);
+        sys->c.strafe(-0.1*speed);
     }
 }
 
@@ -262,7 +264,7 @@ void handle_userevent(SDL_Event event)
             update(simulation_speed * *((Uint32*)(intptr_t)(&event.user.data1)));
             break;
         case (int)System::CLEAN_TIMER:
-            sys.clean(MAX_DISTANCE);
+            sys->clean(MAX_DISTANCE);
             break;
         default:
             break;
@@ -278,7 +280,7 @@ int main(int argc, char** argv)
     init(argc, argv);
 
     // ugly hack to center mouse
-    sys.c.change_look_at_pos(0, HEIGHT/2, WIDTH, HEIGHT);
+    sys->c.change_look_at_pos(0, HEIGHT/2, WIDTH, HEIGHT);
 
     Timer disp_timer(30, display_timer, &window);
     Timer upd_timer(5, update_timer, NULL);
@@ -288,6 +290,7 @@ int main(int argc, char** argv)
 
     game.run();
 
-    sys.bodies.clear_list();
+    sys->bodies.clear_list();
+    delete sys;
 }
 
